@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+ android:gravity="center"
+ android:layout_width="wrap_content" android:layout_height="wrap_content">
+<ImageView android:id="@+id/ImageView01"
+android:layout_width="wrap_content" 
+android:layout_height="wrap_content"
+android:layout_centerHorizontal="true" />
+
+ 
+
+ <ScrollView android:id="@+id/ScrollViewabout"
+ android:layout_width="wrap_content" android:layout_below="@+id/ImageView01"
+ android:layout_height="300px"
+>
+
+<TextView android:text="@+id/TextView01" 
+	android:id="@+id/TextView01"
+	android:layout_width="wrap_content" 
+	android:layout_height="wrap_content" 
+	android:paddingLeft="5px"
+	android:paddingRight="5px"
+	 android:paddingTop="5px"
+	 android:paddingBottom="5px"
+	 />
+
+ 
+
+ </ScrollView>
+ <Button android:id="@+id/ButtonAbout" android:layout_below="@id/ScrollViewabout"
+android:layout_width="wrap_content" android:layout_height="wrap_content"
+android:layout_centerHorizontal="true" android:text="OK" 
+
+/>
+
+
+</RelativeLayout>

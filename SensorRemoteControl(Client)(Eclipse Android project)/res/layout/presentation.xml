@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:orientation="vertical"
+  android:layout_width="fill_parent"
+  android:layout_height="fill_parent">
+  <LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:orientation="vertical"
+  android:layout_width="fill_parent"
+  android:layout_height="wrap_content"
+  android:gravity="center"
+ >
+ <TextView
+	android:id="@+id/scanlist_title"
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content"
+	android:text="Slide Show"
+	android:textColor="#FFFFFF"
+	android:gravity="center"
+	android:textSize="20sp"
+	android:paddingLeft="2px"
+	android:paddingRight="2px"
+	android:paddingTop="2px"
+	android:paddingBottom="2px"
+	android:background="@drawable/title_bg"
+> </TextView>
+  
+  <TextView android:layout_width="fill_parent" 
+  android:gravity="center"
+  android:id="@+id/TextView_accHead" 
+  android:layout_height="wrap_content" 
+  android:text="Shake Left or Right to control the slide"/>
+<ToggleButton
+        android:id="@+id/toggleButton2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Use Accelerometer"
+        android:checked="true" 
+        android:gravity="center"/>
+<TextView android:layout_height="wrap_content" 
+ android:layout_width="fill_parent"
+ android:id="@+id/p_textView">
+ </TextView>
+                                      
+
+</LinearLayout>                                                
+
+	
+	<RelativeLayout android:orientation="horizontal"
+    android:layout_width="fill_parent"
+  android:layout_height="wrap_content"
+  android:gravity="center"
+>
+	<Button
+	android:id="@+id/p_start"
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content"
+	android:paddingLeft="40dp" 
+	android:paddingRight="40dp"
+	android:background="@drawable/start_button"
+	android:layout_marginRight="5px"
+	android:layout_marginBottom="5px"
+	android:layout_marginLeft="5px"
+	android:layout_marginTop="5px"
+	/>
+	
+	<Button
+	android:id="@+id/p_end"
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content"
+	android:layout_toRightOf="@id/p_start"
+	android:background="@drawable/end_button"
+	android:layout_marginRight="5px"
+	android:layout_marginBottom="5px"
+	android:layout_marginLeft="5px"
+	android:layout_marginTop="5px"
+	
+	/>
+	</RelativeLayout>
+  	
+	<RelativeLayout android:orientation="horizontal"
+    android:layout_width="fill_parent"
+  android:layout_height="wrap_content"
+  android:gravity="center"
+>
+
+	<Button
+	android:id="@+id/p_keyboard"
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content"
+	android:background="@drawable/keyboard_s_button"
+	android:layout_marginRight="5px"
+	android:layout_marginBottom="5px"
+	android:layout_marginLeft="5px"
+	android:layout_marginTop="5px"
+	
+	/>
+	
+	<Button
+	android:id="@+id/p_pen"
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content"
+	android:layout_toRightOf="@id/p_keyboard"
+	android:background="@drawable/pen"
+	android:layout_marginRight="5px"
+	android:layout_marginBottom="5px"
+	android:layout_marginLeft="5px"
+	android:layout_marginTop="5px"
+	/>
+	
+	<Button
+	android:id="@+id/p_black"
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content"
+	android:layout_toRightOf="@id/p_pen"
+	android:background="@drawable/black"
+	android:layout_marginRight="5px"
+	android:layout_marginBottom="5px"
+	android:layout_marginLeft="5px"
+	android:layout_marginTop="5px"
+	/>
+	
+	
+	
+	
+	</RelativeLayout>
+	
+	<LinearLayout android:orientation="vertical"
+    android:layout_width="fill_parent"
+  android:layout_height="fill_parent"
+  android:gravity="center"
+>
+<Button android:layout_width="fill_parent" 
+android:id="@+id/p_leftClick" android:paddingLeft="20dp" 
+android:layout_height="0px" 
+android:paddingRight="20dp"
+android:layout_weight="0.3"
+android:background="@drawable/previous_button"
+	android:layout_marginRight="5px"
+	android:layout_marginBottom="5px"
+	android:layout_marginLeft="5px"
+	android:layout_marginTop="5px"
+></Button>
+	<Button
+	android:id="@+id/p_rightClick"
+	android:layout_width="fill_parent"
+	android:layout_height="0px"
+	android:paddingLeft="40dp" 
+	android:paddingRight="40dp"
+	android:layout_toRightOf="@id/a_leftClick"
+	android:layout_weight="0.7"
+	android:background="@drawable/next_button"
+	android:layout_marginRight="5px"
+	android:layout_marginBottom="5px"
+	android:layout_marginLeft="5px"
+	android:layout_marginTop="5px"
+	/>
+	
+        
+    </LinearLayout>    
+    	
+	
+	
+	<EditText android:id="@+id/etAdvancedText"
+                android:layout_marginTop="100dp"
+                android:layout_width="fill_parent" android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true" android:layout_alignParentRight="true"
+                android:layout_centerHorizontal="true" android:maxHeight="32dp"
+                android:inputType="textMultiLine"
+                android:visibility="visible"
+                />
+
+	
+<ScrollView android:layout_height="fill_parent" android:layout_width="fill_parent" android:id="@+id/ScrollViewOverview"><TextView android:layout_height="fill_parent" android:layout_width="fill_parent" android:id="@+id/TextViewOverview"></TextView>
+</ScrollView>
+
+
+	
+    
+</LinearLayout>
+
+

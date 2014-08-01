@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:orientation="vertical"
+  android:layout_width="fill_parent"
+  android:layout_height="fill_parent"
+  android:gravity="center">
+  
+   <TextView
+	android:id="@+id/mousea_title"
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content"
+	android:text="NumPad"
+	android:textColor="#FFFFFF"
+	android:gravity="center"
+	android:textSize="20sp"
+	android:paddingLeft="2px"
+	android:paddingRight="2px"
+	android:paddingTop="2px"
+	android:paddingBottom="2px"
+	android:background="@drawable/title_bg"
+> </TextView>
+
+<LinearLayout
+        android:orientation="horizontal"
+        android:gravity="center" 
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        >
+	<Button
+	android:id="@+id/n_7"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	android:background="@drawable/n7_button"
+	android:layout_weight="1"
+	/>
+	
+	<Button
+	android:id="@+id/n_8"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	android:background="@drawable/n8_button"
+	android:layout_marginLeft="5px"
+	android:layout_weight="1"
+
+	/>
+	
+	<Button
+	android:id="@+id/n_9"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	android:background="@drawable/n9_button"
+	android:layout_marginLeft="5px"
+	android:layout_weight="1"
+	/>
+	
+	<Button
+	android:id="@+id/n_divide"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	android:background="@drawable/divide_button"
+	android:layout_marginLeft="5px"
+
+	android:layout_weight="1"
+	/>
+	</LinearLayout>
+	
+	
+	
+	
+	<LinearLayout
+        android:orientation="horizontal"
+        android:gravity="center" 
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        >
+	<Button
+	android:id="@+id/n_4"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	android:background="@drawable/n4_button"
+	android:layout_weight="1"
+	/>
+	
+	<Button
+	android:id="@+id/n_5"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	android:background="@drawable/n5_button"
+	android:layout_marginLeft="5px"
+	android:layout_weight="1"
+
+	/>
+	
+	<Button
+	android:id="@+id/n_6"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	android:background="@drawable/n6_button"
+	android:layout_marginLeft="5px"
+	android:layout_weight="1"
+	/>
+	
+	<Button
+	android:id="@+id/n_multiply"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	android:background="@drawable/multiply_button"
+	android:layout_marginLeft="5px"
+	android:layout_weight="1"
+	/>
+	</LinearLayout>
+	
+<LinearLayout
+        android:orientation="horizontal"
+        android:gravity="center" 
+        android:layout_width="fill_parent"
+	android:layout_height="wrap_content"
+        android:layout_weight="1"
+        >
+	<Button
+	android:id="@+id/n_1"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	android:background="@drawable/n1_button"
+	android:layout_weight="1"
+	/>
+	
+	<Button
+	android:id="@+id/n_2"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	android:background="@drawable/n2_button"
+	android:layout_marginLeft="5px"
+	android:layout_weight="1"
+
+	/>
+	
+	<Button
+	android:id="@+id/n_3"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	android:background="@drawable/n3_button"
+	android:layout_marginLeft="5px"
+
+	android:layout_weight="1"
+	/>
+	
+	<Button
+	android:id="@+id/n_substract"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	android:background="@drawable/minus_button"
+	android:layout_marginLeft="5px"
+	android:layout_weight="1"
+	/>
+	</LinearLayout>
+	
+	
+<LinearLayout
+        android:orientation="horizontal"
+        android:gravity="center" 
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        >
+	<Button
+	android:id="@+id/n_dot"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	android:background="@drawable/dot_button"
+	android:layout_weight="1"
+	/>
+	
+	<Button
+	android:id="@+id/n_0"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	android:background="@drawable/n0_button"
+	android:layout_marginLeft="5px"
+	android:layout_weight="1"
+
+	/>
+	<Button
+	android:id="@+id/n_percentages"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	android:background="@drawable/per_button"
+	android:layout_marginLeft="5px"
+	android:layout_weight="1"
+	/>
+	<Button
+	android:id="@+id/n_addition"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	android:background="@drawable/plus_button"
+	android:layout_marginLeft="5px"
+	android:layout_weight="1"
+	/>
+	
+	
+	</LinearLayout>	
+	
+  <LinearLayout
+        android:orientation="horizontal"
+        android:gravity="center" 
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.6"
+        >
+	<Button
+	android:id="@+id/n_back"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	android:background="@drawable/bs_button"
+	android:layout_weight="1"
+	/>
+	
+
+	
+	
+	
+	<Button
+	android:id="@+id/n_enter"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	android:background="@drawable/enter_button"
+	android:layout_marginLeft="5px"
+	android:layout_weight="1"
+	/>
+	</LinearLayout>	
+    
+</LinearLayout>
