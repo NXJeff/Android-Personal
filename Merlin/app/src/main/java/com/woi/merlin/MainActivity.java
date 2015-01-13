@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.woi.merlin.fragment.FragmentCardSample1;
 import com.woi.merlin.fragment.FragmentHome;
 import com.woi.merlin.ui.drawer.CustomDrawerAdapter;
 import com.woi.merlin.ui.drawer.DrawerItem;
@@ -270,6 +271,7 @@ public class MainActivity extends ActionBarActivity {
                 break;
 
             case CASE_HELP:
+                fragment = new FragmentCardSample1();
                 break;
 
             case CASE_EXIT:
