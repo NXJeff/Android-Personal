@@ -43,4 +43,7 @@ dependencies {
     //Optional for twowayview support (coming soon)
     //compile 'com.github.gabrielemariotti.cards:cardslib-extra-twoway:2.0.1'
 
+    //imageloader
+    compile 'com.squareup.picasso:picasso:2.4.0'
+
 }

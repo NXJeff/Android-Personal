@@ -1,7 +1,6 @@
 package com.woi.merlin.fragment;
 
 import android.app.Fragment;
-import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.TypedValue;
@@ -10,12 +9,13 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.woi.merlin.R;
+import com.woi.merlin.card.Sample1Card;
+import com.woi.merlin.card.Sample1CardHeader;
 
 import it.gmariotti.cardslib.library.Constants;
 import it.gmariotti.cardslib.library.internal.Card;
@@ -49,6 +49,7 @@ public class FragmentCardSample1 extends Fragment {
 
     private void initCards() {
         init_standard_header_with_overflow_button();
+        init_custom_header_inner_layout();
     }
 
     private void init_standard_header_with_overflow_button() {
@@ -71,9 +72,8 @@ public class FragmentCardSample1 extends Fragment {
         card.addCardHeader(header);
 
         //Set shadow elevation
-        Resources r = getResources();
         //Convert dp to float
-        float shadowElevation = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 14, r.getDisplayMetrics());
+        float shadowElevation = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 14, getResources().getDisplayMetrics());
         card.setCardElevation(shadowElevation);
 
         //Create thumbnail
@@ -95,7 +95,7 @@ public class FragmentCardSample1 extends Fragment {
         cardViewNative.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
-                switch (motionEvent.getAction()){
+                switch (motionEvent.getAction()) {
                     case MotionEvent.ACTION_DOWN:
                         if (Build.VERSION.SDK_INT >= Constants.API_L) {
                             cardViewNative.animate().setDuration(100).scaleX(1.1f).scaleY(1.1f).translationZ(10);
@@ -115,6 +115,33 @@ public class FragmentCardSample1 extends Fragment {
                 return false;
             }
         });
+    }
+
+    public void init_custom_header_inner_layout() {
+
+
+        String username_thumbnail_url = "https://lh5.googleusercontent.com/-N8bz9q4Kz0I/AAAAAAAAAAI/AAAAAAAAAAs/Icl2bQMyK7c/s265-c-k-no/photo.jpg";
+        String username = "Jason Yap";
+        String subtitle = "has commented on the video.";
+        String privacy = "Custom";
+        String timestamp = "35 minutes ago";
+        String contentText = "Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum interdum elit lectus, id pharetra mi facilisis a. Suspendisse et nisi et dolor pulvinar feugiat. Vivamus elementum sodales lacinia. In hac habitasse platea dictumst. Pellentesque mollis tortor at augue cursus, et vehicula dui pellentesque. Aenean at tempus nibh. Nulla sollicitudin lorem non nunc tempor tincidunt.";
+
+        //Create a Card
+        Sample1Card card = new Sample1Card(getActivity(), R.layout.sample1cardlayout, contentText);
+        //Create a CardHeader
+        Sample1CardHeader header = new Sample1CardHeader(getActivity(), username_thumbnail_url, username, subtitle, privacy, timestamp);
+        //Add Header to card
+        card.addCardHeader(header);
+
+        //Set shadow elevation
+        //Convert dp to float
+        float shadowElevation = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 14, getResources().getDisplayMetrics());
+        card.setCardElevation(shadowElevation);
+
+        //Set card in the CardViewNative
+        CardViewNative cardViewNative = (CardViewNative) getActivity().findViewById(R.id.sample1_carddemo_header_layout);
+        cardViewNative.setCard(card);
     }
 
 

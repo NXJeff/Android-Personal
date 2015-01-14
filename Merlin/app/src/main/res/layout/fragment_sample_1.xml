@@ -10,6 +10,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
         <it.gmariotti.cardslib.library.view.CardViewNative
             android:id="@+id/cardView1"
             android:layout_width="match_parent"
@@ -17,6 +22,12 @@
             style="@style/card_external"
             card:card_layout_resourceID="@layout/native_card_thumbnail_layout"/>
 
+        <it.gmariotti.cardslib.library.view.CardViewNative
+            android:id="@+id/sample1_carddemo_header_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/card_external"/>
 
+        </LinearLayout>
     </ScrollView>
 </LinearLayout>

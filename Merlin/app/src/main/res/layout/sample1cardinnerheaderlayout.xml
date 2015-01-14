@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_alignParentTop="true"
+    android:layout_alignParentLeft="true"
+    style="@style/card.header_compound_view">
+
+
+    <!-- This is the Button Frame.
+         You can custom its behaviour with some methods in CardHeader class -->
+
+    <ImageView
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:id="@+id/iv_user_thumbnail"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:clickable="true" />
+
+    <TextView
+        android:layout_toRightOf="@id/iv_user_thumbnail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv_username"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:layout_marginLeft="20dp"
+        android:singleLine="true"
+        android:textColor="#333"
+        android:text="DEFAULT" />
+
+    <TextView
+        android:layout_below="@id/tv_username"
+        android:layout_alignLeft="@id/tv_username"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#333"
+        android:id="@+id/tv_subtitle"
+        android:textSize="14sp"
+        android:text="DEFAULT" />
+
+    <TextView
+        android:layout_below="@id/tv_subtitle"
+        android:layout_alignLeft="@id/tv_username"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#BBB"
+        android:id="@+id/tv_privacy"
+        android:textSize="12sp"
+        android:text="Public" />
+
+    <TextView
+        android:layout_toRightOf="@id/tv_privacy"
+        android:layout_alignTop="@id/tv_privacy"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#BBB"
+        android:textSize="12sp"
+        android:id="@+id/tv_seperator_privacy"
+        android:text=" - "
+        />
+
+
+
+    <TextView
+        android:layout_toRightOf="@id/tv_seperator_privacy"
+        android:layout_alignTop="@id/tv_privacy"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#BBB"
+        android:id="@+id/tv_timestamp"
+        android:textSize="12sp"
+        android:text="1 days ago"/>
+
+</RelativeLayout>

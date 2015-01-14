@@ -237,7 +237,7 @@ public class MainActivity extends ActionBarActivity {
 
             case CASE_HOME:
                 changeActionbarColor(color.primary_material_dark);
-                fragment = new FragmentHome();
+                fragment = new FragmentCardSample1();
                 args.putString(FragmentHome.ITEM_NAME, drawerItemList.get(position)
                         .getItemName());
                 args.putInt(FragmentHome.IMAGE_RESOURCE_ID, drawerItemList.get(position)
