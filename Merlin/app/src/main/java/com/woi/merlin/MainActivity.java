@@ -16,12 +16,15 @@ import android.widget.ListView;
 
 import com.woi.merlin.fragment.FragmentCardSample1;
 import com.woi.merlin.fragment.FragmentHome;
+import com.woi.merlin.notification.service.NotificationReceiver;
 import com.woi.merlin.ui.drawer.CustomDrawerAdapter;
 import com.woi.merlin.ui.drawer.DrawerItem;
 import com.woi.merlin.ui.drawer.DrawerItemType;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import merlin.Box;
 
 import static com.woi.merlin.R.*;
 
@@ -50,9 +53,12 @@ public class MainActivity extends ActionBarActivity {
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(layout.activity_main);
+
+        NotificationReceiver.scheduleAlarms(this);
+
 
         //init
         mCurrentDrawerId = CASE_HOME;
