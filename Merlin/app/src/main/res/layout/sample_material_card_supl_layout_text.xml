@@ -1,0 +1,27 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="@dimen/actions_padding"
+    android:paddingLeft="@dimen/actions_padding_left"
+    android:paddingRight="@dimen/actions_padding_left">
+
+    <TextView
+        android:id="@+id/text1"
+        android:text="SHARE"
+        android:background="?android:selectableItemBackground"
+        android:layout_width="wrap_content"
+        style="@style/card.native.actions"
+        android:layout_height="wrap_content" />
+
+
+    <TextView
+        android:id="@+id/text2"
+        android:text="LEARN MORE"
+        android:background="?android:selectableItemBackground"
+        android:textColor="@color/orange_500"
+        android:layout_width="wrap_content"
+        style="@style/card.native.actions"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>

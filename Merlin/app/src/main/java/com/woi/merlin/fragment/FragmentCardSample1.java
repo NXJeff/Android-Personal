@@ -10,14 +10,19 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ScrollView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.woi.merlin.R;
 import com.woi.merlin.card.Sample1Card;
 import com.woi.merlin.card.Sample1CardHeader;
 
+import java.util.ArrayList;
+
 import it.gmariotti.cardslib.library.Constants;
+import it.gmariotti.cardslib.library.cards.actions.BaseSupplementalAction;
+import it.gmariotti.cardslib.library.cards.actions.IconSupplementalAction;
+import it.gmariotti.cardslib.library.cards.actions.TextSupplementalAction;
+import it.gmariotti.cardslib.library.cards.material.MaterialLargeImageCard;
 import it.gmariotti.cardslib.library.internal.Card;
 import it.gmariotti.cardslib.library.internal.CardHeader;
 import it.gmariotti.cardslib.library.internal.CardThumbnail;
@@ -50,6 +55,8 @@ public class FragmentCardSample1 extends Fragment {
     private void initCards() {
         init_standard_header_with_overflow_button();
         init_custom_header_inner_layout();
+        init_material_largeimage_text();
+        init_material_largeimage_icon();
     }
 
     private void init_standard_header_with_overflow_button() {
@@ -142,6 +149,98 @@ public class FragmentCardSample1 extends Fragment {
         //Set card in the CardViewNative
         CardViewNative cardViewNative = (CardViewNative) getActivity().findViewById(R.id.sample1_carddemo_header_layout);
         cardViewNative.setCard(card);
+    }
+
+    /**
+     * Builds a Material Card with Large Image and Text
+     */
+    private void init_material_largeimage_text() {
+
+        ArrayList<BaseSupplementalAction> actions = new ArrayList<BaseSupplementalAction>();
+
+        // Set supplemental actions
+        TextSupplementalAction t1 = new TextSupplementalAction(getActivity(), R.id.text1);
+        t1.setOnActionClickListener(new BaseSupplementalAction.OnActionClickListener() {
+            @Override
+            public void onClick(Card card, View view) {
+                Toast.makeText(getActivity(), " Click on Text SHARE ", Toast.LENGTH_SHORT).show();
+            }
+        });
+        actions.add(t1);
+
+        TextSupplementalAction t2 = new TextSupplementalAction(getActivity(), R.id.text2);
+        t2.setOnActionClickListener(new BaseSupplementalAction.OnActionClickListener() {
+            @Override
+            public void onClick(Card card, View view) {
+                Toast.makeText(getActivity(), " Click on Text LEARN ", Toast.LENGTH_SHORT).show();
+            }
+        });
+        actions.add(t2);
+
+        //Create a Card, set the title over the image and set the thumbnail
+        MaterialLargeImageCard card =
+                MaterialLargeImageCard.with(getActivity())
+                        .setTextOverImage("Italian Beaches")
+                        .setTitle("This is my favorite local beach")
+                        .setSubTitle("A wonderful place")
+                        .useDrawableId(R.drawable.card_bg_1)
+                        .setupSupplementalActions(R.layout.sample_material_card_supl_layout_text, actions)
+                        .build();
+
+        card.setOnClickListener(new Card.OnCardClickListener() {
+            @Override
+            public void onClick(Card card, View view) {
+                Toast.makeText(getActivity(), " Click on ActionArea ", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        //Set card in the CardViewNative
+        CardViewNative cardView = (CardViewNative) getActivity().findViewById(R.id.carddemo_largeimage_text);
+        cardView.setCard(card);
+    }
+
+    /**
+     * Builds a Material Card with Large and small icons as supplemental actions
+     */
+    private void init_material_largeimage_icon() {
+
+        // Set supplemental actions as icon
+        ArrayList<BaseSupplementalAction> actions = new ArrayList<BaseSupplementalAction>();
+        IconSupplementalAction t1 = new IconSupplementalAction(getActivity(), R.id.ic1);
+        t1.setOnActionClickListener(new BaseSupplementalAction.OnActionClickListener() {
+            @Override
+            public void onClick(Card card, View view) {
+                Toast.makeText(getActivity(), " Click on Text SHARE ", Toast.LENGTH_SHORT).show();
+            }
+        });
+        actions.add(t1);
+
+        IconSupplementalAction t2 = new IconSupplementalAction(getActivity(), R.id.ic2);
+        t2.setOnActionClickListener(new BaseSupplementalAction.OnActionClickListener() {
+            @Override
+            public void onClick(Card card, View view) {
+                Toast.makeText(getActivity(), " Click on Text LEARN ", Toast.LENGTH_SHORT).show();
+            }
+        });
+        actions.add(t2);
+
+        MaterialLargeImageCard card =
+                MaterialLargeImageCard.with(getActivity())
+                        .setTextOverImage("Italian Beaches")
+                        .useDrawableId(R.drawable.card_bg_1)
+                        .setupSupplementalActions(R.layout.sample_material_card_supl_icon_layout, actions)
+                        .build();
+
+        card.setOnClickListener(new Card.OnCardClickListener() {
+            @Override
+            public void onClick(Card card, View view) {
+                Toast.makeText(getActivity(), " Click on ActionArea ", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        //Set card in the CardViewNative
+        CardViewNative cardView = (CardViewNative) getActivity().findViewById(R.id.carddemo_largeimage);
+        cardView.setCard(card);
     }
 
 

@@ -2,12 +2,15 @@ package com.woi.merlin;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,6 +20,7 @@ import android.widget.ListView;
 import com.woi.merlin.fragment.FragmentCardSample1;
 import com.woi.merlin.fragment.FragmentHome;
 import com.woi.merlin.notification.service.NotificationReceiver;
+import com.woi.merlin.notification.service.NotificationService;
 import com.woi.merlin.ui.drawer.CustomDrawerAdapter;
 import com.woi.merlin.ui.drawer.DrawerItem;
 import com.woi.merlin.ui.drawer.DrawerItemType;
@@ -25,6 +29,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import merlin.Box;
+import merlin.DaoMaster;
+import merlin.DaoSession;
 
 import static com.woi.merlin.R.*;
 
@@ -37,6 +43,7 @@ public class MainActivity extends ActionBarActivity {
     private ActionBarDrawerToggle mDrawerToggle;
     List<DrawerItem> drawerItemList;
     private CustomDrawerAdapter adapter;
+    private DaoSession daoSession;
 
     private static final int CASE_HEADER_NAVIGATION = 0;
     private static final int CASE_HOME = 1;
@@ -50,6 +57,7 @@ public class MainActivity extends ActionBarActivity {
     private static final int CASE_ABOUT = 9;
     private static final int CASE_HELP = 10;
     private static final int CASE_EXIT = 11;
+    private static final String TAG = "MERLIN-APP";
 
 
     @Override
@@ -57,7 +65,8 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(layout.activity_main);
 
-        NotificationReceiver.scheduleAlarms(this);
+//        NotificationReceiver.scheduleAlarms(this);
+
 
 
         //init
@@ -77,6 +86,26 @@ public class MainActivity extends ActionBarActivity {
 
         //Initialisze navigation drawer
         initNavigationDrawer(savedInstanceState);
+        setupDatabase();
+        testNotification();
+    }
+
+    private void setupDatabase() {
+        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, "merlin-db", null);
+        SQLiteDatabase db = helper.getWritableDatabase();
+        DaoMaster daoMaster = new DaoMaster(db);
+        daoSession = daoMaster.newSession();
+        Log.d(TAG, "Initialise database completed on " + this.getClass().getSimpleName());
+    }
+
+    private void testInsert() {
+
+    }
+    private void testNotification() {
+        Intent service = new Intent(this, NotificationService.class);
+//        service.putExtra("Notification", String.valueOf(alarmId));
+//        service.setAction(AlarmService.POPULATE);
+        startService(service);
     }
 
     @Override
@@ -313,5 +342,13 @@ public class MainActivity extends ActionBarActivity {
 
     private void changeActionbarTitle(int drawerId) {
         mCurrentDrawerId = drawerId;
+    }
+
+    public DaoSession getDaoSession() {
+        return daoSession;
+    }
+
+    public void setDaoSession(DaoSession daoSession) {
+        this.daoSession = daoSession;
     }
 }

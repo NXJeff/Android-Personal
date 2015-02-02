@@ -14,5 +14,16 @@ public class MyDaoGenerator {
         box.addIntProperty("slots");
         box.addStringProperty("description");
         new DaoGenerator().generateAll(schema, args[0]);
+
+        //Reminder
+        Entity reminder = schema.addEntity("Reminder");
+        reminder.addIdProperty();
+        reminder.addStringProperty("name");
+        reminder.addStringProperty("description");
+        reminder.addDateProperty("reminderTime");
+        reminder.addStringProperty("repeatType");
+        reminder.addStringProperty("dayToRepeat");
+        reminder.addBooleanProperty("status");
+
     }
 }
