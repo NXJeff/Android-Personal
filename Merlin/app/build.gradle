@@ -59,4 +59,10 @@ dependencies {
     //greendao
     compile 'de.greenrobot:greendao:1.3.7'
 
+    //jodatime
+    compile 'net.danlew:android.joda:2.7.0'
+
+    //iconify font awesome
+    compile 'com.joanzapata.android:android-iconify:1.0.9'
+
 }

@@ -19,11 +19,14 @@ import android.widget.ListView;
 
 import com.woi.merlin.fragment.FragmentCardSample1;
 import com.woi.merlin.fragment.FragmentHome;
+import com.woi.merlin.fragment.FragmentNewReminder;
 import com.woi.merlin.notification.service.NotificationReceiver;
 import com.woi.merlin.notification.service.NotificationService;
 import com.woi.merlin.ui.drawer.CustomDrawerAdapter;
 import com.woi.merlin.ui.drawer.DrawerItem;
 import com.woi.merlin.ui.drawer.DrawerItemType;
+
+import net.danlew.android.joda.JodaTimeAndroid;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,6 +67,8 @@ public class MainActivity extends ActionBarActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(layout.activity_main);
+        //init joda
+        JodaTimeAndroid.init(this);
 
 //        NotificationReceiver.scheduleAlarms(this);
 
@@ -87,7 +92,7 @@ public class MainActivity extends ActionBarActivity {
         //Initialisze navigation drawer
         initNavigationDrawer(savedInstanceState);
         setupDatabase();
-        testNotification();
+//        testNotification();
     }
 
     private void setupDatabase() {
@@ -174,7 +179,7 @@ public class MainActivity extends ActionBarActivity {
 
         if (savedInstanceState == null) {
 
-            int position = 0;
+            int position = 1;
             for (DrawerItem di : drawerItemList) {
                 if (!di.getType().equals(DrawerItemType.TextWithImage)) {
                     position++;
@@ -281,6 +286,11 @@ public class MainActivity extends ActionBarActivity {
 
             case CASE_MY_CARDS:
                 changeActionbarColor(color.blue_500);
+                fragment = new FragmentNewReminder();
+                args.putString(FragmentHome.ITEM_NAME, drawerItemList.get(position)
+                        .getItemName());
+                args.putInt(FragmentHome.IMAGE_RESOURCE_ID, drawerItemList.get(position)
+                        .getImgResID());
                 break;
 
             case CASE_MY_MISSIONS:
