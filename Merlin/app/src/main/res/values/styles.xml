@@ -4,6 +4,7 @@
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
         <!-- Set AppCompat’s color theming attrs -->
+ 
     </style>
 
     <style name="ActionBarPopupThemeOverlay" parent="ThemeOverlay.AppCompat.Light">
@@ -27,6 +28,12 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">1dp</item>
         <item name="android:background">?android:attr/listDivider</item>
+    </style>
+
+
+    <style name="MyActionButtonStyle" parent="AppTheme">
+
+        <item name="android:padding">40sp</item>
     </style>
 
 

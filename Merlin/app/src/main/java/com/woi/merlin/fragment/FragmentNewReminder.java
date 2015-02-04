@@ -3,19 +3,25 @@ package com.woi.merlin.fragment;
 import android.app.DatePickerDialog;
 import android.app.Fragment;
 import android.app.TimePickerDialog;
+import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.IconTextView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.ThemeSingleton;
 import com.woi.merlin.R;
+import com.woi.merlin.component.ColorPickerDialog;
 import com.woi.merlin.component.DatePickerFragment;
 import com.woi.merlin.component.TimePickerFragment;
 import com.woi.merlin.util.GeneralUtil;
@@ -33,11 +39,12 @@ import java.util.List;
  */
 public class FragmentNewReminder extends Fragment {
 
-    TextView fromDatePicker, toDatePicker, atTimePicker;
+    TextView fromDatePicker, toDatePicker, atTimePicker, colorPicker;
 
     LocalDate fromDate, toDate;
     LocalTime atTime;
     Spinner repeatSpinner;
+    IconTextView colorIconView;
 
 
     public FragmentNewReminder() {
@@ -53,6 +60,8 @@ public class FragmentNewReminder extends Fragment {
         toDatePicker = (TextView) view.findViewById(R.id.toDatePickerET);
         atTimePicker = (TextView) view.findViewById(R.id.atTimePickerET);
         repeatSpinner = (Spinner) view.findViewById(R.id.repeatSpinner);
+        colorPicker = (TextView) view.findViewById(R.id.colorPickerET);
+        colorIconView = (IconTextView) view.findViewById(R.id.colorIconView);
 
         initRepeatSpinner();
 
@@ -83,6 +92,13 @@ public class FragmentNewReminder extends Fragment {
             @Override
             public void onClick(View v) {
                 showAtTimePicker();
+            }
+        });
+
+        colorPicker.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showCustomColorChooser();
             }
         });
 
@@ -181,6 +197,25 @@ public class FragmentNewReminder extends Fragment {
                 android.R.layout.simple_spinner_item, list);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         repeatSpinner.setAdapter(dataAdapter);
+    }
+
+    static int selectedColorIndex = -1;
+
+    private void showCustomColorChooser() {
+        new ColorPickerDialog().show(getActivity(), selectedColorIndex, new ColorPickerDialog.Callback() {
+            @Override
+            public void onColorSelection(int index, int color, int darker, String colorName) {
+                selectedColorIndex = index;
+                ((ActionBarActivity)getActivity()).getSupportActionBar().setBackgroundDrawable(new ColorDrawable(color));
+                colorIconView.setTextColor(color);
+                colorPicker.setText(colorName);
+                ThemeSingleton.get().positiveColor = color;
+                ThemeSingleton.get().neutralColor = color;
+                ThemeSingleton.get().negativeColor = color;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+                    getActivity().getWindow().setStatusBarColor(darker);
+            }
+        });
     }
 
 

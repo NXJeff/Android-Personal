@@ -65,4 +65,7 @@ dependencies {
     //iconify font awesome
     compile 'com.joanzapata.android:android-iconify:1.0.9'
 
+    //Material dialog
+    compile 'com.afollestad:material-dialogs:0.6.2.2'
+
 }

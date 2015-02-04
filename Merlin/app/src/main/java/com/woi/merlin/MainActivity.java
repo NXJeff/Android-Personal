@@ -96,7 +96,7 @@ public class MainActivity extends ActionBarActivity {
     }
 
     private void setupDatabase() {
-        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, "merlin-db", null);
+        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, "merlin-db-2", null);
         SQLiteDatabase db = helper.getWritableDatabase();
         DaoMaster daoMaster = new DaoMaster(db);
         daoSession = daoMaster.newSession();

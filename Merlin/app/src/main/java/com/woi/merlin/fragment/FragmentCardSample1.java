@@ -1,6 +1,7 @@
 package com.woi.merlin.fragment;
 
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.TypedValue;
@@ -13,6 +14,7 @@ import android.widget.ScrollView;
 import android.widget.Toast;
 
 import com.woi.merlin.R;
+import com.woi.merlin.activity.AddNewReminder;
 import com.woi.merlin.card.Sample1Card;
 import com.woi.merlin.card.Sample1CardHeader;
 
@@ -141,6 +143,14 @@ public class FragmentCardSample1 extends Fragment {
         //Add Header to card
         card.addCardHeader(header);
 
+        card.addPartialOnClickListener(Card.CLICK_LISTENER_CONTENT_VIEW, new Card.OnCardClickListener() {
+            @Override
+            public void onClick(Card card, View view) {
+                Toast.makeText(getActivity(),"New activity", Toast.LENGTH_LONG).show();
+                testOpenActivity();
+            }
+        });
+
         //Set shadow elevation
         //Convert dp to float
         float shadowElevation = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 14, getResources().getDisplayMetrics());
@@ -241,6 +251,13 @@ public class FragmentCardSample1 extends Fragment {
         //Set card in the CardViewNative
         CardViewNative cardView = (CardViewNative) getActivity().findViewById(R.id.carddemo_largeimage);
         cardView.setCard(card);
+    }
+
+    public void testOpenActivity() {
+        Intent intent = new Intent(getActivity(), AddNewReminder.class);
+//        intent.putExtra(EXTRA_MESSAGE, message);
+
+        startActivity(intent);
     }
 
 

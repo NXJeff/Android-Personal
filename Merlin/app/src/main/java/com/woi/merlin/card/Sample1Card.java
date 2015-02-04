@@ -20,7 +20,7 @@ public class Sample1Card extends Card {
     public Sample1Card(Context context, int layout, String contentText) {
         super(context, layout);
         this.contentText = contentText;
-        init();
+//        init();
     }
 
     /**
@@ -31,12 +31,12 @@ public class Sample1Card extends Card {
         //No Header
 
         //Set a OnClickListener listener
-        setOnClickListener(new OnCardClickListener() {
-            @Override
-            public void onClick(Card card, View view) {
-                Toast.makeText(getContext(), "Click Listener card=", Toast.LENGTH_LONG).show();
-            }
-        });
+//        setOnClickListener(new OnCardClickListener() {
+//            @Override
+//            public void onClick(Card card, View view) {
+//                Toast.makeText(getContext(), "Click Listener card=", Toast.LENGTH_LONG).show();
+//            }
+//        });
     }
 
     @Override
