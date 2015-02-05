@@ -2,12 +2,17 @@ package com.woi.merlin.activity;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
+import android.support.v4.app.TaskStackBuilder;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
@@ -58,6 +63,44 @@ public class AddNewReminder extends ActionBarActivity {
         getMenuInflater().inflate(R.menu.add_new_reminder_action_bar_menu, menu);
         return true;
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        Log.d("itemId", getResources().getResourceName(item.getItemId()));
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.homeAsUp:
+            case android.R.id.home:
+//                Intent upIntent = NavUtils.getParentActivityIntent(this);
+//                if (NavUtils.shouldUpRecreateTask(this, upIntent)) {
+//                    // This activity is NOT part of this app's task, so create a new task
+//                    // when navigating up, with a synthesized back stack.
+//                    TaskStackBuilder.create(this)
+//                            // Add all of this activity's parents to the back stack
+//                            .addNextIntentWithParentStack(upIntent)
+//                                    // Navigate up to the closest parent
+//                            .startActivities();
+//                    finish();
+//                } else {
+//                    // This activity is part of this app's task, so simply
+//                    // navigate up to the logical parent activity.
+//                    NavUtils.navigateUpTo(this, upIntent);
+//                }
+//                finish();
+                onBackPressed();
+                return true;
+
+            case R.id.menu_save:
+
+                break;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
 
     private void initActionBar() {
         // enable ActionBar app icon to behave as action to toggle nav drawer

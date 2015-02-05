@@ -3,6 +3,7 @@ package com.woi.merlin;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v4.view.GravityCompat;
@@ -16,6 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.woi.merlin.fragment.FragmentCardSample1;
 import com.woi.merlin.fragment.FragmentHome;
@@ -41,7 +43,7 @@ import static com.woi.merlin.R.*;
 public class MainActivity extends ActionBarActivity {
 
     private ListView mDrawerList;
-    private int mCurrentDrawerId;
+    private int mCurrentDrawerId = -1;
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
     List<DrawerItem> drawerItemList;
@@ -68,20 +70,7 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(layout.activity_main);
         //init joda
-        JodaTimeAndroid.init(this);
-
 //        NotificationReceiver.scheduleAlarms(this);
-
-
-
-        //init
-        mCurrentDrawerId = CASE_HOME;
-
-        drawerItemList = new ArrayList<DrawerItem>();
-        mDrawerLayout = (DrawerLayout) findViewById(id.drawer_layout);
-        mDrawerLayout.setDrawerShadow(drawable.drawer_shadow,
-                GravityCompat.START);
-
         // enable ActionBar app icon to behave as action to toggle nav drawer
         // use action bar here
         getSupportActionBar().setIcon(drawable.ic_launcher);
@@ -90,10 +79,41 @@ public class MainActivity extends ActionBarActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         //Initialisze navigation drawer
+
+        if (savedInstanceState == null) {
+            savedInstanceState = new Bundle();
+            JodaTimeAndroid.init(this);
+            setupDatabase();
+        } else {
+            mCurrentDrawerId = savedInstanceState.getInt("mLastDrawerId");
+        }
+
         initNavigationDrawer(savedInstanceState);
-        setupDatabase();
+
+
+
 //        testNotification();
+
     }
+
+    @Override
+    protected void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+        savedInstanceState.putInt("mLastDrawerId", mCurrentDrawerId);
+//        Toast.makeText(MainActivity.this,
+//                "onSaveInstanceState:\n" +
+//                        "saved_state = " + mCurrentDrawerId,
+//                Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        // Restore UI state from the savedInstanceState.
+        // This bundle has also been passed to onCreate.
+        mCurrentDrawerId = savedInstanceState.getInt("mLastDrawerId");
+    }
+
 
     private void setupDatabase() {
         DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, "merlin-db-2", null);
@@ -106,6 +126,7 @@ public class MainActivity extends ActionBarActivity {
     private void testInsert() {
 
     }
+
     private void testNotification() {
         Intent service = new Intent(this, NotificationService.class);
 //        service.putExtra("Notification", String.valueOf(alarmId));
@@ -120,33 +141,44 @@ public class MainActivity extends ActionBarActivity {
         mDrawerToggle.syncState();
     }
 
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        mDrawerToggle.onConfigurationChanged(newConfig);
+    }
+
     public void initNavigationDrawer(Bundle savedInstanceState) {
         // Initializing
-        drawerItemList = new ArrayList<DrawerItem>();
-        mDrawerLayout = (DrawerLayout) findViewById(id.drawer_layout);
         mDrawerList = (ListView) findViewById(id.drawer);
 
-        drawerItemList.add(new DrawerItem(CASE_HEADER_NAVIGATION, getTitleString(CASE_HEADER_NAVIGATION))); // adding a header to the
-        // list
-        drawerItemList.add(new DrawerItem(CASE_HOME, getTitleString(CASE_HOME), drawable.ic_action_email));
-        drawerItemList.add(new DrawerItem(CASE_MY_CARDS, getTitleString(CASE_MY_CARDS), drawable.ic_action_good));
-        drawerItemList.add(new DrawerItem(CASE_MY_MISSIONS, getTitleString(CASE_MY_MISSIONS), drawable.ic_action_gamepad));
-        drawerItemList.add(new DrawerItem(CASE_AVAILABLE_MISSIONS, getTitleString(CASE_AVAILABLE_MISSIONS), drawable.ic_action_labels));
-        drawerItemList.add(new DrawerItem(CASE_MY_TIMELINE, getTitleString(CASE_MY_TIMELINE), drawable.ic_action_good));
-        drawerItemList.add(new DrawerItem(CASE_TIMELINE, getTitleString(CASE_TIMELINE), drawable.ic_action_gamepad));
+        //init
+//        mCurrentDrawerId = CASE_HOME;
 
-        drawerItemList.add(new DrawerItem(CASE_HEADER_MISC, getTitleString(CASE_HEADER_MISC))); // adding a header to the
-        // list
-        drawerItemList.add(new DrawerItem(CASE_SETTING, getTitleString(CASE_SETTING), drawable.ic_action_settings));
-        drawerItemList.add(new DrawerItem(CASE_ABOUT, getTitleString(CASE_ABOUT), drawable.ic_action_about));
-        drawerItemList.add(new DrawerItem(CASE_HELP, getTitleString(CASE_HELP), drawable.ic_action_help));
-        drawerItemList.add(new DrawerItem(CASE_EXIT, getTitleString(CASE_EXIT), drawable.ic_action_help));
+        mDrawerLayout = (DrawerLayout) findViewById(id.drawer_layout);
+        mDrawerLayout.setDrawerShadow(drawable.drawer_shadow,
+                GravityCompat.START);
 
-        adapter = new CustomDrawerAdapter(this, layout.custom_drawer_item,
-                drawerItemList);
+        if(drawerItemList == null) {
+            drawerItemList = new ArrayList<DrawerItem>();
+            drawerItemList.add(new DrawerItem(CASE_HEADER_NAVIGATION, getTitleString(CASE_HEADER_NAVIGATION))); // adding a header to the
+            // list
+            drawerItemList.add(new DrawerItem(CASE_HOME, getTitleString(CASE_HOME), drawable.ic_action_email));
+            drawerItemList.add(new DrawerItem(CASE_MY_CARDS, getTitleString(CASE_MY_CARDS), drawable.ic_action_good));
+            drawerItemList.add(new DrawerItem(CASE_MY_MISSIONS, getTitleString(CASE_MY_MISSIONS), drawable.ic_action_gamepad));
+            drawerItemList.add(new DrawerItem(CASE_AVAILABLE_MISSIONS, getTitleString(CASE_AVAILABLE_MISSIONS), drawable.ic_action_labels));
+            drawerItemList.add(new DrawerItem(CASE_MY_TIMELINE, getTitleString(CASE_MY_TIMELINE), drawable.ic_action_good));
+            drawerItemList.add(new DrawerItem(CASE_TIMELINE, getTitleString(CASE_TIMELINE), drawable.ic_action_gamepad));
 
-        mDrawerList.setAdapter(adapter);
-
+            drawerItemList.add(new DrawerItem(CASE_HEADER_MISC, getTitleString(CASE_HEADER_MISC))); // adding a header to the
+            // list
+            drawerItemList.add(new DrawerItem(CASE_SETTING, getTitleString(CASE_SETTING), drawable.ic_action_settings));
+            drawerItemList.add(new DrawerItem(CASE_ABOUT, getTitleString(CASE_ABOUT), drawable.ic_action_about));
+            drawerItemList.add(new DrawerItem(CASE_HELP, getTitleString(CASE_HELP), drawable.ic_action_help));
+            drawerItemList.add(new DrawerItem(CASE_EXIT, getTitleString(CASE_EXIT), drawable.ic_action_help));
+            adapter = new CustomDrawerAdapter(this, layout.custom_drawer_item,
+                    drawerItemList);
+            mDrawerList.setAdapter(adapter);
+        }
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
 
 //        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
@@ -163,7 +195,7 @@ public class MainActivity extends ActionBarActivity {
             /** Called when a drawer has settled in a completely closed state. */
             public void onDrawerClosed(View view) {
                 super.onDrawerClosed(view);
-                getSupportActionBar().setTitle(getTitleString(mCurrentDrawerId));
+                changeActionbarTitle(mCurrentDrawerId);
             }
 
             /** Called when a drawer has settled in a completely open state. */
@@ -177,7 +209,7 @@ public class MainActivity extends ActionBarActivity {
 
         mDrawerLayout.setDrawerListener(mDrawerToggle);
 
-        if (savedInstanceState == null) {
+        if (mCurrentDrawerId == -1) {
 
             int position = 1;
             for (DrawerItem di : drawerItemList) {
@@ -188,8 +220,13 @@ public class MainActivity extends ActionBarActivity {
                     break;
                 }
             }
+        } else {
+            changeActionbarTitle(mCurrentDrawerId);
+            changeActionbarColor(mCurrentDrawerId);
         }
     }
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -266,17 +303,18 @@ public class MainActivity extends ActionBarActivity {
                 selectFragment(position);
             }
         }
+
     }
 
     public void selectFragment(int position) {
         Fragment fragment = null;
         Bundle args = new Bundle();
-        int drawerId = drawerItemList.get(position).getDrawerId();
-        changeActionbarTitle(drawerId);
-        switch (drawerId) {
+        mCurrentDrawerId = drawerItemList.get(position).getDrawerId();
+        changeActionbarTitle(mCurrentDrawerId);
+        changeActionbarColor(mCurrentDrawerId);
+        switch (mCurrentDrawerId) {
 
             case CASE_HOME:
-                changeActionbarColor(color.primary_material_dark);
                 fragment = new FragmentCardSample1();
                 args.putString(FragmentHome.ITEM_NAME, drawerItemList.get(position)
                         .getItemName());
@@ -285,7 +323,6 @@ public class MainActivity extends ActionBarActivity {
                 break;
 
             case CASE_MY_CARDS:
-                changeActionbarColor(color.blue_500);
                 fragment = new FragmentNewReminder();
                 args.putString(FragmentHome.ITEM_NAME, drawerItemList.get(position)
                         .getItemName());
@@ -294,22 +331,17 @@ public class MainActivity extends ActionBarActivity {
                 break;
 
             case CASE_MY_MISSIONS:
-                changeActionbarColor(color.purple_500);
                 break;
 
             case CASE_AVAILABLE_MISSIONS:
-                changeActionbarColor(color.red_500);
                 break;
 
             case CASE_MY_TIMELINE:
-                changeActionbarColor(color.teal_500);
                 break;
 
             case CASE_TIMELINE:
-                changeActionbarColor(color.amber_500);
                 break;
             case CASE_SETTING:
-                changeActionbarColor(color.orange_500);
                 break;
 
             case CASE_ABOUT:
@@ -347,11 +379,40 @@ public class MainActivity extends ActionBarActivity {
 
     //Convenient method to change the action bar background color
     private void changeActionbarColor(int cid) {
-        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(this.getResources().getColor(cid)));
+        int colorId = -1;
+
+        switch (cid) {
+            case CASE_HOME:
+                colorId = color.primary_material_dark;
+                break;
+
+            case CASE_MY_CARDS:
+                colorId = color.blue_500;
+                break;
+
+            case CASE_MY_MISSIONS:
+                colorId = color.purple_500;
+                break;
+
+            case CASE_AVAILABLE_MISSIONS:
+                colorId = color.red_500;
+                break;
+
+            case CASE_MY_TIMELINE:
+                colorId = color.teal_500;
+                break;
+
+            case CASE_TIMELINE:
+                colorId = color.amber_500;
+                break;
+        }
+
+        if (colorId != -1)
+            getSupportActionBar().setBackgroundDrawable(new ColorDrawable(this.getResources().getColor(colorId)));
     }
 
     private void changeActionbarTitle(int drawerId) {
-        mCurrentDrawerId = drawerId;
+        getSupportActionBar().setTitle(getTitleString(drawerId));
     }
 
     public DaoSession getDaoSession() {

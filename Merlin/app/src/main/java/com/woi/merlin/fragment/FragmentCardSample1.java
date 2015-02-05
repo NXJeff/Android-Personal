@@ -146,7 +146,7 @@ public class FragmentCardSample1 extends Fragment {
         card.addPartialOnClickListener(Card.CLICK_LISTENER_CONTENT_VIEW, new Card.OnCardClickListener() {
             @Override
             public void onClick(Card card, View view) {
-                Toast.makeText(getActivity(),"New activity", Toast.LENGTH_LONG).show();
+//                Toast.makeText(getActivity(),"New activity", Toast.LENGTH_LONG).show();
                 testOpenActivity();
             }
         });
@@ -244,7 +244,7 @@ public class FragmentCardSample1 extends Fragment {
         card.setOnClickListener(new Card.OnCardClickListener() {
             @Override
             public void onClick(Card card, View view) {
-                Toast.makeText(getActivity(), " Click on ActionArea ", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getActivity(), " Click on ActionArea ", Toast.LENGTH_SHORT).show();
             }
         });
 
