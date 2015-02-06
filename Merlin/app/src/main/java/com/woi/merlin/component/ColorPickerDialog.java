@@ -101,7 +101,7 @@ public class ColorPickerDialog extends DialogFragment implements View.OnClickLis
         else view.setBackgroundDrawable(d);
     }
 
-    private int shiftColor(int color) {
+    public static int shiftColor(int color) {
         float[] hsv = new float[3];
         Color.colorToHSV(color, hsv);
         hsv[2] *= 0.9f; // value component

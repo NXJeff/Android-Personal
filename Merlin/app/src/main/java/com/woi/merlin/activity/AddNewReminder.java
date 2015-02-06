@@ -3,6 +3,7 @@ package com.woi.merlin.activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.content.res.TypedArray;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -14,18 +15,25 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.IconTextView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.ThemeSingleton;
 import com.woi.merlin.R;
 import com.woi.merlin.component.ColorPickerDialog;
 import com.woi.merlin.component.DatePickerFragment;
 import com.woi.merlin.component.TimePickerFragment;
+import com.woi.merlin.constant.ReminderType;
+import com.woi.merlin.constant.RepeatType;
 import com.woi.merlin.util.GeneralUtil;
 
 import org.joda.time.LocalDate;
@@ -44,7 +52,7 @@ public class AddNewReminder extends ActionBarActivity {
 
     LocalDate fromDate, toDate;
     LocalTime atTime;
-    Spinner repeatSpinner;
+    Spinner repeatSpinner, customRepeatMode, reminderTypeSpinner;
     IconTextView colorIconView;
 
     @Override
@@ -55,6 +63,8 @@ public class AddNewReminder extends ActionBarActivity {
         initActionBar();
         initViewComponents();
         initRepeatSpinner();
+        initCustomRepeatMode();
+        initReminderType();
 
     }
 
@@ -72,22 +82,6 @@ public class AddNewReminder extends ActionBarActivity {
         switch (item.getItemId()) {
             case R.id.homeAsUp:
             case android.R.id.home:
-//                Intent upIntent = NavUtils.getParentActivityIntent(this);
-//                if (NavUtils.shouldUpRecreateTask(this, upIntent)) {
-//                    // This activity is NOT part of this app's task, so create a new task
-//                    // when navigating up, with a synthesized back stack.
-//                    TaskStackBuilder.create(this)
-//                            // Add all of this activity's parents to the back stack
-//                            .addNextIntentWithParentStack(upIntent)
-//                                    // Navigate up to the closest parent
-//                            .startActivities();
-//                    finish();
-//                } else {
-//                    // This activity is part of this app's task, so simply
-//                    // navigate up to the logical parent activity.
-//                    NavUtils.navigateUpTo(this, upIntent);
-//                }
-//                finish();
                 onBackPressed();
                 return true;
 
@@ -117,6 +111,8 @@ public class AddNewReminder extends ActionBarActivity {
         toDatePicker = (TextView) findViewById(R.id.toDatePickerET);
         atTimePicker = (TextView) findViewById(R.id.atTimePickerET);
         repeatSpinner = (Spinner) findViewById(R.id.repeatSpinner);
+        customRepeatMode = (Spinner) findViewById(R.id.customRepeatMode);
+        reminderTypeSpinner = (Spinner) findViewById(R.id.reminderTypeSpinner);
         colorPicker = (TextView) findViewById(R.id.colorPickerET);
         colorIconView = (IconTextView) findViewById(R.id.colorIconView);
         fromDate = new LocalDate();
@@ -154,6 +150,9 @@ public class AddNewReminder extends ActionBarActivity {
                 showCustomColorChooser();
             }
         });
+
+        applyDefaultColorToActivity();
+
     }
 
     public void showFromDateDatePicker() {
@@ -236,19 +235,98 @@ public class AddNewReminder extends ActionBarActivity {
         }
     };
 
+    /**
+     * repeatSpinner
+     */
     private void initRepeatSpinner() {
         List<String> list = new ArrayList<String>();
-        list.add("Do not repeat");
-        list.add("Every Day");
-        list.add("Every Week");
-        list.add("Every Month");
-        list.add("Every Year");
-        list.add("Custom...");
+        list.add(RepeatType.sDONOTREPEAT);
+        list.add(RepeatType.sEVERYDAY);
+        list.add(RepeatType.sEVERYWEEK);
+        list.add(RepeatType.sEVERYMONTH);
+        list.add(RepeatType.sEVERYYEAR);
+        list.add(RepeatType.sCUSTOM);
+
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_item, list);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         repeatSpinner.setAdapter(dataAdapter);
+
+        repeatSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+            public void onItemSelected(AdapterView<?> arg0, View arg1,
+                                       int arg2, long arg3) {
+                String id = String.valueOf(repeatSpinner.getSelectedItem());
+                LinearLayout repeatCustomView = (LinearLayout) findViewById(R.id.repeatCustomView);
+                LinearLayout dosePerDayOptionLayout = (LinearLayout) findViewById(R.id.dosePerDayOptionLayout);
+
+                if (id == RepeatType.sCUSTOM) {
+                    repeatCustomView.setVisibility(View.VISIBLE);
+                } else {
+                    repeatCustomView.setVisibility(View.GONE);
+                }
+
+                if (id == RepeatType.sDONOTREPEAT) {
+                    dosePerDayOptionLayout.setVisibility(View.GONE);
+                } else {
+                    dosePerDayOptionLayout.setVisibility(View.VISIBLE);
+                }
+            }
+
+            public void onNothingSelected(AdapterView<?> arg0) {
+                //Do nothing
+            }
+        });
+
     }
+
+    /**
+     * customRepeatMode
+     */
+    private void initCustomRepeatMode() {
+        List<String> list = new ArrayList<String>();
+        list.add("Forever");
+        list.add("Until a date");
+        list.add("For a number of event");
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_item, list);
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        customRepeatMode.setAdapter(dataAdapter);
+    }
+
+    private void initReminderType() {
+        List<String> list = new ArrayList<String>();
+        list.add(ReminderType.sNormal);
+        list.add(ReminderType.sMedicalReminder);
+        list.add(ReminderType.sLoveCalendar);
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_item, list);
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        reminderTypeSpinner.setAdapter(dataAdapter);
+
+        reminderTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+            public void onItemSelected(AdapterView<?> arg0, View arg1,
+                                       int arg2, long arg3) {
+                String id = String.valueOf(reminderTypeSpinner.getSelectedItem());
+
+
+                if (id == ReminderType.sNormal) {
+                    applyDefaultColorToActivity(13);
+                } else if (id == ReminderType.sMedicalReminder) {
+                    applyDefaultColorToActivity(5);
+                } else if (id == ReminderType.sLoveCalendar) {
+                    applyDefaultColorToActivity(20);
+                }
+
+            }
+
+            public void onNothingSelected(AdapterView<?> arg0) {
+                //Do nothing
+            }
+        });
+    }
+
 
     static int selectedColorIndex = -1;
 
@@ -257,15 +335,54 @@ public class AddNewReminder extends ActionBarActivity {
             @Override
             public void onColorSelection(int index, int color, int darker, String colorName) {
                 selectedColorIndex = index;
-                getSupportActionBar().setBackgroundDrawable(new ColorDrawable(color));
-                colorIconView.setTextColor(color);
-                colorPicker.setText(colorName);
-                ThemeSingleton.get().positiveColor = color;
-                ThemeSingleton.get().neutralColor = color;
-                ThemeSingleton.get().negativeColor = color;
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-                    getWindow().setStatusBarColor(darker);
+                applyColorToActivity(color, darker, colorName);
             }
         });
+    }
+
+    private void applyDefaultColorToActivity() {
+        applyDefaultColorToActivity(13);
+    }
+
+    private void applyDefaultColorToActivity(int colorPosition) {
+        TypedArray ca = getResources().obtainTypedArray(R.array.colors);
+        TypedArray cna = getResources().obtainTypedArray(R.array.colorsName);
+        int color = ca.getColor(colorPosition, 0);
+        int darker = ColorPickerDialog.shiftColor(color);
+        String colorName = cna.getString(colorPosition);
+        applyColorToActivity(color, darker, colorName);
+    }
+
+    private void applyColorToActivity(int color, int darker, String colorName) {
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(color));
+        colorIconView.setTextColor(color);
+        colorPicker.setText(colorName);
+        ThemeSingleton.get().positiveColor = color;
+        ThemeSingleton.get().neutralColor = color;
+        ThemeSingleton.get().negativeColor = color;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+            getWindow().setStatusBarColor(darker);
+    }
+
+    @Override
+    public void onBackPressed() {
+
+        new MaterialDialog.Builder(this)
+                .title("Cancel")
+                .content("Are you sure you want to discard this event?")
+                .positiveText("Keep Editing")
+                .negativeText("Discard")
+                .callback(new MaterialDialog.ButtonCallback() {
+                    @Override
+                    public void onPositive(MaterialDialog dialog) {
+                        dialog.dismiss();
+                    }
+
+                    @Override
+                    public void onNegative(MaterialDialog dialog) {
+                        finish();
+                    }
+                })
+                .show();
     }
 }
