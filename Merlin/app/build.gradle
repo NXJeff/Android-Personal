@@ -48,7 +48,7 @@ dependencies {
     compile 'com.github.gabrielemariotti.cards:cardslib-extra-dragdrop:2.0.1'
 
     //Pull to refresh
-    compile 'com.github.chrisbanes.actionbarpulltorefresh:library:+'
+//    compile 'com.github.chrisbanes.actionbarpulltorefresh:library:+'
 
     //Optional for twowayview support (coming soon)
     //compile 'com.github.gabrielemariotti.cards:cardslib-extra-twoway:2.0.1'
