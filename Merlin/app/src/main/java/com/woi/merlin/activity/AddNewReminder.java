@@ -39,6 +39,7 @@ import com.woi.merlin.util.GeneralUtil;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -49,11 +50,11 @@ import java.util.List;
 public class AddNewReminder extends ActionBarActivity {
 
     TextView fromDatePicker, toDatePicker, atTimePicker, colorPicker;
-
+    Spinner repeatSpinner, customRepeatMode, reminderTypeSpinner;
     LocalDate fromDate, toDate;
     LocalTime atTime;
-    Spinner repeatSpinner, customRepeatMode, reminderTypeSpinner;
     IconTextView colorIconView;
+    int selectedColor;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -347,10 +348,10 @@ public class AddNewReminder extends ActionBarActivity {
     private void applyDefaultColorToActivity(int colorPosition) {
         TypedArray ca = getResources().obtainTypedArray(R.array.colors);
         TypedArray cna = getResources().obtainTypedArray(R.array.colorsName);
-        int color = ca.getColor(colorPosition, 0);
-        int darker = ColorPickerDialog.shiftColor(color);
+        selectedColor = ca.getColor(colorPosition, 0);
+        int darker = ColorPickerDialog.shiftColor(selectedColor);
         String colorName = cna.getString(colorPosition);
-        applyColorToActivity(color, darker, colorName);
+        applyColorToActivity(selectedColor, darker, colorName);
     }
 
     private void applyColorToActivity(int color, int darker, String colorName) {
@@ -384,5 +385,33 @@ public class AddNewReminder extends ActionBarActivity {
                     }
                 })
                 .show();
+    }
+
+    public boolean validateReminderValues() {
+
+//        repeatSpinner, customRepeatMode, reminderTypeSpinner;
+//        fromDate, toDate;
+//        atTime;
+//        colorIconView;
+//        selectedColor;
+
+        if (fromDate == null) {
+
+        }
+
+        return false;
+    }
+
+
+    public void saveToDatabase() {
+
+    }
+
+    public void onSave() {
+        new Thread(new Runnable() {
+            public void run() {
+                saveToDatabase();
+            }
+        }).start();
     }
 }

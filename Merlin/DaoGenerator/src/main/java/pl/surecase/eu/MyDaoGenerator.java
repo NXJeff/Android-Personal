@@ -7,13 +7,7 @@ import de.greenrobot.daogenerator.Schema;
 public class MyDaoGenerator {
 
     public static void main(String args[]) throws Exception {
-        Schema schema = new Schema(3, "merlin");
-        Entity box = schema.addEntity("Box");
-        box.addIdProperty();
-        box.addStringProperty("name");
-        box.addIntProperty("slots");
-        box.addStringProperty("description");
-        new DaoGenerator().generateAll(schema, args[0]);
+        Schema schema = new Schema(3, "com.woi.merlin.model.raw");
 
         //Reminder
         Entity reminder = schema.addEntity("Reminder");
@@ -24,6 +18,8 @@ public class MyDaoGenerator {
         reminder.addStringProperty("repeatType");
         reminder.addStringProperty("dayToRepeat");
         reminder.addBooleanProperty("status");
+
+
 
     }
 }
