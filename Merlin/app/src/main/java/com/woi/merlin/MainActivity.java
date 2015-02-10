@@ -90,20 +90,12 @@ public class MainActivity extends ActionBarActivity {
 
         initNavigationDrawer(savedInstanceState);
 
-
-
-//        testNotification();
-
     }
 
     @Override
     protected void onSaveInstanceState(Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
         savedInstanceState.putInt("mLastDrawerId", mCurrentDrawerId);
-//        Toast.makeText(MainActivity.this,
-//                "onSaveInstanceState:\n" +
-//                        "saved_state = " + mCurrentDrawerId,
-//                Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -158,7 +150,7 @@ public class MainActivity extends ActionBarActivity {
         mDrawerLayout.setDrawerShadow(drawable.drawer_shadow,
                 GravityCompat.START);
 
-        if(drawerItemList == null) {
+        if (drawerItemList == null) {
             drawerItemList = new ArrayList<DrawerItem>();
             drawerItemList.add(new DrawerItem(CASE_HEADER_NAVIGATION, getTitleString(CASE_HEADER_NAVIGATION))); // adding a header to the
             // list
@@ -211,7 +203,7 @@ public class MainActivity extends ActionBarActivity {
 
         if (mCurrentDrawerId == -1) {
 
-            int position = 1;
+            int position = 0;
             for (DrawerItem di : drawerItemList) {
                 if (!di.getType().equals(DrawerItemType.TextWithImage)) {
                     position++;
@@ -225,7 +217,6 @@ public class MainActivity extends ActionBarActivity {
             changeActionbarColor(mCurrentDrawerId);
         }
     }
-
 
 
     @Override

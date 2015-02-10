@@ -2,21 +2,15 @@ package com.woi.merlin.activity;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
-import android.content.Intent;
 import android.content.res.TypedArray;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.NavUtils;
-import android.support.v4.app.TaskStackBuilder;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
@@ -32,8 +26,9 @@ import com.woi.merlin.R;
 import com.woi.merlin.component.ColorPickerDialog;
 import com.woi.merlin.component.DatePickerFragment;
 import com.woi.merlin.component.TimePickerFragment;
-import com.woi.merlin.constant.ReminderType;
-import com.woi.merlin.constant.RepeatType;
+import com.woi.merlin.enumeration.CustomRepeatMode;
+import com.woi.merlin.enumeration.ReminderType;
+import com.woi.merlin.enumeration.RepeatType;
 import com.woi.merlin.util.GeneralUtil;
 
 import org.joda.time.LocalDate;
@@ -42,7 +37,6 @@ import org.joda.time.LocalTime;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 
 /**
  * Created by Jeffery on 2/2/2015.
@@ -53,8 +47,13 @@ public class AddNewReminder extends ActionBarActivity {
     Spinner repeatSpinner, customRepeatMode, reminderTypeSpinner;
     LocalDate fromDate, toDate;
     LocalTime atTime;
+    Spinner repeatSpinner, customRepeatModeSpinner, reminderTypeSpinner;
     IconTextView colorIconView;
     int selectedColor;
+
+    RepeatType repeatType = RepeatType.DONOTREPEAT;
+    ReminderType reminderType = ReminderType.Normal;
+    CustomRepeatMode customRepeatMode = CustomRepeatMode.FOREVER;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -87,7 +86,6 @@ public class AddNewReminder extends ActionBarActivity {
                 return true;
 
             case R.id.menu_save:
-
                 break;
             default:
                 return super.onOptionsItemSelected(item);
@@ -112,7 +110,7 @@ public class AddNewReminder extends ActionBarActivity {
         toDatePicker = (TextView) findViewById(R.id.toDatePickerET);
         atTimePicker = (TextView) findViewById(R.id.atTimePickerET);
         repeatSpinner = (Spinner) findViewById(R.id.repeatSpinner);
-        customRepeatMode = (Spinner) findViewById(R.id.customRepeatMode);
+        customRepeatModeSpinner = (Spinner) findViewById(R.id.customRepeatMode);
         reminderTypeSpinner = (Spinner) findViewById(R.id.reminderTypeSpinner);
         colorPicker = (TextView) findViewById(R.id.colorPickerET);
         colorIconView = (IconTextView) findViewById(R.id.colorIconView);
@@ -164,7 +162,7 @@ public class AddNewReminder extends ActionBarActivity {
         Calendar calender = Calendar.getInstance();
         Bundle args = new Bundle();
         args.putInt("year", fromDate.getYear());
-        args.putInt("month", fromDate.getMonthOfYear());
+        args.putInt("month", fromDate.getMonthOfYear() - 1);
         args.putInt("day", fromDate.getDayOfMonth());
         date.setArguments(args);
         /**
@@ -182,7 +180,7 @@ public class AddNewReminder extends ActionBarActivity {
         Calendar calender = Calendar.getInstance();
         Bundle args = new Bundle();
         args.putInt("year", toDate.getYear());
-        args.putInt("month", toDate.getMonthOfYear());
+        args.putInt("month", toDate.getMonthOfYear() - 1);
         args.putInt("day", toDate.getDayOfMonth());
         date.setArguments(args);
         /**
@@ -214,7 +212,7 @@ public class AddNewReminder extends ActionBarActivity {
         @Override
         public void onDateSet(DatePicker view, int year, int monthOfYear,
                               int dayOfMonth) {
-            fromDate = new LocalDate(year, monthOfYear, dayOfMonth);
+            fromDate = new LocalDate(year, monthOfYear + 1, dayOfMonth);
             fromDatePicker.setText(GeneralUtil.getDateInString(fromDate));
         }
     };
@@ -223,7 +221,7 @@ public class AddNewReminder extends ActionBarActivity {
         @Override
         public void onDateSet(DatePicker view, int year, int monthOfYear,
                               int dayOfMonth) {
-            toDate = new LocalDate(year, monthOfYear, dayOfMonth);
+            toDate = new LocalDate(year, monthOfYear + 1, dayOfMonth);
             toDatePicker.setText(GeneralUtil.getDateInString(toDate));
         }
     };
@@ -240,16 +238,16 @@ public class AddNewReminder extends ActionBarActivity {
      * repeatSpinner
      */
     private void initRepeatSpinner() {
-        List<String> list = new ArrayList<String>();
-        list.add(RepeatType.sDONOTREPEAT);
-        list.add(RepeatType.sEVERYDAY);
-        list.add(RepeatType.sEVERYWEEK);
-        list.add(RepeatType.sEVERYMONTH);
-        list.add(RepeatType.sEVERYYEAR);
-        list.add(RepeatType.sCUSTOM);
+//        List<String> list = new ArrayList<String>();
+//        list.add(RepeatType.DONOTREPEAT.toString());
+//        list.add(RepeatType.EVERYDAY.toString());
+//        list.add(RepeatType.EVERYWEEK.toString());
+//        list.add(RepeatType.EVERYMONTH.toString());
+//        list.add(RepeatType.EVERYYEAR.toString());
+//        list.add(RepeatType.CUSTOM.toString());
 
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_spinner_item, list);
+        ArrayAdapter<RepeatType> dataAdapter = new ArrayAdapter<RepeatType>(this,
+                android.R.layout.simple_list_item_1, RepeatType.values());
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         repeatSpinner.setAdapter(dataAdapter);
 
@@ -257,20 +255,21 @@ public class AddNewReminder extends ActionBarActivity {
 
             public void onItemSelected(AdapterView<?> arg0, View arg1,
                                        int arg2, long arg3) {
-                String id = String.valueOf(repeatSpinner.getSelectedItem());
+                repeatType = (RepeatType) repeatSpinner.getSelectedItem();
                 LinearLayout repeatCustomView = (LinearLayout) findViewById(R.id.repeatCustomView);
                 LinearLayout dosePerDayOptionLayout = (LinearLayout) findViewById(R.id.dosePerDayOptionLayout);
 
-                if (id == RepeatType.sCUSTOM) {
+                if (repeatType.equals(RepeatType.CUSTOM)) {
                     repeatCustomView.setVisibility(View.VISIBLE);
                 } else {
                     repeatCustomView.setVisibility(View.GONE);
                 }
 
-                if (id == RepeatType.sDONOTREPEAT) {
+                if (repeatType.equals(RepeatType.DONOTREPEAT)) {
                     dosePerDayOptionLayout.setVisibility(View.GONE);
                 } else {
-                    dosePerDayOptionLayout.setVisibility(View.VISIBLE);
+                    if (reminderType.equals(ReminderType.MedicalReminder))
+                        dosePerDayOptionLayout.setVisibility(View.VISIBLE);
                 }
             }
 
@@ -278,45 +277,71 @@ public class AddNewReminder extends ActionBarActivity {
                 //Do nothing
             }
         });
+    }
 
+    private void populateRepeatSpinnerValue(RepeatType repeatType) {
+        repeatSpinner.setSelection(((ArrayAdapter<RepeatType>) repeatSpinner.getAdapter()).getPosition(repeatType));
     }
 
     /**
-     * customRepeatMode
+     * customRepeatModeSpinner
      */
     private void initCustomRepeatMode() {
-        List<String> list = new ArrayList<String>();
-        list.add("Forever");
-        list.add("Until a date");
-        list.add("For a number of event");
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_spinner_item, list);
+//        List<String> list = new ArrayList<String>();
+//        list.add("Forever");
+//        list.add("Until a date");
+//        list.add("For a number of event");
+        ArrayAdapter<CustomRepeatMode> dataAdapter = new ArrayAdapter<CustomRepeatMode>(this,
+                android.R.layout.simple_spinner_item, CustomRepeatMode.values());
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        customRepeatMode.setAdapter(dataAdapter);
+        customRepeatModeSpinner.setAdapter(dataAdapter);
+
+        customRepeatModeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+            public void onItemSelected(AdapterView<?> arg0, View arg1,
+                                       int arg2, long arg3) {
+                customRepeatMode = (CustomRepeatMode) customRepeatModeSpinner.getSelectedItem();
+                LinearLayout dosesInTotalLayout = (LinearLayout) findViewById(R.id.dosesInTotalLayout);
+                LinearLayout toDatePickerLayout = (LinearLayout) findViewById(R.id.toDatePickerLayout);
+
+                if (customRepeatMode.equals(CustomRepeatMode.FOREVER)) {
+                    toDatePickerLayout.setVisibility(View.GONE);
+                    dosesInTotalLayout.setVisibility(View.GONE);
+
+                } else if (customRepeatMode.equals(CustomRepeatMode.UNTIL)) {
+                    toDatePickerLayout.setVisibility(View.VISIBLE);
+                    dosesInTotalLayout.setVisibility(View.GONE);
+                } else if (customRepeatMode.equals(CustomRepeatMode.EVENTS)) {
+                    toDatePickerLayout.setVisibility(View.GONE);
+                    if (reminderType.equals(ReminderType.MedicalReminder))
+                        dosesInTotalLayout.setVisibility(View.VISIBLE);
+                }
+            }
+
+            public void onNothingSelected(AdapterView<?> arg0) {
+                //Do nothing
+            }
+        });
     }
 
     private void initReminderType() {
-        List<String> list = new ArrayList<String>();
-        list.add(ReminderType.sNormal);
-        list.add(ReminderType.sMedicalReminder);
-        list.add(ReminderType.sLoveCalendar);
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_spinner_item, list);
+
+        ArrayAdapter<ReminderType> dataAdapter = new ArrayAdapter<ReminderType>(this,
+                android.R.layout.simple_spinner_item, ReminderType.values());
+
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         reminderTypeSpinner.setAdapter(dataAdapter);
-
         reminderTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
             public void onItemSelected(AdapterView<?> arg0, View arg1,
                                        int arg2, long arg3) {
-                String id = String.valueOf(reminderTypeSpinner.getSelectedItem());
+                reminderType = (ReminderType) reminderTypeSpinner.getSelectedItem();
 
-
-                if (id == ReminderType.sNormal) {
+                if (reminderType.equals(ReminderType.Normal)) {
                     applyDefaultColorToActivity(13);
-                } else if (id == ReminderType.sMedicalReminder) {
+                } else if (reminderType.equals(ReminderType.MedicalReminder)) {
                     applyDefaultColorToActivity(5);
-                } else if (id == ReminderType.sLoveCalendar) {
+                } else if (reminderType.equals(ReminderType.LoveCalendar)) {
                     applyDefaultColorToActivity(20);
                 }
 
@@ -326,6 +351,10 @@ public class AddNewReminder extends ActionBarActivity {
                 //Do nothing
             }
         });
+    }
+
+    private void populateReminderType(ReminderType reminderType) {
+        reminderTypeSpinner.setSelection(((ArrayAdapter<ReminderType>) reminderTypeSpinner.getAdapter()).getPosition(reminderType));
     }
 
 

@@ -7,6 +7,7 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:animateLayoutChanges="true"
         android:weightSum="1">
 
 
@@ -23,7 +24,8 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:animateLayoutChanges="true">
 
             <IconTextView
                 android:layout_width="wrap_content"
@@ -201,7 +203,9 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:id="@+id/toDatePickerLayout"
+                    android:paddingLeft="15sp">
 
                     <TextView
                         android:layout_width="match_parent"
@@ -218,7 +222,8 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:paddingLeft="15sp">
 
                     <TextView
                         android:layout_width="match_parent"
@@ -227,6 +232,7 @@
                         android:id="@+id/toDatePickerET2"
                         android:layout_below="@id/fromDatePickerET"
                         android:layout_alignLeft="@id/fromDatePickerET"
+                        android:visibility="gone"
                         android:textSize="14sp"
                         android:focusable="true"
                         android:layout_weight="1"
@@ -237,15 +243,16 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:id="@+id/dosesInTotalLayout"
+                    android:orientation="horizontal"
+                    android:paddingLeft="15sp">
 
                     <EditText
                         android:layout_width="wrap_content"
                         android:layout_height="35sp"
                         android:gravity="center_vertical"
-                        android:id="@+id/dosesPerDayET"
+                        android:id="@+id/dosesInTotalET"
                         android:inputType="number"
-                        android:visibility="visible"
                         android:paddingLeft="15sp"
                         android:ems="2"
                         android:textSize="14sp"
@@ -256,11 +263,11 @@
                         android:layout_height="35sp"
                         android:gravity="center_vertical"
                         android:visibility="visible"
-                        android:id="@+id/dosesPerDayLabel"
                         android:textSize="14sp"
-                        android:text="dose(s) per day"
+                        android:text="doses in total"
                         android:layout_weight="1"
                         android:textColor="#333" />
+
                 </LinearLayout>
             </LinearLayout>
 
@@ -270,14 +277,13 @@
                 android:id="@+id/dosePerDayOptionLayout"
                 android:orientation="horizontal"
                 android:layout_below="@id/repeatCustomView"
-                android:layout_alignLeft="@id/repeatSpinner"
-                android:visibility="visible">
+                android:layout_alignLeft="@id/repeatSpinner">
 
                 <EditText
                     android:layout_width="wrap_content"
                     android:layout_height="35sp"
                     android:gravity="center_vertical"
-                    android:id="@+id/repeatOption2Menu2_1ET"
+                    android:id="@+id/dosesPerDayET"
                     android:inputType="number"
                     android:visibility="visible"
                     android:paddingLeft="15sp"
@@ -290,11 +296,12 @@
                     android:layout_height="35sp"
                     android:gravity="center_vertical"
                     android:visibility="visible"
-                    android:id="@+id/repeatOption2Menu2_2"
+                    android:id="@+id/dosesPerDayLabel"
                     android:textSize="14sp"
-                    android:text="doses in total"
+                    android:text="dose(s) per day"
                     android:layout_weight="1"
                     android:textColor="#333" />
+
             </LinearLayout>
 
             <!-- separator -->
