@@ -164,7 +164,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="35sp"
                         android:gravity="center_vertical"
-                        android:id="@+id/repeatOption1Menu1_2ET"
+                        android:id="@+id/repeatEveryNDayET"
                         android:textSize="14sp"
                         android:inputType="number"
                         android:ems="2"

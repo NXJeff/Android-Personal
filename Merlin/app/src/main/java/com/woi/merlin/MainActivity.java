@@ -17,12 +17,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.woi.merlin.fragment.FragmentCardSample1;
 import com.woi.merlin.fragment.FragmentHome;
 import com.woi.merlin.fragment.FragmentNewReminder;
-import com.woi.merlin.notification.service.NotificationReceiver;
 import com.woi.merlin.notification.service.NotificationService;
 import com.woi.merlin.ui.drawer.CustomDrawerAdapter;
 import com.woi.merlin.ui.drawer.DrawerItem;
@@ -32,10 +30,6 @@ import net.danlew.android.joda.JodaTimeAndroid;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import merlin.Box;
-import merlin.DaoMaster;
-import merlin.DaoSession;
 
 import static com.woi.merlin.R.*;
 

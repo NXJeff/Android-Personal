@@ -1,5 +1,8 @@
 package com.woi.merlin.enumeration;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Created by Jeffery on 2/7/2015.
  */
@@ -12,6 +15,14 @@ public enum RepeatType {
     CUSTOM(5);
 
     private int value;
+    private final static Map<Integer, RepeatType> map =
+            new HashMap<Integer, RepeatType>(RepeatType.values().length, 1.0f);
+
+    static {
+        for (RepeatType c : RepeatType.values()) {
+            map.put(c.value, c);
+        }
+    }
 
     private RepeatType(int value) {
         this.value = value;
@@ -36,4 +47,14 @@ public enum RepeatType {
 
         return null;
     }
+
+    public static RepeatType of(int name) {
+        RepeatType result = map.get(name);
+        if (result == null) {
+            throw new IllegalArgumentException("No Such RepeatType Exists");
+        }
+        return result;
+    }
+
+
 }

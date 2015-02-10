@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.IconTextView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
@@ -29,6 +30,8 @@ import com.woi.merlin.component.TimePickerFragment;
 import com.woi.merlin.enumeration.CustomRepeatMode;
 import com.woi.merlin.enumeration.ReminderType;
 import com.woi.merlin.enumeration.RepeatType;
+import com.woi.merlin.enumeration.StatusType;
+import com.woi.merlin.model.Reminder;
 import com.woi.merlin.util.GeneralUtil;
 
 import org.joda.time.LocalDate;
@@ -44,7 +47,6 @@ import java.util.Calendar;
 public class AddNewReminder extends ActionBarActivity {
 
     TextView fromDatePicker, toDatePicker, atTimePicker, colorPicker;
-    Spinner repeatSpinner, customRepeatMode, reminderTypeSpinner;
     LocalDate fromDate, toDate;
     LocalTime atTime;
     Spinner repeatSpinner, customRepeatModeSpinner, reminderTypeSpinner;
@@ -54,6 +56,8 @@ public class AddNewReminder extends ActionBarActivity {
     RepeatType repeatType = RepeatType.DONOTREPEAT;
     ReminderType reminderType = ReminderType.Normal;
     CustomRepeatMode customRepeatMode = CustomRepeatMode.FOREVER;
+
+    EditText subjectET, repeatEveryNDayET, dosesInTotalET, dosesPerDayET, remarkET;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -117,6 +121,12 @@ public class AddNewReminder extends ActionBarActivity {
         fromDate = new LocalDate();
         toDate = new LocalDate();
         atTime = new LocalTime();
+
+        repeatEveryNDayET = (EditText) findViewById(R.id.repeatEveryNDayET);
+        dosesInTotalET = (EditText) findViewById(R.id.dosesInTotalET);
+        dosesPerDayET = (EditText) findViewById(R.id.dosesPerDayET);
+        remarkET = (EditText) findViewById(R.id.remarkET);
+        subjectET = (EditText) findViewById(R.id.subjectET);
 
         fromDatePicker.setText(GeneralUtil.getDateInString(fromDate));
         toDatePicker.setText(GeneralUtil.getDateInString(toDate));
@@ -417,16 +427,27 @@ public class AddNewReminder extends ActionBarActivity {
     }
 
     public boolean validateReminderValues() {
+//        TextView fromDatePicker, toDatePicker, atTimePicker, colorPicker;
+//        LocalDate fromDate, toDate;
+//        LocalTime atTime;
+//        Spinner repeatSpinner, customRepeatModeSpinner, reminderTypeSpinner;
+//        IconTextView colorIconView;
+//        int selectedColor;
+//
+//        RepeatType repeatType = RepeatType.DONOTREPEAT;
+//        ReminderType reminderType = ReminderType.Normal;
+//        CustomRepeatMode customRepeatMode = CustomRepeatMode.FOREVER;
+//
+//        EditText repeatEveryNDayET, dosesInTotalET, dosesPerDayET, remarkET;
 
-//        repeatSpinner, customRepeatMode, reminderTypeSpinner;
-//        fromDate, toDate;
-//        atTime;
-//        colorIconView;
-//        selectedColor;
+        Reminder reminder = new Reminder();
+        reminder.setStatus(StatusType.Active.name());
+        reminder.setEnabled(Boolean.TRUE);
+        reminder.setSubject(subjectET.getText().toString());
+        reminder.setFromDate(fromDate.toDate());
+        reminder.setToDate(toDate.toDate());
 
-        if (fromDate == null) {
 
-        }
 
         return false;
     }

@@ -10,9 +10,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.SystemClock;
 import android.util.Log;
 
-import merlin.DaoMaster;
-import merlin.DaoSession;
-
 /**
  * Created by YeekFeiTan on 1/27/2015.
  */
