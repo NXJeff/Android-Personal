@@ -25,11 +25,14 @@ import com.woi.merlin.notification.service.NotificationService;
 import com.woi.merlin.ui.drawer.CustomDrawerAdapter;
 import com.woi.merlin.ui.drawer.DrawerItem;
 import com.woi.merlin.ui.drawer.DrawerItemType;
+import com.woi.merlin.util.DbUtil;
 
 import net.danlew.android.joda.JodaTimeAndroid;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import merlin.model.raw.DaoSession;
 
 import static com.woi.merlin.R.*;
 
@@ -77,7 +80,7 @@ public class MainActivity extends ActionBarActivity {
         if (savedInstanceState == null) {
             savedInstanceState = new Bundle();
             JodaTimeAndroid.init(this);
-            setupDatabase();
+            daoSession = DbUtil.setupDatabase(this);
         } else {
             mCurrentDrawerId = savedInstanceState.getInt("mLastDrawerId");
         }
@@ -101,13 +104,13 @@ public class MainActivity extends ActionBarActivity {
     }
 
 
-    private void setupDatabase() {
-        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, "merlin-db-2", null);
-        SQLiteDatabase db = helper.getWritableDatabase();
-        DaoMaster daoMaster = new DaoMaster(db);
-        daoSession = daoMaster.newSession();
-        Log.d(TAG, "Initialise database completed on " + this.getClass().getSimpleName());
-    }
+//    private void setupDatabase() {
+//        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, "merlin-db-2", null);
+//        SQLiteDatabase db = helper.getWritableDatabase();
+//        DaoMaster daoMaster = new DaoMaster(db);
+//        daoSession = daoMaster.newSession();
+//        Log.d(TAG, "Initialise database completed on " + this.getClass().getSimpleName());
+//    }
 
     private void testInsert() {
 
@@ -308,7 +311,7 @@ public class MainActivity extends ActionBarActivity {
                 break;
 
             case CASE_MY_CARDS:
-                fragment = new FragmentNewReminder();
+//                fragment = new FragmentNewReminder();
                 args.putString(FragmentHome.ITEM_NAME, drawerItemList.get(position)
                         .getItemName());
                 args.putInt(FragmentHome.IMAGE_RESOURCE_ID, drawerItemList.get(position)

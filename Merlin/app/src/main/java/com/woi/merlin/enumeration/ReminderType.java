@@ -49,4 +49,7 @@ public enum ReminderType {
         return result;
     }
 
+    public String getValue() {
+        return value;
+    }
 }

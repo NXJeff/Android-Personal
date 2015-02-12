@@ -56,5 +56,7 @@ public enum RepeatType {
         return result;
     }
 
-
+    public int getValue() {
+        return value;
+    }
 }

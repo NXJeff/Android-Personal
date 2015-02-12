@@ -17,7 +17,7 @@ public class MyDaoGenerator {
 
         //Reminder
         Entity reminder = schema.addEntity("BaseReminder");
-        reminder.setTableName("Reminder");
+//        reminder.setTableName("Reminder");
         reminder.addIdProperty();
         reminder.addStringProperty("subject");
         reminder.addStringProperty("description");

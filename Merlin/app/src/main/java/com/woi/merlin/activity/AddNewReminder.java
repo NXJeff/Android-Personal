@@ -32,6 +32,8 @@ import com.woi.merlin.enumeration.ReminderType;
 import com.woi.merlin.enumeration.RepeatType;
 import com.woi.merlin.enumeration.StatusType;
 import com.woi.merlin.model.Reminder;
+import com.woi.merlin.util.DbUtil;
+import com.woi.merlin.util.EditTextValidator;
 import com.woi.merlin.util.GeneralUtil;
 
 import org.joda.time.LocalDate;
@@ -40,6 +42,9 @@ import org.joda.time.LocalTime;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
+
+import merlin.model.raw.BaseReminderDao;
+import merlin.model.raw.DaoSession;
 
 /**
  * Created by Jeffery on 2/2/2015.
@@ -58,6 +63,8 @@ public class AddNewReminder extends ActionBarActivity {
     CustomRepeatMode customRepeatMode = CustomRepeatMode.FOREVER;
 
     EditText subjectET, repeatEveryNDayET, dosesInTotalET, dosesPerDayET, remarkET;
+
+    Reminder reminder;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -90,6 +97,7 @@ public class AddNewReminder extends ActionBarActivity {
                 return true;
 
             case R.id.menu_save:
+                onSave();
                 break;
             default:
                 return super.onOptionsItemSelected(item);
@@ -98,6 +106,7 @@ public class AddNewReminder extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    //**INIT**//
 
     private void initActionBar() {
         // enable ActionBar app icon to behave as action to toggle nav drawer
@@ -164,6 +173,7 @@ public class AddNewReminder extends ActionBarActivity {
 
     }
 
+
     public void showFromDateDatePicker() {
         DatePickerFragment date = new DatePickerFragment();
         /**
@@ -217,7 +227,7 @@ public class AddNewReminder extends ActionBarActivity {
         date.show(this.getFragmentManager(), "At Time");
     }
 
-    //Callbacks
+    //Initialize Callbacks
     DatePickerDialog.OnDateSetListener callbackOnFromDate = new DatePickerDialog.OnDateSetListener() {
         @Override
         public void onDateSet(DatePicker view, int year, int monthOfYear,
@@ -248,13 +258,6 @@ public class AddNewReminder extends ActionBarActivity {
      * repeatSpinner
      */
     private void initRepeatSpinner() {
-//        List<String> list = new ArrayList<String>();
-//        list.add(RepeatType.DONOTREPEAT.toString());
-//        list.add(RepeatType.EVERYDAY.toString());
-//        list.add(RepeatType.EVERYWEEK.toString());
-//        list.add(RepeatType.EVERYMONTH.toString());
-//        list.add(RepeatType.EVERYYEAR.toString());
-//        list.add(RepeatType.CUSTOM.toString());
 
         ArrayAdapter<RepeatType> dataAdapter = new ArrayAdapter<RepeatType>(this,
                 android.R.layout.simple_list_item_1, RepeatType.values());
@@ -266,21 +269,7 @@ public class AddNewReminder extends ActionBarActivity {
             public void onItemSelected(AdapterView<?> arg0, View arg1,
                                        int arg2, long arg3) {
                 repeatType = (RepeatType) repeatSpinner.getSelectedItem();
-                LinearLayout repeatCustomView = (LinearLayout) findViewById(R.id.repeatCustomView);
-                LinearLayout dosePerDayOptionLayout = (LinearLayout) findViewById(R.id.dosePerDayOptionLayout);
-
-                if (repeatType.equals(RepeatType.CUSTOM)) {
-                    repeatCustomView.setVisibility(View.VISIBLE);
-                } else {
-                    repeatCustomView.setVisibility(View.GONE);
-                }
-
-                if (repeatType.equals(RepeatType.DONOTREPEAT)) {
-                    dosePerDayOptionLayout.setVisibility(View.GONE);
-                } else {
-                    if (reminderType.equals(ReminderType.MedicalReminder))
-                        dosePerDayOptionLayout.setVisibility(View.VISIBLE);
-                }
+                renderRepeatCustomView();
             }
 
             public void onNothingSelected(AdapterView<?> arg0) {
@@ -289,6 +278,7 @@ public class AddNewReminder extends ActionBarActivity {
         });
     }
 
+    //Convenient method to populate value into repeat spinner
     private void populateRepeatSpinnerValue(RepeatType repeatType) {
         repeatSpinner.setSelection(((ArrayAdapter<RepeatType>) repeatSpinner.getAdapter()).getPosition(repeatType));
     }
@@ -297,10 +287,7 @@ public class AddNewReminder extends ActionBarActivity {
      * customRepeatModeSpinner
      */
     private void initCustomRepeatMode() {
-//        List<String> list = new ArrayList<String>();
-//        list.add("Forever");
-//        list.add("Until a date");
-//        list.add("For a number of event");
+
         ArrayAdapter<CustomRepeatMode> dataAdapter = new ArrayAdapter<CustomRepeatMode>(this,
                 android.R.layout.simple_spinner_item, CustomRepeatMode.values());
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -346,21 +333,48 @@ public class AddNewReminder extends ActionBarActivity {
             public void onItemSelected(AdapterView<?> arg0, View arg1,
                                        int arg2, long arg3) {
                 reminderType = (ReminderType) reminderTypeSpinner.getSelectedItem();
-
-                if (reminderType.equals(ReminderType.Normal)) {
-                    applyDefaultColorToActivity(13);
-                } else if (reminderType.equals(ReminderType.MedicalReminder)) {
-                    applyDefaultColorToActivity(5);
-                } else if (reminderType.equals(ReminderType.LoveCalendar)) {
-                    applyDefaultColorToActivity(20);
-                }
-
+                applyColorBasedOnReminderType();
+                renderRepeatCustomView();
             }
 
             public void onNothingSelected(AdapterView<?> arg0) {
                 //Do nothing
             }
         });
+    }
+
+    /**
+     * Conditions and render repeatCustomView layout.
+     */
+    private void renderRepeatCustomView() {
+        LinearLayout repeatCustomView = (LinearLayout) findViewById(R.id.repeatCustomView);
+        LinearLayout dosePerDayOptionLayout = (LinearLayout) findViewById(R.id.dosePerDayOptionLayout);
+
+        if (repeatType.equals(RepeatType.CUSTOM)) {
+            repeatCustomView.setVisibility(View.VISIBLE);
+        } else {
+            repeatCustomView.setVisibility(View.GONE);
+        }
+
+        if (repeatType.equals(RepeatType.DONOTREPEAT)) {
+            dosePerDayOptionLayout.setVisibility(View.GONE);
+        } else {
+            if (reminderType.equals(ReminderType.MedicalReminder))
+                dosePerDayOptionLayout.setVisibility(View.VISIBLE);
+            else
+                dosePerDayOptionLayout.setVisibility(View.GONE);
+        }
+    }
+
+
+    private void applyColorBasedOnReminderType() {
+        if (reminderType.equals(ReminderType.Normal)) {
+            applyDefaultColorToActivity(13);
+        } else if (reminderType.equals(ReminderType.MedicalReminder)) {
+            applyDefaultColorToActivity(5);
+        } else if (reminderType.equals(ReminderType.LoveCalendar)) {
+            applyDefaultColorToActivity(20);
+        }
     }
 
     private void populateReminderType(ReminderType reminderType) {
@@ -380,6 +394,9 @@ public class AddNewReminder extends ActionBarActivity {
         });
     }
 
+    /**
+     * Color changer methods
+     */
     private void applyDefaultColorToActivity() {
         applyDefaultColorToActivity(13);
     }
@@ -404,6 +421,9 @@ public class AddNewReminder extends ActionBarActivity {
             getWindow().setStatusBarColor(darker);
     }
 
+    /**
+     * Override default behaviour
+     */
     @Override
     public void onBackPressed() {
 
@@ -426,42 +446,74 @@ public class AddNewReminder extends ActionBarActivity {
                 .show();
     }
 
+    /**
+     * Validations
+     *
+     * @return
+     */
     public boolean validateReminderValues() {
-//        TextView fromDatePicker, toDatePicker, atTimePicker, colorPicker;
-//        LocalDate fromDate, toDate;
-//        LocalTime atTime;
-//        Spinner repeatSpinner, customRepeatModeSpinner, reminderTypeSpinner;
-//        IconTextView colorIconView;
-//        int selectedColor;
-//
-//        RepeatType repeatType = RepeatType.DONOTREPEAT;
-//        ReminderType reminderType = ReminderType.Normal;
-//        CustomRepeatMode customRepeatMode = CustomRepeatMode.FOREVER;
-//
-//        EditText repeatEveryNDayET, dosesInTotalET, dosesPerDayET, remarkET;
 
-        Reminder reminder = new Reminder();
-        reminder.setStatus(StatusType.Active.name());
+
+        if(!EditTextValidator.hasText(subjectET)) {
+            return false;
+        }
+
+        /* Repeat Conditions */
+        if (reminderType.equals(ReminderType.Normal)) {
+            //TODO: cause now nothing to do
+        } else if (reminderType.equals(ReminderType.MedicalReminder)) {
+            if (repeatType.equals(RepeatType.CUSTOM)) {
+                //TODO
+            } else if (!repeatType.equals(RepeatType.DONOTREPEAT)) {
+                if(!EditTextValidator.hasText(dosesPerDayET)) {
+                    return false;
+                }
+            }
+        }
+
+        //Construct
+        reminder = new Reminder();
+        reminder.setStatus(StatusType.Active.getValue());
         reminder.setEnabled(Boolean.TRUE);
         reminder.setSubject(subjectET.getText().toString());
+        reminder.setReminderType(reminderType.getValue());
         reminder.setFromDate(fromDate.toDate());
         reminder.setToDate(toDate.toDate());
+        reminder.setAtTime(atTime.toDateTimeToday().toDate());
+        reminder.setColor(selectedColor);
+        reminder.setRepeatType(repeatType.getValue());
+        reminder.setCustomRepeatMode(customRepeatMode.getValue());
 
+        if (!repeatEveryNDayET.getText().toString().isEmpty())
+            reminder.setRepeatEveryNDay(Integer.parseInt(repeatEveryNDayET.getText().toString()));
+        if (!dosesPerDayET.getText().toString().isEmpty())
+            reminder.setDosesPerDay(Integer.parseInt(dosesPerDayET.getText().toString()));
+        if (!dosesInTotalET.getText().toString().isEmpty())
+            reminder.setDosesInTotal(Integer.parseInt(dosesInTotalET.getText().toString()));
 
+        reminder.setDescription(remarkET.getText().toString());
 
-        return false;
+        return true;
     }
 
-
+    /**
+     * Saving methods
+     */
     public void saveToDatabase() {
 
+        DaoSession daoSession = DbUtil.setupDatabase(this);
+        BaseReminderDao reminderDao = daoSession.getBaseReminderDao();
+        reminderDao.insert(reminder);
+        finish();
     }
 
     public void onSave() {
-        new Thread(new Runnable() {
-            public void run() {
-                saveToDatabase();
-            }
-        }).start();
+        if (validateReminderValues()) {
+            new Thread(new Runnable() {
+                public void run() {
+                    saveToDatabase();
+                }
+            }).start();
+        }
     }
 }

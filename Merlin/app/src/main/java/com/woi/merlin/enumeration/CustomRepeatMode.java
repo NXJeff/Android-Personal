@@ -48,4 +48,8 @@ public enum CustomRepeatMode {
         }
         return result;
     }
+
+    public int getValue() {
+        return value;
+    }
 }

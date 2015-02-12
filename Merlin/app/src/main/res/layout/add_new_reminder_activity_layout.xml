@@ -277,7 +277,8 @@
                 android:id="@+id/dosePerDayOptionLayout"
                 android:orientation="horizontal"
                 android:layout_below="@id/repeatCustomView"
-                android:layout_alignLeft="@id/repeatSpinner">
+                android:layout_alignLeft="@id/repeatSpinner"
+                android:visibility="gone">
 
                 <EditText
                     android:layout_width="wrap_content"
@@ -309,6 +310,7 @@
                 android:id="@+id/repeatOptionSeperator"
                 android:layout_below="@id/dosePerDayOptionLayout"
                 android:layout_alignLeft="@id/repeatSpinner"
+                android:visibility="gone"
                 style="@style/Divider" />
 
             <IconTextView

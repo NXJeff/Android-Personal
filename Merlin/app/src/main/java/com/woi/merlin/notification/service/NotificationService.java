@@ -10,6 +10,11 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.SystemClock;
 import android.util.Log;
 
+import com.woi.merlin.util.DbUtil;
+
+import merlin.model.raw.DaoMaster;
+import merlin.model.raw.DaoSession;
+
 /**
  * Created by YeekFeiTan on 1/27/2015.
  */
@@ -30,7 +35,7 @@ public class NotificationService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        setupDatabase();
+        daoSession = DbUtil.setupDatabase(this);
         String action = intent.getAction();
         String notificationId = intent.getStringExtra("notificationId");
 
@@ -60,11 +65,11 @@ public class NotificationService extends IntentService {
 
     }
 
-    private void setupDatabase() {
-        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, "merlin-db", null);
-        SQLiteDatabase db = helper.getWritableDatabase();
-        DaoMaster daoMaster = new DaoMaster(db);
-        daoSession = daoMaster.newSession();
-        Log.d(TAG, "Initialise database completed on " + this.getClass().getSimpleName());
-    }
+//    private void setupDatabase() {
+//        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, "merlin-db", null);
+//        SQLiteDatabase db = helper.getWritableDatabase();
+//        DaoMaster daoMaster = new DaoMaster(db);
+//        daoSession = daoMaster.newSession();
+//        Log.d(TAG, "Initialise database completed on " + this.getClass().getSimpleName());
+//    }
 }

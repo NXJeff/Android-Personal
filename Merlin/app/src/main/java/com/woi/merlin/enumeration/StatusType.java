@@ -45,4 +45,8 @@ public enum StatusType {
         }
         return result;
     }
+
+    public String getValue() {
+        return value;
+    }
 }
