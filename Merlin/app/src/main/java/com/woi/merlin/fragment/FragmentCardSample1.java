@@ -11,6 +11,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ScrollView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.woi.merlin.R;
@@ -25,6 +26,7 @@ import it.gmariotti.cardslib.library.cards.actions.BaseSupplementalAction;
 import it.gmariotti.cardslib.library.cards.actions.IconSupplementalAction;
 import it.gmariotti.cardslib.library.cards.actions.TextSupplementalAction;
 import it.gmariotti.cardslib.library.cards.material.MaterialLargeImageCard;
+import it.gmariotti.cardslib.library.cards.topcolored.TopColoredCard;
 import it.gmariotti.cardslib.library.internal.Card;
 import it.gmariotti.cardslib.library.internal.CardHeader;
 import it.gmariotti.cardslib.library.internal.CardThumbnail;
@@ -59,6 +61,8 @@ public class FragmentCardSample1 extends Fragment {
         init_custom_header_inner_layout();
         init_material_largeimage_text();
         init_material_largeimage_icon();
+        init_HalfColoredCard();
+        init_BlackTopColoredCard();
     }
 
     private void init_standard_header_with_overflow_button() {
@@ -260,5 +264,61 @@ public class FragmentCardSample1 extends Fragment {
         startActivity(intent);
     }
 
+    /**
+     * Builds a Material HalfColored Card
+     */
+    private void init_HalfColoredCard() {
+
+        TopColoredCard card = TopColoredCard.with(getActivity())
+                .setColorResId(R.color.light_green_500)
+                .setTitleOverColor("22 mins to Ancona")
+                .setSubTitleOverColor("Light traffic on SS16")
+                .setupSubLayoutId(R.layout.sample_top_color_card_title_image)
+                .setupInnerElements(new TopColoredCard.OnSetupInnerElements() {
+                    @Override
+                    public void setupInnerViewElementsSecondHalf(View secondHalfView) {
+
+                        TextView mSimpleTitleView = (TextView) secondHalfView.findViewById(R.id.carddemo_halfcolored_simple_title);
+                        if (mSimpleTitleView != null) {
+                            mSimpleTitleView.setText("It is just an example!");
+                        }
+                    }
+                })
+                .build();
+
+        //Set card in the CardViewNative
+        CardViewNative cardView = (CardViewNative) getActivity().findViewById(R.id.carddemo_halfcolored);
+        cardView.setCard(card);
+    }
+
+    /**
+     * Builds a Material HalfColored Card
+     */
+    private void init_BlackTopColoredCard() {
+
+        TopColoredCard card = TopColoredCard.with(getActivity())
+                .setColorResId(R.color.light_green_500)
+                .setTitleOverColor("22 mins to Ancona")
+                .setSubTitleOverColor("Light traffic on SS16")
+                .setupSubLayoutId(R.layout.sample_top_color_card_title_text)
+                .setupInnerElements(new TopColoredCard.OnSetupInnerElements() {
+                    @Override
+                    public void setupInnerViewElementsSecondHalf(View secondHalfView) {
+
+                        TextView mSimpleTitleView = (TextView) secondHalfView.findViewById(R.id.carddemo_blackcolored_simple_title);
+                        if (mSimpleTitleView != null) {
+                            mSimpleTitleView.setText("It is just an example!");
+                        }
+                    }
+                })
+                .build();
+        //Set card in the CardViewNative
+        CardViewNative cardView = (CardViewNative) getActivity().findViewById(R.id.carddemo_blackcolored);
+        cardView.setCard(card);
+    }
+
+    private void init_sample_top_colored_card() {
+
+    }
 
 }

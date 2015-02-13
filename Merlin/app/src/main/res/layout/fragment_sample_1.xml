@@ -41,8 +41,23 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 card:card_layout_resourceID="@layout/native_material_largeimage_card"
-                style="@style/card_external"
-                />
+                style="@style/card_external" />
+
+            <it.gmariotti.cardslib.library.view.CardViewNative
+                android:id="@+id/carddemo_halfcolored"
+                android:layout_width="match_parent"
+                android:layout_height="350dp"
+                card:card_layout_resourceID="@layout/native_material_topcolored_card"
+                style="@style/card_external" />
+
+            <it.gmariotti.cardslib.library.view.CardViewNative
+                android:id="@+id/carddemo_blackcolored"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="200sp"
+                card:card_layout_resourceID="@layout/native_material_topcolored_card"
+                style="@style/card_external" />
+
 
         </LinearLayout>
     </ScrollView>

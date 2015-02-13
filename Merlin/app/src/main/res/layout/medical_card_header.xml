@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:id="@+id/card_main_inner_topcolored_layout"
+    style="@style/card.native.top_colored_layout"
+    android:background="@drawable/topcolored_bg"
+    >
+
+
+    <!-- This is the base for the top colored card -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/card.native.top_colored_title"
+        android:textColor="#FFF"
+        android:textSize="22dp"
+        android:fontFamily="@string/card_native_font_fontFamily_top_colored"
+        android:id="@+id/card_main_inner_topcolored_title"
+        />
+
+    <TextView
+        style="@style/card.native.top_colored_subtitle"
+        android:fontFamily="@string/card_native_font_fontFamily_top_colored"
+        android:id="@+id/card_main_inner_topcolored_subtitle"
+        />
+
+</LinearLayout>

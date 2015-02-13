@@ -20,7 +20,6 @@ import android.widget.ListView;
 
 import com.woi.merlin.fragment.FragmentCardSample1;
 import com.woi.merlin.fragment.FragmentHome;
-import com.woi.merlin.fragment.FragmentNewReminder;
 import com.woi.merlin.notification.service.NotificationService;
 import com.woi.merlin.ui.drawer.CustomDrawerAdapter;
 import com.woi.merlin.ui.drawer.DrawerItem;

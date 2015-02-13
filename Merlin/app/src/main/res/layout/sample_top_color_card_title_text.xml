@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        tools:text="AAAA"
+        android:textSize="16dp"
+        android:textColor="@color/blue_grey_700"
+        android:fontFamily="@string/card_font_fontFamily_image_text_over"
+        android:id="@+id/carddemo_blackcolored_simple_title"
+        style="@style/card.native.base_simple_title" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv_description"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:layout_marginLeft="20dp"
+        android:textColor="#333"
+        android:text="DEFAULT" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv_category"
+        android:textSize="16sp"
+        android:textStyle="normal"
+        android:layout_marginLeft="20dp"
+        android:singleLine="true"
+        android:textColor="#333"
+        android:text="DEFAULT" />
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv_last_dismissed_time"
+        android:textSize="16sp"
+        android:textStyle="normal"
+        android:layout_marginLeft="20dp"
+        android:singleLine="true"
+        android:textColor="#333"
+        android:text="DEFAULT" />
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv_next_remind_time"
+        android:textSize="16sp"
+        android:textStyle="normal"
+        android:layout_marginLeft="20dp"
+        android:singleLine="true"
+        android:textColor="#333"
+        android:text="DEFAULT" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv_test1"
+        android:textSize="16sp"
+        android:textStyle="normal"
+        android:layout_marginLeft="20dp"
+        android:singleLine="true"
+        android:textColor="#333"
+        android:text="DEFAULT 4" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv_test2"
+        android:textSize="16sp"
+        android:textStyle="normal"
+        android:layout_marginLeft="20dp"
+        android:singleLine="true"
+        android:textColor="#333"
+        android:text="DEFAULT 4" />
+
+
+</LinearLayout>
