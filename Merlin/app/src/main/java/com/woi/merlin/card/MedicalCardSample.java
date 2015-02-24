@@ -6,6 +6,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.woi.merlin.R;
+import com.woi.merlin.enumeration.ReminderType;
 
 import it.gmariotti.cardslib.library.internal.Card;
 
@@ -14,11 +15,16 @@ import it.gmariotti.cardslib.library.internal.Card;
  */
 public class MedicalCardSample extends Card {
 
-    String contentText;
+    String description;
+    ReminderType reminderType = ReminderType.MedicalReminder;
+    String lastDismissedDate;
+    String nextRemindDate;
+    String atTime;
 
-    public MedicalCardSample(Context context, int layout, String contentText) {
+
+    public MedicalCardSample(Context context, int layout, String description) {
         super(context, layout);
-        this.contentText = contentText;
+        this.description = description;
 //        init();
     }
 
@@ -44,7 +50,7 @@ public class MedicalCardSample extends Card {
         TextView tvContent = (TextView) parent.findViewById(R.id.tv_content);
 
         if (tvContent != null)
-            tvContent.setText(contentText);
+            tvContent.setText(description);
 
     }
 }

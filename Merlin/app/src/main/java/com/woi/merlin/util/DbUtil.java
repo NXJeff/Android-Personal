@@ -15,7 +15,7 @@ public class DbUtil {
     final static String TAG = "MERLIN.DBUTIL";
 
     public static DaoSession setupDatabase(Context context) {
-        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(context, "merlin-db-2", null);
+        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(context, "merlin-db", null);
         SQLiteDatabase db = helper.getWritableDatabase();
         DaoMaster daoMaster = new DaoMaster(db);
         DaoSession daoSession = daoMaster.newSession();
