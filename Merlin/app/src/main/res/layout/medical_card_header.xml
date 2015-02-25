@@ -2,8 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:id="@+id/card_main_inner_topcolored_layout"
-    style="@style/card.native.top_colored_layout"
-    android:background="@drawable/topcolored_bg"
+    style="@style/card.native.medical_card_layout"
     >
 
 
@@ -15,13 +14,11 @@
         android:textColor="#FFF"
         android:textSize="22dp"
         android:fontFamily="@string/card_native_font_fontFamily_top_colored"
-        android:id="@+id/card_main_inner_topcolored_title"
-        />
+        android:id="@+id/card_main_inner_topcolored_title" />
 
     <TextView
         style="@style/card.native.top_colored_subtitle"
         android:fontFamily="@string/card_native_font_fontFamily_top_colored"
-        android:id="@+id/card_main_inner_topcolored_subtitle"
-        />
+        android:id="@+id/card_main_inner_topcolored_subtitle" />
 
 </LinearLayout>

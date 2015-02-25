@@ -19,8 +19,7 @@
     </style>
 
     <!-- ActionBar styles -->
-    <style name="MyActionBar"
-        parent="@android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">
+    <style name="MyActionBar" parent="@android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">
         <item name="android:colorBackground">@color/accent</item>
     </style>
 
@@ -34,6 +33,26 @@
     <style name="MyActionButtonStyle" parent="AppTheme">
 
         <item name="android:padding">40sp</item>
+    </style>
+
+    <style name="card.native.medical_card_layout">
+        <item name="android:minHeight">@dimen/card_topcolored_layout_minHeigth</item>
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:padding">@dimen/card_topcolored_layout_padding</item>
+    </style>
+
+    <style name="card_external_custom">
+        <item name="android:layout_marginTop">@dimen/card_default_native_margin_top</item>
+        <item name="android:layout_marginBottom">@dimen/card_default_native_margin_bottom</item>
+        <item name="android:layout_marginLeft">@dimen/card_default_native_margin_left</item>
+        <item name="android:layout_marginRight">@dimen/card_default_native_margin_right</item>
+    </style>
+
+    <style name="card.native.header_button_frame_custom">
+        <item name="android:layout_centerVertical">false</item>
+        <item name="android:layout_marginTop">10sp</item>
+        <item name="android:layout_alignParentRight">true</item>
     </style>
 
 

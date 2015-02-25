@@ -16,10 +16,18 @@ import android.widget.Toast;
 
 import com.woi.merlin.R;
 import com.woi.merlin.activity.AddNewReminder;
+import com.woi.merlin.card.MedicalCard;
+import com.woi.merlin.card.MedicalCardHeader;
 import com.woi.merlin.card.Sample1Card;
 import com.woi.merlin.card.Sample1CardHeader;
+import com.woi.merlin.enumeration.ReminderType;
+import com.woi.merlin.util.GeneralUtil;
+
+import org.joda.time.LocalDate;
+import org.joda.time.LocalTime;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 import it.gmariotti.cardslib.library.Constants;
 import it.gmariotti.cardslib.library.cards.actions.BaseSupplementalAction;
@@ -63,6 +71,7 @@ public class FragmentCardSample1 extends Fragment {
         init_material_largeimage_icon();
         init_HalfColoredCard();
         init_BlackTopColoredCard();
+        init_medical_card();
     }
 
     private void init_standard_header_with_overflow_button() {
@@ -317,7 +326,52 @@ public class FragmentCardSample1 extends Fragment {
         cardView.setCard(card);
     }
 
-    private void init_sample_top_colored_card() {
+    private void init_medical_card() {
+
+        String description = "Paracetamol (acetaminophen) is a pain reliever and a fever reducer. Note: This dose will make you sleepy or dizzy.";
+        ReminderType reminderType = ReminderType.MedicalReminder;
+        String lastDismissedDate = GeneralUtil.getDateInString(new LocalDate());
+        String nextRemindDate = GeneralUtil.getDateInString(new LocalDate());
+        String atTime = GeneralUtil.getTimeInString(new LocalTime());
+        String title = "22 minutes before taking";
+        String subTitle = "Paracetamol";
+        int bgColor = R.color.red_500;
+
+
+        //Create a Card
+        MedicalCard card = new MedicalCard(getActivity(), description, reminderType, atTime);
+        card.setLastDismissedDate(lastDismissedDate);
+        card.setNextRemindDate(nextRemindDate);
+
+        //Create a CardHeader
+        MedicalCardHeader header = new MedicalCardHeader(getActivity(), title, subTitle);
+        header.setBgColor(bgColor);
+        header.setPopupMenu(R.menu.sample1menu, new CardHeader.OnClickCardHeaderPopupMenuListener() {
+            @Override
+            public void onMenuItemClick(BaseCard card, MenuItem item) {
+                Toast.makeText(getActivity(), "Click on " + item.getTitle(), Toast.LENGTH_SHORT).show();
+            }
+        });
+        card.addCardHeader(header);
+
+
+//        card.addPartialOnClickListener(Card.CLICK_LISTENER_CONTENT_VIEW, new Card.OnCardClickListener() {
+//            @Override
+//            public void onClick(Card card, View view) {
+////                Toast.makeText(getActivity(),"New activity", Toast.LENGTH_LONG).show();
+////                testOpenActivity();
+//            }
+//        });
+
+        //Set shadow elevation
+        //Convert dp to float
+        float shadowElevation = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 14, getResources().getDisplayMetrics());
+        card.setCardElevation(shadowElevation);
+
+        //Set card in the CardViewNative
+        final CardViewNative cardViewNative = (CardViewNative) getActivity().findViewById(R.id.medical_card_layout);
+        cardViewNative.setCard(card);
+
 
     }
 

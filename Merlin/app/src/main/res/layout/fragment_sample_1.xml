@@ -59,6 +59,27 @@
                 style="@style/card_external" />
 
 
+            <!--<it.gmariotti.cardslib.library.view.CardViewNative-->
+                <!--android:id="@+id/medical_card_layout"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--style="@style/card_external" />-->
+
+            <it.gmariotti.cardslib.library.view.CardViewNative
+                android:id="@+id/medical_card_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/card_external"
+                card:card_layout_resourceID="@layout/medical_card_frame_layout"/>
+
+            <!--<it.gmariotti.cardslib.library.view.component.CardHeaderView-->
+                <!--style="@style/card.native.header_outer_layout"-->
+                <!--android:id="@+id/medical_card_layout"-->
+                <!--android:layout_width="match_parent"-->
+                <!--card:card_header_layout_resourceID="@layout/medical_card_frame_layout"-->
+                <!--android:layout_height="wrap_content"/>-->
+
+
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

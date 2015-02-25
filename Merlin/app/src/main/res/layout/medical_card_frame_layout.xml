@@ -1,0 +1,37 @@
+<!-- This is the Header Layout -->
+
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    style="@style/card.native"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <!-- Card visible layout -->
+    <it.gmariotti.cardslib.library.view.ForegroundLinearLayout
+        android:id="@+id/card_main_layout"
+        style="@style/card.native.main_layout"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+
+        <it.gmariotti.cardslib.library.view.component.CardHeaderView
+            style="@style/card.native.header_outer_layout"
+            android:id="@+id/card_header_layout"
+            android:layout_width="match_parent"
+            card:card_header_layout_resourceID="@layout/medical_card_header_frame_layout"
+            android:layout_height="wrap_content"/>
+
+        <!-- Main Content View -->
+        <FrameLayout
+            android:id="@+id/card_main_content_layout"
+            style="@style/card.native.content_outer_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+    </it.gmariotti.cardslib.library.view.ForegroundLinearLayout>
+
+
+</LinearLayout>

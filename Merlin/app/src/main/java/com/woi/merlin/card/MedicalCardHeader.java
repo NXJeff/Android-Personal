@@ -3,6 +3,7 @@ package com.woi.merlin.card;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.woi.merlin.R;
@@ -21,7 +22,7 @@ public class MedicalCardHeader extends CardHeader {
     public MedicalCardHeader(Context context, String title, String subTitle) {
         super(context, R.layout.medical_card_header);
         this.title = title;
-        this.subTitle = title;
+        this.subTitle = subTitle;
     }
 
     @Override
@@ -30,6 +31,19 @@ public class MedicalCardHeader extends CardHeader {
         if (view != null) {
             TextView tvTitle = (TextView) view.findViewById(R.id.card_main_inner_topcolored_title);
             TextView tvSubTitle = (TextView) view.findViewById(R.id.card_main_inner_topcolored_subtitle);
+            LinearLayout headerLayout = (LinearLayout) view.findViewById(R.id.card_main_inner_topcolored_layout);
+
+            if(tvTitle!=null) {
+                tvTitle.setText(title);
+            }
+
+            if(tvSubTitle!=null) {
+                tvSubTitle.setText(subTitle);
+            }
+
+            if(headerLayout!=null) {
+                headerLayout.setBackgroundResource(bgColor);
+            }
         }
     }
 
