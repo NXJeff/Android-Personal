@@ -20,6 +20,7 @@ import android.widget.ListView;
 
 import com.woi.merlin.fragment.FragmentCardSample1;
 import com.woi.merlin.fragment.FragmentHome;
+import com.woi.merlin.fragment.ReminderFragment;
 import com.woi.merlin.notification.service.NotificationService;
 import com.woi.merlin.ui.drawer.CustomDrawerAdapter;
 import com.woi.merlin.ui.drawer.DrawerItem;
@@ -302,7 +303,7 @@ public class MainActivity extends ActionBarActivity {
         switch (mCurrentDrawerId) {
 
             case CASE_HOME:
-                fragment = new FragmentCardSample1();
+                fragment = new ReminderFragment();
                 args.putString(FragmentHome.ITEM_NAME, drawerItemList.get(position)
                         .getItemName());
                 args.putInt(FragmentHome.IMAGE_RESOURCE_ID, drawerItemList.get(position)
@@ -310,7 +311,7 @@ public class MainActivity extends ActionBarActivity {
                 break;
 
             case CASE_MY_CARDS:
-//                fragment = new FragmentNewReminder();
+                fragment = new FragmentCardSample1();
                 args.putString(FragmentHome.ITEM_NAME, drawerItemList.get(position)
                         .getItemName());
                 args.putInt(FragmentHome.IMAGE_RESOURCE_ID, drawerItemList.get(position)

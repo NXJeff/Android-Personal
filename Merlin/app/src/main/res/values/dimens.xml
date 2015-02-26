@@ -7,4 +7,5 @@
     <dimen name="card_header_native_default_paddingRight">0dp</dimen>
     <dimen name="card_header_native_default_paddingTop">0dp</dimen>
     <dimen name="card_header_native_default_paddingBottom">0dp</dimen>
+    <dimen name="carddemo_list_padding">0dp</dimen>
 </resources>
