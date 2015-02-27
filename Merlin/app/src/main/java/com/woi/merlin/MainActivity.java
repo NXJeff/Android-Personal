@@ -20,6 +20,7 @@ import android.widget.ListView;
 
 import com.woi.merlin.fragment.FragmentCardSample1;
 import com.woi.merlin.fragment.FragmentHome;
+import com.woi.merlin.fragment.MealFragment;
 import com.woi.merlin.fragment.ReminderFragment;
 import com.woi.merlin.notification.service.NotificationService;
 import com.woi.merlin.ui.drawer.CustomDrawerAdapter;
@@ -319,6 +320,7 @@ public class MainActivity extends ActionBarActivity {
                 break;
 
             case CASE_MY_MISSIONS:
+                fragment = new MealFragment();
                 break;
 
             case CASE_AVAILABLE_MISSIONS:

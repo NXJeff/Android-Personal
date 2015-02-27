@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:animateLayoutChanges="true"
+        android:weightSum="1">
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="50sp"
+            android:id="@+id/subjectET"
+            android:layout_weight="0.04"
+            android:autoText="false"
+            android:background="@android:color/transparent"
+            android:hint="Enter food name or places" />
+
+        <View style="@style/Divider" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <IconTextView
+                android:layout_width="wrap_content"
+                android:layout_height="50sp"
+                android:id="@+id/clockIconView"
+                android:text="{fa-clock-o}"
+                android:textColor="@color/grey_700"
+                android:shadowColor="#22000000"
+                android:shadowDx="3"
+                android:shadowDy="3"
+                android:paddingLeft="15sp"
+                android:paddingRight="25sp"
+                android:shadowRadius="1"
+                android:layout_weight="1"
+                android:textSize="25sp"
+                android:gravity="center_vertical" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="50sp"
+                android:gravity="center_vertical"
+                android:id="@+id/newMealDatePickerET"
+                android:text="Monday, FEb 2, 2015"
+                android:textSize="16sp"
+                android:focusable="true"
+                android:layout_weight="1"
+                android:textColor="#333" />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="50sp"
+                android:gravity="center_vertical"
+                android:ems="10"
+                android:id="@+id/newMealTimePickerET"
+                android:textSize="16sp"
+                android:layout_weight="1"
+                android:text="6.50 PM"
+                android:layout_marginLeft="65dp"
+                android:textColor="#333" />
+
+        </LinearLayout>
+
+        <!-- separator -->
+        <View style="@style/Divider" />
+
+
+    </LinearLayout>
+
+</ScrollView>
