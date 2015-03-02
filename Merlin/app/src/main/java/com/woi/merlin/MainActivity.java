@@ -201,7 +201,7 @@ public class MainActivity extends ActionBarActivity {
 
         if (mCurrentDrawerId == -1) {
 
-            int position = 0;
+            int position = 2;
             for (DrawerItem di : drawerItemList) {
                 if (!di.getType().equals(DrawerItemType.TextWithImage)) {
                     position++;

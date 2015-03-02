@@ -78,6 +78,44 @@
         <!-- separator -->
         <View style="@style/Divider" />
 
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <IconTextView
+                android:layout_width="wrap_content"
+                android:layout_height="50sp"
+                android:id="@+id/photoIconView"
+                android:text="{fa-camera}"
+                android:textColor="@color/grey_700"
+                android:shadowColor="#22000000"
+                android:shadowDx="3"
+                android:shadowDy="3"
+                android:paddingLeft="15sp"
+                android:paddingRight="25sp"
+                android:shadowRadius="1"
+                android:layout_weight="1"
+                android:textSize="25sp"
+                android:gravity="center_vertical" />
+
+            <Button
+                android:id="@+id/add_photo_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Tap to add photo" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:id="@+id/photosLayout"
+            android:layout_gravity="center_horizontal">
+
+        </LinearLayout>
+
 
     </LinearLayout>
 
