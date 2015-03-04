@@ -28,12 +28,14 @@ import com.woi.merlin.component.ColorPickerDialog;
 import com.woi.merlin.component.DatePickerFragment;
 import com.woi.merlin.component.TimePickerFragment;
 import com.woi.merlin.enumeration.CustomRepeatMode;
+import com.woi.merlin.enumeration.EntityType;
 import com.woi.merlin.enumeration.ReminderType;
 import com.woi.merlin.enumeration.RepeatType;
 import com.woi.merlin.enumeration.StatusType;
 import com.woi.merlin.model.Reminder;
 import com.woi.merlin.util.DbUtil;
 import com.woi.merlin.util.EditTextValidator;
+import com.woi.merlin.util.EntityUtil;
 import com.woi.merlin.util.GeneralUtil;
 
 import org.joda.time.LocalDate;
@@ -57,6 +59,7 @@ public class AddNewReminder extends ActionBarActivity {
     Spinner repeatSpinner, customRepeatModeSpinner, reminderTypeSpinner;
     IconTextView colorIconView;
     int selectedColor;
+    String entityID;
 
     RepeatType repeatType = RepeatType.DONOTREPEAT;
     ReminderType reminderType = ReminderType.Normal;
@@ -107,6 +110,12 @@ public class AddNewReminder extends ActionBarActivity {
     }
 
     //**INIT**//
+
+    private void initEntityID() {
+        if (entityID == null) {
+            entityID = EntityUtil.generateEntityUniqueID(this, EntityType.REMINDER);
+        }
+    }
 
     private void initActionBar() {
         // enable ActionBar app icon to behave as action to toggle nav drawer
@@ -454,7 +463,7 @@ public class AddNewReminder extends ActionBarActivity {
     public boolean validateReminderValues() {
 
 
-        if(!EditTextValidator.hasText(subjectET)) {
+        if (!EditTextValidator.hasText(subjectET)) {
             return false;
         }
 
@@ -465,7 +474,7 @@ public class AddNewReminder extends ActionBarActivity {
             if (repeatType.equals(RepeatType.CUSTOM)) {
                 //TODO
             } else if (!repeatType.equals(RepeatType.DONOTREPEAT)) {
-                if(!EditTextValidator.hasText(dosesPerDayET)) {
+                if (!EditTextValidator.hasText(dosesPerDayET)) {
                     return false;
                 }
             }
@@ -483,6 +492,7 @@ public class AddNewReminder extends ActionBarActivity {
         reminder.setColor(selectedColor);
         reminder.setRepeatType(repeatType.getValue());
         reminder.setCustomRepeatMode(customRepeatMode.getValue());
+        reminder.setEntityId(entityID);
 
         if (!repeatEveryNDayET.getText().toString().isEmpty())
             reminder.setRepeatEveryNDay(Integer.parseInt(repeatEveryNDayET.getText().toString()));

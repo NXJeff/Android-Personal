@@ -17,17 +17,17 @@ public class MyDaoGenerator {
 
         //Reminder
         Entity reminder = schema.addEntity("BaseReminder");
-//        reminder.setTableName("Reminder");
+        reminder.setTableName("reminder");
         reminder.addIdProperty();
         reminder.addStringProperty("subject");
         reminder.addStringProperty("description");
         reminder.addDateProperty("fromDate");
         reminder.addDateProperty("toDate");
         reminder.addDateProperty("atTime");
-
         reminder.addIntProperty("repeatType");
         reminder.addStringProperty("reminderType");
         reminder.addIntProperty("customRepeatMode");
+        reminder.addStringProperty("entityId"); //Unique ID for each item of this entity
 
         reminder.addIntProperty("color");
         reminder.addIntProperty("repeatEveryNDay");
@@ -35,6 +35,22 @@ public class MyDaoGenerator {
         reminder.addIntProperty("dosesPerDay");
         reminder.addBooleanProperty("enabled");
         reminder.addStringProperty("status");
+
+        Entity meal = schema.addEntity("BaseMeal");
+        meal.setTableName("meal");
+        meal.addIdProperty();
+        meal.addStringProperty("subject");
+        meal.addStringProperty("description");
+        meal.addDateProperty("date");
+        meal.addStringProperty("entityId");
+        meal.addStringProperty("status");
+
+        Entity imageHolder = schema.addEntity("BaseImageHolder");
+        imageHolder.setTableName("image_holder");
+        imageHolder.addIdProperty();
+        imageHolder.addStringProperty("entityId");
+        imageHolder.addStringProperty("path");
+
 
 
         //end
