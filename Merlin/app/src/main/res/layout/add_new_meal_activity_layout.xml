@@ -13,7 +13,7 @@
         <EditText
             android:layout_width="match_parent"
             android:layout_height="50sp"
-            android:id="@+id/subjectET"
+            android:id="@+id/addNewMealSubjectET"
             android:layout_weight="0.04"
             android:autoText="false"
             android:background="@android:color/transparent"
@@ -29,7 +29,6 @@
             <IconTextView
                 android:layout_width="wrap_content"
                 android:layout_height="50sp"
-                android:id="@+id/clockIconView"
                 android:text="{fa-clock-o}"
                 android:textColor="@color/grey_700"
                 android:shadowColor="#22000000"
@@ -86,7 +85,85 @@
             <IconTextView
                 android:layout_width="wrap_content"
                 android:layout_height="50sp"
-                android:id="@+id/photoIconView"
+                android:id="@+id/addNewMealColorIconView"
+                android:text="{fa-circle}"
+                android:textColor="@color/grey_700"
+                android:shadowColor="#22000000"
+                android:shadowDx="3"
+                android:shadowDy="3"
+                android:paddingLeft="15sp"
+                android:paddingRight="25sp"
+                android:shadowRadius="1"
+                android:layout_weight="1"
+                android:textSize="25sp"
+                android:gravity="center_vertical" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="50sp"
+                android:gravity="center_vertical"
+                android:ems="10"
+                android:id="@+id/addNewMealColorPickerET"
+                android:textSize="16sp"
+                android:text="Black"
+                android:layout_weight="1"
+                android:textColor="#333" />
+
+        </LinearLayout>
+
+        <!-- separator -->
+        <View style="@style/Divider" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <IconTextView
+                android:layout_width="wrap_content"
+                android:layout_height="50sp"
+                android:id="@+id/addNewMealRemarkIconView"
+                android:text="{fa-align-left}"
+                android:textColor="@color/grey_700"
+                android:shadowColor="#22000000"
+                android:shadowDx="3"
+                android:shadowDy="3"
+                android:paddingLeft="15sp"
+                android:paddingRight="25sp"
+                android:shadowRadius="1"
+                android:layout_weight="1"
+                android:textSize="25sp"
+                android:gravity="center_vertical" />
+
+            <EditText
+                android:id="@+id/addNewMealRemarkET"
+                android:inputType="textMultiLine"
+                android:lines="6"
+                android:minLines="1"
+                android:gravity="center_vertical"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:paddingTop="5sp"
+                android:paddingBottom="5sp"
+                android:minHeight="50sp"
+                android:hint="Add note"
+                android:background="@android:color/transparent"
+                android:scrollbars="vertical" />
+
+        </LinearLayout>
+
+        <!-- separator -->
+        <View style="@style/Divider" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <IconTextView
+                android:layout_width="wrap_content"
+                android:layout_height="50sp"
+                android:id="@+id/addNewMealPhotoIconView"
                 android:text="{fa-camera}"
                 android:textColor="@color/grey_700"
                 android:shadowColor="#22000000"
@@ -100,7 +177,7 @@
                 android:gravity="center_vertical" />
 
             <Button
-                android:id="@+id/add_photo_btn"
+                android:id="@+id/addNewMealAddPhotoBtn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Tap to add photo" />
@@ -111,7 +188,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:id="@+id/photosLayout"
+            android:id="@+id/addNewMealPhotosLayout"
             android:layout_margin="20sp"
             android:layout_gravity="center_horizontal"
             android:animateLayoutChanges="true">

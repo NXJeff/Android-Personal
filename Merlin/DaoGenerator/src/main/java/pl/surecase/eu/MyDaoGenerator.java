@@ -28,7 +28,6 @@ public class MyDaoGenerator {
         reminder.addStringProperty("reminderType");
         reminder.addIntProperty("customRepeatMode");
         reminder.addStringProperty("entityId"); //Unique ID for each item of this entity
-
         reminder.addIntProperty("color");
         reminder.addIntProperty("repeatEveryNDay");
         reminder.addIntProperty("dosesInTotal");
@@ -44,6 +43,7 @@ public class MyDaoGenerator {
         meal.addDateProperty("date");
         meal.addStringProperty("entityId");
         meal.addStringProperty("status");
+        meal.addIntProperty("color");
 
         Entity imageHolder = schema.addEntity("BaseImageHolder");
         imageHolder.setTableName("image_holder");
