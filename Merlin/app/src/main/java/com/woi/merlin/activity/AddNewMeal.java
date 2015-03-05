@@ -142,7 +142,7 @@ public class AddNewMeal extends ActionBarActivity {
         time = new LocalTime();
 
         mealDatePicker.setText(GeneralUtil.getDateInString(date));
-        mealDatePicker.setText(GeneralUtil.getTimeInString(time));
+        mealTimePicker.setText(GeneralUtil.getTimeInString(time));
 
         photoButton.setOnClickListener(new View.OnClickListener() {
             @Override
