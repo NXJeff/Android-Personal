@@ -42,7 +42,7 @@ public class MedicalCardHeader extends CardHeader {
             }
 
             if(headerLayout!=null) {
-                headerLayout.setBackgroundResource(bgColor);
+                headerLayout.setBackgroundColor(bgColor);
             }
         }
     }

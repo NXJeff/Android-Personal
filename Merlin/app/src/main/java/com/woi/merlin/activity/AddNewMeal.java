@@ -3,7 +3,6 @@ package com.woi.merlin.activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.ActivityNotFoundException;
-import android.content.Entity;
 import android.content.Intent;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
@@ -19,12 +18,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.IconTextView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -36,32 +38,38 @@ import com.woi.merlin.component.ColorPickerDialog;
 import com.woi.merlin.component.DatePickerFragment;
 import com.woi.merlin.component.TimePickerFragment;
 import com.woi.merlin.enumeration.EntityType;
+import com.woi.merlin.enumeration.MealType;
 import com.woi.merlin.enumeration.StatusType;
-import com.woi.merlin.model.ImageHolder;
-import com.woi.merlin.model.Meal;
 import com.woi.merlin.util.DbUtil;
 import com.woi.merlin.util.EditTextValidator;
 import com.woi.merlin.util.EntityUtil;
 import com.woi.merlin.util.GeneralUtil;
 import com.woi.merlin.util.MediaUtil;
-import com.woi.merlin.util.MyFileContentProvider;
 
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-import merlin.model.raw.BaseMealDao;
-import merlin.model.raw.BaseReminderDao;
 import merlin.model.raw.DaoSession;
+import merlin.model.raw.ImageHolder;
+import merlin.model.raw.Meal;
+import merlin.model.raw.MealDao;
 
 /**
  * Created by YeekFeiTan on 2/27/2015.
  */
 public class AddNewMeal extends ActionBarActivity {
+
+    //keep track of intents
+    final int CAMERA_CAPTURE = 1;
+    final int PIC_CROP = 2;
+    //captured picture uri
+    private Uri fileUri;
+
+
 
     TextView mealDatePicker, mealTimePicker, colorPicker;
     LocalDate date;
@@ -71,18 +79,12 @@ public class AddNewMeal extends ActionBarActivity {
     private List<ImageHolder> imageHolders = new ArrayList<>();
     IconTextView colorIconView;
     private Meal meal;
+    private MealType mealType;
     EditText subjectET, remarkET;
+    Spinner mealSpinner;
 
     private String entityID;
     int selectedColor;
-
-    //keep track of camera capture intent
-    final int CAMERA_CAPTURE = 1;
-    //keep track of cropping intent
-    final int PIC_CROP = 2;
-    //captured picture uri
-    private Uri fileUri;
-
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,14 +92,50 @@ public class AddNewMeal extends ActionBarActivity {
 
         initViewComponents();
         initEntityID();
-//        initActionBar();
+        initActionBar();
+        initMealTypeSpinner();
+        initMealTypePrediction();
+        applyColorBasedOnMealType();
 
+    }
+
+    /**
+     * This method will predict the mealType based on the init time.
+     */
+    private void initMealTypePrediction() {
+
+        LocalTime breakfastStart = new LocalTime(05, 00, 00);
+        LocalTime lunchStart = new LocalTime(12, 00, 00);
+        LocalTime dinnerStart = new LocalTime(18, 00, 00);
+        LocalTime supperStart = new LocalTime(22, 00, 00);
+
+        if ((time.isEqual(breakfastStart) || time.isAfter(breakfastStart)) && time.isBefore(lunchStart)) {
+            mealType = MealType.BREAKFAST;
+        } else if ((time.isEqual(lunchStart) || time.isAfter(lunchStart)) && time.isBefore(dinnerStart)) {
+            mealType = MealType.LUNCH;
+        } else if ((time.isEqual(dinnerStart) || time.isAfter(dinnerStart)) && time.isBefore(supperStart)) {
+            mealType = MealType.DINNER;
+        } else {
+            mealType = MealType.SUPPER;
+        }
+        //Set spinner selection
+        populateMealSpinnerValue(mealType);
     }
 
     private void initEntityID() {
         if (entityID == null) {
             entityID = EntityUtil.generateEntityUniqueID(this, EntityType.MEAL);
         }
+    }
+
+    private void initActionBar() {
+        // enable ActionBar app icon to behave as action to toggle nav drawer
+        // use action bar here
+//        getSupportActionBar().setIcon(new IconDrawable(this, Iconify.IconValue.fa_bell).colorRes(R.color.grey_white_1000).actionBarSize());
+        getSupportActionBar().setTitle("New Meal");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
     }
 
     @Override
@@ -134,6 +172,7 @@ public class AddNewMeal extends ActionBarActivity {
         colorIconView = (IconTextView) findViewById(R.id.addNewMealColorIconView);
         remarkET = (EditText) findViewById(R.id.addNewMealRemarkET);
         subjectET = (EditText) findViewById(R.id.addNewMealSubjectET);
+        mealSpinner = (Spinner) findViewById(R.id.mealTypeSpinner);
 
         photosLayout = (LinearLayout) findViewById(R.id.addNewMealPhotosLayout);
         photoButton = (Button) findViewById(R.id.addNewMealAddPhotoBtn);
@@ -183,6 +222,36 @@ public class AddNewMeal extends ActionBarActivity {
 
         applyDefaultColorToActivity();
 
+
+        //Initialise FAB
+
+
+    }
+
+    private void initMealTypeSpinner() {
+
+        ArrayAdapter<MealType> dataAdapter = new ArrayAdapter<MealType>(this,
+                android.R.layout.simple_spinner_item, MealType.values());
+
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mealSpinner.setAdapter(dataAdapter);
+        mealSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+            public void onItemSelected(AdapterView<?> arg0, View arg1,
+                                       int arg2, long arg3) {
+                mealType = (MealType) mealSpinner.getSelectedItem();
+                applyColorBasedOnMealType();
+            }
+
+            public void onNothingSelected(AdapterView<?> arg0) {
+                //Do nothing
+            }
+        });
+    }
+
+    //Convenient method to populate value into repeat spinner
+    private void populateMealSpinnerValue(MealType mealType) {
+        mealSpinner.setSelection(((ArrayAdapter<MealType>) mealSpinner.getAdapter()).getPosition(mealType));
     }
 
     public void showToDateDatePicker() {
@@ -200,7 +269,7 @@ public class AddNewMeal extends ActionBarActivity {
          * Set Call back to capture selected date
          */
         date.setCallBack(callbackOnToDate);
-        date.show(this.getFragmentManager(), "To Date");
+        date.show(this.getFragmentManager(), "Date");
     }
 
     public void showAtTimePicker() {
@@ -217,7 +286,7 @@ public class AddNewMeal extends ActionBarActivity {
          * Set Call back to capture selected date
          */
         date.setCallBack(callbackOnAtTime);
-        date.show(this.getFragmentManager(), "At Time");
+        date.show(this.getFragmentManager(), "Time");
     }
 
     //Initialize Callbacks
@@ -246,14 +315,6 @@ public class AddNewMeal extends ActionBarActivity {
             //user is returning from capturing an image using the camera
             if (requestCode == CAMERA_CAPTURE) {
                 if (resultCode == RESULT_OK) {
-                    //get the Uri for the captured image
-//                Bundle extras = data.getExtras();
-//                    File out = new File(getFilesDir(), "newImage.jpg");
-
-//                    if (!out.exists()) {
-//                        Toast.makeText(getBaseContext(), "Error while capturing image", Toast.LENGTH_LONG).show();
-//                        return;
-//                    }
                     addNewPhoto();
                 }
             }
@@ -326,14 +387,14 @@ public class AddNewMeal extends ActionBarActivity {
             if (imageHolder != null) {
                 removeImageHolder(imageHolder);
                 imageHolders.remove(imageHolder);
-                Log.d("AddNewMeal", "Removed " + imageHolder.getPath());
+//                Log.d("AddNewMeal", "Removed " + imageHolder.getPath());
             }
         }
     }
 
     private void removeImageHolder(ImageHolder imageHolder) {
         if (imageHolder.getId() != null) {
-            //remove
+            //remove from db
         }
     }
 
@@ -408,6 +469,18 @@ public class AddNewMeal extends ActionBarActivity {
     /**
      * Color changer methods
      */
+    private void applyColorBasedOnMealType() {
+        if (mealType.equals(MealType.BREAKFAST)) {
+            applyDefaultColorToActivity(11);
+        } else if (mealType.equals(MealType.LUNCH)) {
+            applyDefaultColorToActivity(13);
+        } else if (mealType.equals(MealType.DINNER)) {
+            applyDefaultColorToActivity(9);
+        } else if (mealType.equals(MealType.SUPPER)) {
+            applyDefaultColorToActivity(5);
+        }
+    }
+
     private void applyDefaultColorToActivity() {
         applyDefaultColorToActivity(13);
     }
@@ -477,7 +550,6 @@ public class AddNewMeal extends ActionBarActivity {
         meal.setEntityId(entityID);
 
 
-
         meal.setDescription(remarkET.getText().toString());
 
         return true;
@@ -490,7 +562,7 @@ public class AddNewMeal extends ActionBarActivity {
     public void saveToDatabase() {
 
         DaoSession daoSession = DbUtil.setupDatabase(this);
-        BaseMealDao mealDao = daoSession.getBaseMealDao();
+        MealDao mealDao = daoSession.getMealDao();
         mealDao.insert(meal);
         finish();
     }

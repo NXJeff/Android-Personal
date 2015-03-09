@@ -1,7 +1,9 @@
 package com.woi.merlin.activity;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Intent;
 import android.content.res.TypedArray;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
@@ -32,7 +34,6 @@ import com.woi.merlin.enumeration.EntityType;
 import com.woi.merlin.enumeration.ReminderType;
 import com.woi.merlin.enumeration.RepeatType;
 import com.woi.merlin.enumeration.StatusType;
-import com.woi.merlin.model.Reminder;
 import com.woi.merlin.util.DbUtil;
 import com.woi.merlin.util.EditTextValidator;
 import com.woi.merlin.util.EntityUtil;
@@ -41,17 +42,18 @@ import com.woi.merlin.util.GeneralUtil;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Calendar;
 
-import merlin.model.raw.BaseReminderDao;
 import merlin.model.raw.DaoSession;
+import merlin.model.raw.Reminder;
+import merlin.model.raw.ReminderDao;
 
 /**
  * Created by Jeffery on 2/2/2015.
  */
 public class AddNewReminder extends ActionBarActivity {
+
+    public final static String NEW_REMINDER_ID = "NEW_REMINDER_ID";
 
     TextView fromDatePicker, toDatePicker, atTimePicker, colorPicker;
     LocalDate fromDate, toDate;
@@ -512,8 +514,11 @@ public class AddNewReminder extends ActionBarActivity {
     public void saveToDatabase() {
 
         DaoSession daoSession = DbUtil.setupDatabase(this);
-        BaseReminderDao reminderDao = daoSession.getBaseReminderDao();
+        ReminderDao reminderDao = daoSession.getReminderDao();
         reminderDao.insert(reminder);
+        Intent resultIntent = new Intent();
+        resultIntent.putExtra(NEW_REMINDER_ID, reminder.getId());
+        setResult(Activity.RESULT_OK, resultIntent);
         finish();
     }
 

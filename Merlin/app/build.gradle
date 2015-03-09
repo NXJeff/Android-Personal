@@ -68,4 +68,7 @@ dependencies {
     //Material dialog
     compile 'com.afollestad:material-dialogs:0.6.2.2'
 
+    //Floating Action Button
+    compile 'com.melnykov:floatingactionbutton:1.2.0'
+
 }

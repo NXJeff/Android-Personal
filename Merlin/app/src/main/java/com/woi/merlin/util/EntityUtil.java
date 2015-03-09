@@ -9,10 +9,9 @@ import java.util.List;
 import java.util.UUID;
 
 import de.greenrobot.dao.query.Query;
-import merlin.model.raw.BaseMealDao;
-import merlin.model.raw.BaseReminder;
-import merlin.model.raw.BaseReminderDao;
 import merlin.model.raw.DaoSession;
+import merlin.model.raw.MealDao;
+import merlin.model.raw.ReminderDao;
 
 /**
  * Created by YeekFeiTan on 3/4/2015.
@@ -32,14 +31,14 @@ public class EntityUtil {
 
             switch (type) {
                 case MEAL:
-                    BaseMealDao mealDao = daoSession.getBaseMealDao();
-                    query = mealDao.queryBuilder().where(BaseMealDao.Properties.EntityId.eq(ID)).build();
+                    MealDao mealDao = daoSession.getMealDao();
+                    query = mealDao.queryBuilder().where(MealDao.Properties.EntityId.eq(ID)).build();
                     entityItems = query.list();
                     break;
 
                 case REMINDER:
-                    BaseReminderDao reminderDao = daoSession.getBaseReminderDao();
-                    query = reminderDao.queryBuilder().where(BaseReminderDao.Properties.EntityId.eq(ID)).build();
+                    ReminderDao reminderDao = daoSession.getReminderDao();
+                    query = reminderDao.queryBuilder().where(ReminderDao.Properties.EntityId.eq(ID)).build();
                     entityItems = query.list();
                     break;
             }
