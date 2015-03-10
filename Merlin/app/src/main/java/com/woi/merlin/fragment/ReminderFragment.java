@@ -46,6 +46,8 @@ public class ReminderFragment extends Fragment {
 
     //keep track of intents
     final int ADD_NEW_REMINDER = 1;
+    final int UPDATE_REMINDER = 2;
+    final int DELETE_REMINDER = 3;
 
     DaoSession daoSession = null;
     ReminderDao reminderDao = null;

@@ -4,8 +4,10 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.content.res.TypedArray;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.os.Bundle;
@@ -18,6 +20,8 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.afollestad.materialdialogs.ThemeSingleton;
+import com.woi.merlin.component.ColorPickerDialog;
 import com.woi.merlin.fragment.FragmentCardSample1;
 import com.woi.merlin.fragment.FragmentHome;
 import com.woi.merlin.fragment.MealFragment;
@@ -49,17 +53,17 @@ public class MainActivity extends ActionBarActivity {
     private DaoSession daoSession;
 
     private static final int CASE_HEADER_NAVIGATION = 0;
-    private static final int CASE_HOME = 1;
-    private static final int CASE_MY_CARDS = 2;
-    private static final int CASE_MY_MISSIONS = 3;
-    private static final int CASE_AVAILABLE_MISSIONS = 4;
-    private static final int CASE_MY_TIMELINE = 5;
-    private static final int CASE_TIMELINE = 6;
-    private static final int CASE_HEADER_MISC = 7;
+    private static final int CASE_REMINDER = 1;
+    private static final int CASE_MEAL = 2;
+    //    private static final int CASE_MY_MISSIONS = 3;
+//    private static final int CASE_AVAILABLE_MISSIONS = 4;
+//    private static final int CASE_MY_TIMELINE = 5;
+//    private static final int CASE_TIMELINE = 6;
+//    private static final int CASE_HEADER_MISC = 7;
     private static final int CASE_SETTING = 8;
-    private static final int CASE_ABOUT = 9;
-    private static final int CASE_HELP = 10;
-    private static final int CASE_EXIT = 11;
+    //    private static final int CASE_ABOUT = 9;
+//    private static final int CASE_HELP = 10;
+//    private static final int CASE_EXIT = 11;
     private static final String TAG = "MERLIN-APP";
 
 
@@ -74,7 +78,7 @@ public class MainActivity extends ActionBarActivity {
         getSupportActionBar().setIcon(drawable.ic_launcher);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
+//        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         //Initialisze navigation drawer
 
@@ -142,7 +146,7 @@ public class MainActivity extends ActionBarActivity {
         mDrawerList = (ListView) findViewById(id.drawer);
 
         //init
-//        mCurrentDrawerId = CASE_HOME;
+//        mCurrentDrawerId = CASE_REMINDER;
 
         mDrawerLayout = (DrawerLayout) findViewById(id.drawer_layout);
         mDrawerLayout.setDrawerShadow(drawable.drawer_shadow,
@@ -152,19 +156,19 @@ public class MainActivity extends ActionBarActivity {
             drawerItemList = new ArrayList<DrawerItem>();
             drawerItemList.add(new DrawerItem(CASE_HEADER_NAVIGATION, getTitleString(CASE_HEADER_NAVIGATION))); // adding a header to the
             // list
-            drawerItemList.add(new DrawerItem(CASE_HOME, getTitleString(CASE_HOME), drawable.ic_action_email));
-            drawerItemList.add(new DrawerItem(CASE_MY_CARDS, getTitleString(CASE_MY_CARDS), drawable.ic_action_good));
-            drawerItemList.add(new DrawerItem(CASE_MY_MISSIONS, getTitleString(CASE_MY_MISSIONS), drawable.ic_action_gamepad));
-            drawerItemList.add(new DrawerItem(CASE_AVAILABLE_MISSIONS, getTitleString(CASE_AVAILABLE_MISSIONS), drawable.ic_action_labels));
-            drawerItemList.add(new DrawerItem(CASE_MY_TIMELINE, getTitleString(CASE_MY_TIMELINE), drawable.ic_action_good));
-            drawerItemList.add(new DrawerItem(CASE_TIMELINE, getTitleString(CASE_TIMELINE), drawable.ic_action_gamepad));
-
-            drawerItemList.add(new DrawerItem(CASE_HEADER_MISC, getTitleString(CASE_HEADER_MISC))); // adding a header to the
+            drawerItemList.add(new DrawerItem(CASE_REMINDER, getTitleString(CASE_REMINDER), drawable.ic_action_email));
+            drawerItemList.add(new DrawerItem(CASE_MEAL, getTitleString(CASE_MEAL), drawable.ic_action_good));
+//            drawerItemList.add(new DrawerItem(CASE_MY_MISSIONS, getTitleString(CASE_MY_MISSIONS), drawable.ic_action_gamepad));
+//            drawerItemList.add(new DrawerItem(CASE_AVAILABLE_MISSIONS, getTitleString(CASE_AVAILABLE_MISSIONS), drawable.ic_action_labels));
+//            drawerItemList.add(new DrawerItem(CASE_MY_TIMELINE, getTitleString(CASE_MY_TIMELINE), drawable.ic_action_good));
+//            drawerItemList.add(new DrawerItem(CASE_TIMELINE, getTitleString(CASE_TIMELINE), drawable.ic_action_gamepad));
+//
+//            drawerItemList.add(new DrawerItem(CASE_HEADER_MISC, getTitleString(CASE_HEADER_MISC))); // adding a header to the
             // list
             drawerItemList.add(new DrawerItem(CASE_SETTING, getTitleString(CASE_SETTING), drawable.ic_action_settings));
-            drawerItemList.add(new DrawerItem(CASE_ABOUT, getTitleString(CASE_ABOUT), drawable.ic_action_about));
-            drawerItemList.add(new DrawerItem(CASE_HELP, getTitleString(CASE_HELP), drawable.ic_action_help));
-            drawerItemList.add(new DrawerItem(CASE_EXIT, getTitleString(CASE_EXIT), drawable.ic_action_help));
+//            drawerItemList.add(new DrawerItem(CASE_ABOUT, getTitleString(CASE_ABOUT), drawable.ic_action_about));
+//            drawerItemList.add(new DrawerItem(CASE_HELP, getTitleString(CASE_HELP), drawable.ic_action_help));
+//            drawerItemList.add(new DrawerItem(CASE_EXIT, getTitleString(CASE_EXIT), drawable.ic_action_help));
             adapter = new CustomDrawerAdapter(this, layout.custom_drawer_item,
                     drawerItemList);
             mDrawerList.setAdapter(adapter);
@@ -243,39 +247,39 @@ public class MainActivity extends ActionBarActivity {
             case CASE_HEADER_NAVIGATION:
                 str = "Navigate To";
                 break;
-            case CASE_HOME:
-                str = "Home";
+            case CASE_REMINDER:
+                str = "Reminders";
                 break;
-            case CASE_MY_CARDS:
-                str = "My Cards";
+            case CASE_MEAL:
+                str = "Meals";
                 break;
-            case CASE_MY_MISSIONS:
-                str = "My Missions";
-                break;
-            case CASE_AVAILABLE_MISSIONS:
-                str = "Available Missions";
-                break;
-            case CASE_MY_TIMELINE:
-                str = "My Timeline";
-                break;
-            case CASE_TIMELINE:
-                str = "Timeline";
-                break;
-            case CASE_HEADER_MISC:
-                str = "MISC";
-                break;
+//            case CASE_MY_MISSIONS:
+//                str = "My Missions";
+//                break;
+//            case CASE_AVAILABLE_MISSIONS:
+//                str = "Available Missions";
+//                break;
+//            case CASE_MY_TIMELINE:
+//                str = "My Timeline";
+//                break;
+//            case CASE_TIMELINE:
+//                str = "Timeline";
+//                break;
+//            case CASE_HEADER_MISC:
+//                str = "MISC";
+//                break;
             case CASE_SETTING:
                 str = "Settings";
                 break;
-            case CASE_ABOUT:
-                str = "About";
-                break;
-            case CASE_HELP:
-                str = "Help";
-                break;
-            case CASE_EXIT:
-                str = "Exit";
-                break;
+//            case CASE_ABOUT:
+//                str = "About";
+//                break;
+//            case CASE_HELP:
+//                str = "Help";
+//                break;
+//            case CASE_EXIT:
+//                str = "Exit";
+//                break;
             default:
                 break;
         }
@@ -303,7 +307,7 @@ public class MainActivity extends ActionBarActivity {
         changeActionbarColor(mCurrentDrawerId);
         switch (mCurrentDrawerId) {
 
-            case CASE_HOME:
+            case CASE_REMINDER:
                 fragment = new ReminderFragment();
                 args.putString(FragmentHome.ITEM_NAME, drawerItemList.get(position)
                         .getItemName());
@@ -311,7 +315,7 @@ public class MainActivity extends ActionBarActivity {
                         .getImgResID());
                 break;
 
-            case CASE_MY_CARDS:
+            case CASE_MEAL:
                 fragment = new FragmentCardSample1();
                 args.putString(FragmentHome.ITEM_NAME, drawerItemList.get(position)
                         .getItemName());
@@ -319,30 +323,30 @@ public class MainActivity extends ActionBarActivity {
                         .getImgResID());
                 break;
 
-            case CASE_MY_MISSIONS:
-                fragment = new MealFragment();
-                break;
-
-            case CASE_AVAILABLE_MISSIONS:
-                break;
-
-            case CASE_MY_TIMELINE:
-                break;
-
-            case CASE_TIMELINE:
-                break;
+//            case CASE_MY_MISSIONS:
+//                fragment = new MealFragment();
+//                break;
+//
+//            case CASE_AVAILABLE_MISSIONS:
+//                break;
+//
+//            case CASE_MY_TIMELINE:
+//                break;
+//
+//            case CASE_TIMELINE:
+//                break;
             case CASE_SETTING:
                 break;
 
-            case CASE_ABOUT:
-                break;
-
-            case CASE_HELP:
-                fragment = new FragmentCardSample1();
-                break;
-
-            case CASE_EXIT:
-                break;
+//            case CASE_ABOUT:
+//                break;
+//
+//            case CASE_HELP:
+//                fragment = new FragmentCardSample1();
+//                break;
+//
+//            case CASE_EXIT:
+//                break;
 
             default:
                 fragment = new FragmentHome();
@@ -372,33 +376,53 @@ public class MainActivity extends ActionBarActivity {
         int colorId = -1;
 
         switch (cid) {
-            case CASE_HOME:
-                colorId = color.primary_material_dark;
+            case CASE_REMINDER:
+//                colorId = color.primary_material_dark;
+                applyDefaultColorToActivity(14);
                 break;
 
-            case CASE_MY_CARDS:
-                colorId = color.blue_500;
+            case CASE_MEAL:
+                applyDefaultColorToActivity(14);
+//                colorId = color.blue_500;
                 break;
 
-            case CASE_MY_MISSIONS:
-                colorId = color.purple_500;
-                break;
-
-            case CASE_AVAILABLE_MISSIONS:
-                colorId = color.red_500;
-                break;
-
-            case CASE_MY_TIMELINE:
-                colorId = color.teal_500;
-                break;
-
-            case CASE_TIMELINE:
-                colorId = color.amber_500;
-                break;
+//            case CASE_MY_MISSIONS:
+////                colorId = color.purple_500;
+//                break;
+//
+//            case CASE_AVAILABLE_MISSIONS:
+////                colorId = color.red_500;
+//                break;
+//
+//            case CASE_MY_TIMELINE:
+////                colorId = color.teal_500;
+//                break;
+//
+//            case CASE_TIMELINE:
+////                colorId = color.amber_500;
+//                break;
         }
 
-        if (colorId != -1)
-            getSupportActionBar().setBackgroundDrawable(new ColorDrawable(this.getResources().getColor(colorId)));
+//        if (colorId != -1)
+//            getSupportActionBar().setBackgroundDrawable(new ColorDrawable(this.getResources().getColor(colorId)));
+    }
+
+    private void applyDefaultColorToActivity(int colorPosition) {
+        TypedArray ca = getResources().obtainTypedArray(R.array.colors);
+        TypedArray cna = getResources().obtainTypedArray(R.array.colorsName);
+        int selectedColor = ca.getColor(colorPosition, 0);
+        int darker = ColorPickerDialog.shiftColor(selectedColor);
+        String colorName = cna.getString(colorPosition);
+        applyColorToActivity(selectedColor, darker, colorName);
+    }
+
+    private void applyColorToActivity(int color, int darker, String colorName) {
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(color));
+        ThemeSingleton.get().positiveColor = color;
+        ThemeSingleton.get().neutralColor = color;
+        ThemeSingleton.get().negativeColor = color;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+            getWindow().setStatusBarColor(darker);
     }
 
     private void changeActionbarTitle(int drawerId) {

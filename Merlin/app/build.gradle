@@ -71,4 +71,7 @@ dependencies {
     //Floating Action Button
     compile 'com.melnykov:floatingactionbutton:1.2.0'
 
+    compile 'com.github.chrisbanes.photoview:library:1.2.3'
+
+
 }

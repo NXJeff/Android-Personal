@@ -30,6 +30,13 @@
     </style>
 
 
+    <style name="DefaultFragmentStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:colorBackground">#eeeeee</item>
+    </style>
+
+
     <style name="MyActionButtonStyle" parent="AppTheme">
 
         <item name="android:padding">40sp</item>
