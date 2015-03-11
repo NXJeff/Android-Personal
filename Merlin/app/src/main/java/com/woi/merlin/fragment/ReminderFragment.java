@@ -61,8 +61,6 @@ public class ReminderFragment extends Fragment {
                 false);
 
         initFAB(view);
-
-
         return view;
     }
 
@@ -102,7 +100,6 @@ public class ReminderFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), AddNewReminder.class);
-//        intent.putExtra(EXTRA_MESSAGE, message);
                 startActivityForResult(intent, ADD_NEW_REMINDER);
             }
         });
@@ -146,9 +143,17 @@ public class ReminderFragment extends Fragment {
                         mCardArrayAdapter.notifyDataSetChanged();
                     }
                 }
+            } else if (requestCode == UPDATE_REMINDER) {
+                Long id = resultIntent.getLongExtra(AddNewReminder.NEW_REMINDER_ID, 0l);
+                if (id != 0l) {
+                    Reminder r = (Reminder) reminderDao.load(id);
+                    if (r != null) {
+                        initCards();
+                        mCardArrayAdapter.notifyDataSetChanged();
+                    }
+                }
             }
             //user is returning from cropping the image
-
         }
     }
 
@@ -175,7 +180,7 @@ public class ReminderFragment extends Fragment {
     private Card getNormalCard(Reminder reminder) {
 
         //Create a Card
-        MedicalCard card = new MedicalCard(getActivity(), reminder.getDescription(), ReminderType.Normal, GeneralUtil.getTimeInString(new LocalTime(reminder.getAtTime())));
+        MedicalCard card = new MedicalCard(getActivity(), reminder.getId(), reminder.getDescription(), ReminderType.Normal, GeneralUtil.getTimeInString(new LocalTime(reminder.getAtTime())));
 //        card.setLastDismissedDate(lastDismissedDate);
 //        card.setNextRemindDate(nextRemindDate);
 
@@ -198,6 +203,16 @@ public class ReminderFragment extends Fragment {
 
         card.setSwipeable(true);
 
+        card.addPartialOnClickListener(Card.CLICK_LISTENER_CONTENT_VIEW, new Card.OnCardClickListener() {
+            @Override
+            public void onClick(Card card, View view) {
+                MedicalCard medicalCard = (MedicalCard) card;
+                Intent intent = new Intent(getActivity(), AddNewReminder.class);
+                intent.putExtra("id", medicalCard.getReminderId());
+                startActivityForResult(intent, UPDATE_REMINDER);
+            }
+        });
+
         return card;
 
     }
@@ -214,7 +229,7 @@ public class ReminderFragment extends Fragment {
 
 
         //Create a Card
-        MedicalCard card = new MedicalCard(getActivity(), description, reminderType, atTime);
+        MedicalCard card = new MedicalCard(getActivity(), reminder.getId(), description, reminderType, atTime);
         card.setLastDismissedDate(lastDismissedDate);
         card.setNextRemindDate(nextRemindDate);
 

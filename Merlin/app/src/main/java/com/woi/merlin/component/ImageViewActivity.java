@@ -36,9 +36,11 @@ public class ImageViewActivity extends Activity {
         SamplePagerAdapter spa = new SamplePagerAdapter();
         if(getIntent().getStringArrayExtra("Images") != null) {
             String[] images = getIntent().getStringArrayExtra("Images");
+            int position = getIntent().getIntExtra("openPosition", 0);
             spa.setsDrawables(images);
 
             mViewPager.setAdapter(spa);
+            mViewPager.setCurrentItem(position);
         }
 
         if (savedInstanceState != null) {

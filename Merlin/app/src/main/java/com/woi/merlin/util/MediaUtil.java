@@ -75,41 +75,72 @@ public class MediaUtil {
         return mediaFile;
     }
 
-    public static void compressImage(File file) {
+    public static void compressImage(String path) {
         try {
-            InputStream is = new FileInputStream(file);
-//            BitmapFactory.Options options = new BitmapFactory.Options();
+//            InputStream is = new FileInputStream(file);
+            BitmapFactory.Options options = new BitmapFactory.Options();
 //            options.inSampleSize = 4; //subsampling
 
+            // First decode with inJustDecodeBounds=true to check dimensions
+            options.inJustDecodeBounds = true;
+            BitmapFactory.decodeFile(path, options);
+
+            // Calculate inSampleSize
+            options.inSampleSize = getInSampleSize(options);
+
+            // Decode bitmap with inSampleSize set
+            options.inJustDecodeBounds = false;
+
             int compress = 75;
-            BitmapFactory.decodeStream(is).compress(Bitmap.CompressFormat.JPEG, compress, new FileOutputStream(file));
+            Bitmap bitmap = BitmapFactory.decodeFile(path, options);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, compress, new FileOutputStream(new File(path)));
+
         } catch (FileNotFoundException fnfe) {
         }
     }
 
-    public static void StoreImage(Context mContext, Uri imageLoc, File imageDir)
-    {
-        Bitmap bm = null;
-        try
-        {
-            bm = MediaStore.Images.Media.getBitmap(mContext.getContentResolver(), imageLoc);
-            FileOutputStream out = new FileOutputStream(imageDir);
-            bm.compress(Bitmap.CompressFormat.JPEG, 100, out);
-            bm.recycle();
-        }
-        catch (FileNotFoundException e)
-        {
-            e.printStackTrace();
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
+    private static int getInSampleSize(BitmapFactory.Options options) {
+        int reqWidth = 1280;
+        int reqHeight = 1280;
+
+        return calculateInSampleSize(options, reqWidth, reqHeight);
     }
 
+    private static int calculateInSampleSize(BitmapFactory.Options options,
+                                             int reqWidth, int reqHeight) {
+
+        final int height = options.outHeight;
+        final int width = options.outWidth;
+        int inSampleSize = 1;
+
+        if (height > reqHeight || width > reqWidth) {
+
+            // Calculate ratios of height and width to requested height and
+            // width
+            final int heightRatio = Math.round((float) height
+                    / (float) reqHeight);
+            final int widthRatio = Math.round((float) width / (float) reqWidth);
+
+            // Choose the smallest ratio as inSampleSize value, this will
+            // guarantee
+            // a final image with both dimensions larger than or equal to the
+            // requested height and width.
+            inSampleSize = heightRatio < widthRatio ? heightRatio : widthRatio;
+        }
+        return inSampleSize;
+    }
+
+    /**
+     * Convenient method to delete a file
+     * @param path
+     * @return
+     */
+    public static boolean deleteFile(String path) {
+        File file = new File(path);
+        if (file != null) {
+            return file.delete();
+        }
+        return false;
+    }
 
 }

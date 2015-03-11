@@ -340,7 +340,7 @@ public class FragmentCardSample1 extends Fragment {
 
 
         //Create a Card
-        MedicalCard card = new MedicalCard(getActivity(), description, reminderType, atTime);
+        MedicalCard card = new MedicalCard(getActivity(), null, description, reminderType, atTime);
         card.setLastDismissedDate(lastDismissedDate);
         card.setNextRemindDate(nextRemindDate);
 

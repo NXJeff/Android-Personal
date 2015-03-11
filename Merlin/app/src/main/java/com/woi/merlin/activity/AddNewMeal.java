@@ -57,6 +57,7 @@ import java.util.List;
 
 import merlin.model.raw.DaoSession;
 import merlin.model.raw.ImageHolder;
+import merlin.model.raw.ImageHolderDao;
 import merlin.model.raw.Meal;
 import merlin.model.raw.MealDao;
 
@@ -316,8 +317,13 @@ public class AddNewMeal extends ActionBarActivity {
             //user is returning from capturing an image using the camera
             if (requestCode == CAMERA_CAPTURE) {
                 if (resultCode == RESULT_OK) {
-                    MediaUtil.compressImage(new File(fileUri.getPath()));
-                    addNewPhoto();
+                    MediaUtil.compressImage(fileUri.getPath());
+                    addNewPhoto(fileUri.getPath());
+                    //Create ImageHolder
+                    ImageHolder ih = new ImageHolder();
+                    ih.setEntityId(entityID);
+                    ih.setPath(fileUri.getPath());
+                    imageHolders.add(ih);
                 }
             }
             //user is returning from cropping the image
@@ -326,56 +332,27 @@ public class AddNewMeal extends ActionBarActivity {
         }
     }
 
-    private void addNewPhoto() {
+    private void addNewPhoto(String filePath) {
         BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inSampleSize = 8;
-        final Bitmap imageBitmap = BitmapFactory.decodeFile(fileUri.getPath(),
-                options);
+        options.inSampleSize = 6;
+        final Bitmap imageBitmap = BitmapFactory.decodeFile(filePath, options);
         ImageView imageView = new ImageView(this);
         imageView.setImageBitmap(imageBitmap);
-        imageView.setMaxHeight(600);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         params.setMargins(10, 10, 10, 10);
         imageView.setLayoutParams(params);
 
-        imageView.setTag(fileUri.getPath());
+
+        imageView.setTag(filePath);
         imageView.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
-//                        final String path = (String) v.getTag();
-//                        final View view = v;
-//
-//                        new MaterialDialog.Builder(AddNewMeal.this)
-//                                .title("Remove")
-//                                .content("Are you sure you want to remove this photo?")
-//                                .positiveText("Remove, right away.")
-//                                .negativeText("No, hold on")
-//                                .callback(new MaterialDialog.ButtonCallback() {
-//                                    @Override
-//                                    public void onPositive(MaterialDialog dialog) {
-//                                        view.setVisibility(View.GONE);
-//                                        removeImageHolder(path);
-//                                    }
-//
-//                                    @Override
-//                                    public void onNegative(MaterialDialog dialog) {
-//                                        dialog.dismiss();
-//                                    }
-//                                })
-//                                .show();
-                        showImageViewer();
+                        showImageViewer(v.getTag().toString());
                     }
                 }
         );
         photosLayout.addView(imageView);
-
-        //Create ImageHolder
-        ImageHolder ih = new ImageHolder();
-        ih.setEntityId(entityID);
-        ih.setPath(fileUri.getPath());
-        imageHolders.add(ih);
     }
 
     private void removeImageHolder(String path) {
@@ -454,13 +431,19 @@ public class AddNewMeal extends ActionBarActivity {
         }
     }
 
-    private void showImageViewer() {
+    private void showImageViewer(String path) {
         List<String> images = new ArrayList<>();
+        boolean found = false;
+        int position = 0;
         for (ImageHolder ih : imageHolders) {
+            if (ih.getPath().equals(path)) {
+                position = images.size();
+            }
             images.add(ih.getPath());
         }
         Intent intent = new Intent(this, ImageViewActivity.class);
         intent.putExtra("Images", images.toArray(new String[images.size()]));
+        intent.putExtra("openPosition", position);
         startActivity(intent);
     }
 
@@ -576,8 +559,22 @@ public class AddNewMeal extends ActionBarActivity {
 
         DaoSession daoSession = DbUtil.setupDatabase(this);
         MealDao mealDao = daoSession.getMealDao();
-        mealDao.insert(meal);
-        finish();
+        ImageHolderDao imageHolderDao = daoSession.getImageHolderDao();
+        if (meal.getId() == null) {
+            mealDao.insert(meal);
+        } else {
+            mealDao.update(meal);
+        }
+
+        if (!imageHolders.isEmpty()) {
+            for (ImageHolder imageHolder : imageHolders) {
+                if (imageHolder.getId() == null) {
+                    imageHolderDao.insert(imageHolder);
+                } else {
+                    imageHolderDao.update(imageHolder);
+                }
+            }
+        }
     }
 
     public void onSave() {
@@ -588,6 +585,7 @@ public class AddNewMeal extends ActionBarActivity {
                 }
             }).start();
         }
+        finish();
     }
 
     public String getEntityID() {

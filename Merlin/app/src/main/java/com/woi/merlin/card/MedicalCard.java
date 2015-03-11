@@ -21,13 +21,15 @@ public class MedicalCard extends Card {
     String lastDismissedDate;
     String nextRemindDate;
     String atTime;
+    Long reminderId;
 
 
-    public MedicalCard(Context context, String description, ReminderType reminderType, String atTime) {
+    public MedicalCard(Context context, Long reminderId, String description, ReminderType reminderType, String atTime) {
         super(context, R.layout.medical_card_content);
         this.description = description;
         this.reminderType = reminderType;
         this.atTime = atTime;
+        this.reminderId  = reminderId;
         init();
     }
 
@@ -35,15 +37,6 @@ public class MedicalCard extends Card {
      * Init
      */
     private void init() {
-
-        //No Header
-        this.addPartialOnClickListener(Card.CLICK_LISTENER_CONTENT_VIEW, new Card.OnCardClickListener() {
-            @Override
-            public void onClick(Card card, View view) {
-                Toast.makeText(getContext(), "Click on Content Area", Toast.LENGTH_LONG).show();
-            }
-        });
-
     }
 
     @Override
@@ -109,5 +102,13 @@ public class MedicalCard extends Card {
 
     public void setAtTime(String atTime) {
         this.atTime = atTime;
+    }
+
+    public Long getReminderId() {
+        return reminderId;
+    }
+
+    public void setReminderId(Long reminderId) {
+        this.reminderId = reminderId;
     }
 }

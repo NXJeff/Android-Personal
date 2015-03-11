@@ -376,9 +376,9 @@
                 android:layout_height="wrap_content"
                 android:layout_width="match_parent"
                 android:layout_below="@id/colorOptionSeperator"
+                android:layout_alignLeft="@id/colorOptionSeperator"
                 android:paddingTop="5sp"
                 android:paddingBottom="5sp"
-                android:layout_alignLeft="@id/colorOptionSeperator"
                 android:minHeight="50sp"
                 android:hint="Add note"
                 android:background="@android:color/transparent"
@@ -391,6 +391,41 @@
                 android:layout_alignLeft="@id/repeatSpinner"
                 style="@style/Divider" />
 
+            <IconTextView
+                android:layout_width="wrap_content"
+                android:layout_height="50sp"
+                android:id="@+id/addNewReminderPhotoIconView"
+                android:text="{fa-camera}"
+                android:textColor="@color/grey_700"
+                android:shadowColor="#22000000"
+                android:shadowDx="3"
+                android:shadowDy="3"
+                android:paddingLeft="15sp"
+                android:paddingRight="25sp"
+                android:shadowRadius="1"
+                android:layout_weight="1"
+                android:textSize="25sp"
+                android:gravity="center_vertical"
+                android:layout_below="@id/remarkSeperator"/>
+
+            <Button
+                android:id="@+id/addNewReminderAddPhotoBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/remarkSeperator"
+                android:layout_alignLeft="@id/remarkSeperator"
+                android:text="Tap to add photo" />
+
         </RelativeLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:id="@+id/addNewReminderPhotosLayout"
+            android:layout_margin="20sp"
+            android:layout_gravity="center_horizontal"
+            android:animateLayoutChanges="true">
+
+        </LinearLayout>
     </LinearLayout>
 </ScrollView>
