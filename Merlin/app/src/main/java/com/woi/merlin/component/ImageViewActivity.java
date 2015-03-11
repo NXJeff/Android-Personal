@@ -12,11 +12,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 
-import com.squareup.picasso.Picasso;
 import com.woi.merlin.R;
-
 import java.io.File;
-
 import uk.co.senab.photoview.PhotoView;
 
 /**
@@ -36,7 +33,13 @@ public class ImageViewActivity extends Activity {
         mViewPager = (HackyViewPager) findViewById(R.id.view_pager);
         setContentView(mViewPager);
 
-        mViewPager.setAdapter(new SamplePagerAdapter());
+        SamplePagerAdapter spa = new SamplePagerAdapter();
+        if(getIntent().getStringArrayExtra("Images") != null) {
+            String[] images = getIntent().getStringArrayExtra("Images");
+            spa.setsDrawables(images);
+
+            mViewPager.setAdapter(spa);
+        }
 
         if (savedInstanceState != null) {
             boolean isLocked = savedInstanceState.getBoolean(ISLOCKED_ARG, false);
@@ -79,6 +82,13 @@ public class ImageViewActivity extends Activity {
             return view == object;
         }
 
+        public String[] getsDrawables() {
+            return sDrawables;
+        }
+
+        public void setsDrawables(String[] sDrawables) {
+            this.sDrawables = sDrawables;
+        }
     }
 
     @Override

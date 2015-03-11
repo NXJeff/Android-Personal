@@ -1,10 +1,20 @@
 package com.woi.merlin.util;
 
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.util.Log;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -63,6 +73,42 @@ public class MediaUtil {
         }
 
         return mediaFile;
+    }
+
+    public static void compressImage(File file) {
+        try {
+            InputStream is = new FileInputStream(file);
+//            BitmapFactory.Options options = new BitmapFactory.Options();
+//            options.inSampleSize = 4; //subsampling
+
+            int compress = 75;
+            BitmapFactory.decodeStream(is).compress(Bitmap.CompressFormat.JPEG, compress, new FileOutputStream(file));
+        } catch (FileNotFoundException fnfe) {
+        }
+    }
+
+    public static void StoreImage(Context mContext, Uri imageLoc, File imageDir)
+    {
+        Bitmap bm = null;
+        try
+        {
+            bm = MediaStore.Images.Media.getBitmap(mContext.getContentResolver(), imageLoc);
+            FileOutputStream out = new FileOutputStream(imageDir);
+            bm.compress(Bitmap.CompressFormat.JPEG, 100, out);
+            bm.recycle();
+        }
+        catch (FileNotFoundException e)
+        {
+            e.printStackTrace();
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
     }
 
 

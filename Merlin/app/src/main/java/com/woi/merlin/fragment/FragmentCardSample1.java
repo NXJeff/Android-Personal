@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.woi.merlin.R;
+import com.woi.merlin.activity.AddNewMeal;
 import com.woi.merlin.activity.AddNewReminder;
 import com.woi.merlin.card.MedicalCard;
 import com.woi.merlin.card.MedicalCardHeader;
@@ -267,7 +268,7 @@ public class FragmentCardSample1 extends Fragment {
     }
 
     public void testOpenActivity() {
-        Intent intent = new Intent(getActivity(), AddNewReminder.class);
+        Intent intent = new Intent(getActivity(), AddNewMeal.class);
 //        intent.putExtra(EXTRA_MESSAGE, message);
 
         startActivity(intent);

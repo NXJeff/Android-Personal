@@ -36,6 +36,7 @@ import com.afollestad.materialdialogs.ThemeSingleton;
 import com.woi.merlin.R;
 import com.woi.merlin.component.ColorPickerDialog;
 import com.woi.merlin.component.DatePickerFragment;
+import com.woi.merlin.component.ImageViewActivity;
 import com.woi.merlin.component.TimePickerFragment;
 import com.woi.merlin.enumeration.EntityType;
 import com.woi.merlin.enumeration.MealType;
@@ -49,6 +50,7 @@ import com.woi.merlin.util.MediaUtil;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -68,7 +70,6 @@ public class AddNewMeal extends ActionBarActivity {
     final int PIC_CROP = 2;
     //captured picture uri
     private Uri fileUri;
-
 
 
     TextView mealDatePicker, mealTimePicker, colorPicker;
@@ -315,6 +316,7 @@ public class AddNewMeal extends ActionBarActivity {
             //user is returning from capturing an image using the camera
             if (requestCode == CAMERA_CAPTURE) {
                 if (resultCode == RESULT_OK) {
+                    MediaUtil.compressImage(new File(fileUri.getPath()));
                     addNewPhoto();
                 }
             }
@@ -342,27 +344,28 @@ public class AddNewMeal extends ActionBarActivity {
                     @Override
                     public void onClick(View v) {
 
-                        final String path = (String) v.getTag();
-                        final View view = v;
-
-                        new MaterialDialog.Builder(AddNewMeal.this)
-                                .title("Remove")
-                                .content("Are you sure you want to remove this photo?")
-                                .positiveText("Remove, right away.")
-                                .negativeText("No, hold on")
-                                .callback(new MaterialDialog.ButtonCallback() {
-                                    @Override
-                                    public void onPositive(MaterialDialog dialog) {
-                                        view.setVisibility(View.GONE);
-                                        removeImageHolder(path);
-                                    }
-
-                                    @Override
-                                    public void onNegative(MaterialDialog dialog) {
-                                        dialog.dismiss();
-                                    }
-                                })
-                                .show();
+//                        final String path = (String) v.getTag();
+//                        final View view = v;
+//
+//                        new MaterialDialog.Builder(AddNewMeal.this)
+//                                .title("Remove")
+//                                .content("Are you sure you want to remove this photo?")
+//                                .positiveText("Remove, right away.")
+//                                .negativeText("No, hold on")
+//                                .callback(new MaterialDialog.ButtonCallback() {
+//                                    @Override
+//                                    public void onPositive(MaterialDialog dialog) {
+//                                        view.setVisibility(View.GONE);
+//                                        removeImageHolder(path);
+//                                    }
+//
+//                                    @Override
+//                                    public void onNegative(MaterialDialog dialog) {
+//                                        dialog.dismiss();
+//                                    }
+//                                })
+//                                .show();
+                        showImageViewer();
                     }
                 }
         );
@@ -449,6 +452,16 @@ public class AddNewMeal extends ActionBarActivity {
             Toast toast = Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT);
             toast.show();
         }
+    }
+
+    private void showImageViewer() {
+        List<String> images = new ArrayList<>();
+        for (ImageHolder ih : imageHolders) {
+            images.add(ih.getPath());
+        }
+        Intent intent = new Intent(this, ImageViewActivity.class);
+        intent.putExtra("Images", images.toArray(new String[images.size()]));
+        startActivity(intent);
     }
 
     /**
