@@ -96,6 +96,7 @@
     <orderEntry type="library" exported="" name="material-dialogs-0.6.2.2" level="project" />
     <orderEntry type="library" exported="" name="floatingactionbutton-1.2.0" level="project" />
     <orderEntry type="library" exported="" name="appcompat-v7-21.0.3" level="project" />
+    <orderEntry type="library" exported="" name="navigationdrawer-material-1.0.4" level="project" />
     <orderEntry type="library" exported="" name="android-iconify-1.0.9" level="project" />
     <orderEntry type="library" exported="" name="android.joda-2.7.0" level="project" />
     <orderEntry type="library" exported="" name="lib-core-3.1.0" level="project" />

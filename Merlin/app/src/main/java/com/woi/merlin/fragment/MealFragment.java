@@ -37,34 +37,34 @@ public class MealFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        initCards();
+//        initCards();
     }
 
-    private void initCards() {
-        ArrayList<Card> cards = new ArrayList<Card>();
-
-        //Add new meal detail card
-        ColorCard card = new ColorCard(this.getActivity());
-        card.setTitle("Add New");
-        card.setCount(0);
-        card.setBackgroundColorResourceId(R.color.blue_500);
-        card.addPartialOnClickListener(Card.CLICK_LISTENER_ALL_VIEW, new Card.OnCardClickListener() {
-            @Override
-            public void onClick(Card card, View view) {
-                Intent intent = new Intent(getActivity(), AddNewMeal.class);
-//        intent.putExtra(EXTRA_MESSAGE, message);
-
-                startActivity(intent);
-            }
-        });
-        cards.add(card);
-
-        CardArrayAdapter mCardArrayAdapter = new CardArrayAdapter(getActivity(), cards);
-
-        CardListView listView = (CardListView) getActivity().findViewById(R.id.meal_list_base);
-        if (listView != null) {
-            listView.setAdapter(mCardArrayAdapter);
-        }
-    }
+//    private void initCards() {
+//        ArrayList<Card> cards = new ArrayList<Card>();
+//
+//        //Add new meal detail card
+//        ColorCard card = new ColorCard(this.getActivity());
+//        card.setTitle("Add New");
+//        card.setCount(0);
+//        card.setBackgroundColorResourceId(R.color.blue_500);
+//        card.addPartialOnClickListener(Card.CLICK_LISTENER_ALL_VIEW, new Card.OnCardClickListener() {
+//            @Override
+//            public void onClick(Card card, View view) {
+//                Intent intent = new Intent(getActivity(), AddNewMeal.class);
+////        intent.putExtra(EXTRA_MESSAGE, message);
+//
+//                startActivity(intent);
+//            }
+//        });
+//        cards.add(card);
+//
+//        CardArrayAdapter mCardArrayAdapter = new CardArrayAdapter(getActivity(), cards);
+//
+//        CardListView listView = (CardListView) getActivity().findViewById(R.id.meal_list_base);
+//        if (listView != null) {
+//            listView.setAdapter(mCardArrayAdapter);
+//        }
+//    }
 
 }

@@ -298,7 +298,6 @@ public class AddNewReminder extends ActionBarActivity {
         });
 
         applyDefaultColorToActivity();
-
     }
 
 
@@ -501,22 +500,20 @@ public class AddNewReminder extends ActionBarActivity {
 
 
     private void applyColorBasedOnReminderType() {
-        if (reminderType.equals(ReminderType.Normal)) {
-            applyDefaultColorToActivity(13);
-        } else if (reminderType.equals(ReminderType.MedicalReminder)) {
-            applyDefaultColorToActivity(5);
-        } else if (reminderType.equals(ReminderType.LoveCalendar)) {
-            applyDefaultColorToActivity(20);
+        if (reminder == null) {
+            if (reminderType.equals(ReminderType.Normal)) {
+                applySelectedColorToActivity(13);
+            } else if (reminderType.equals(ReminderType.MedicalReminder)) {
+                applySelectedColorToActivity(5);
+            } else if (reminderType.equals(ReminderType.LoveCalendar)) {
+                applySelectedColorToActivity(20);
+            }
         }
     }
 
     private void populateReminderType() {
         reminderTypeSpinner.setSelection(((ArrayAdapter<ReminderType>) reminderTypeSpinner.getAdapter()).getPosition(reminderType));
     }
-
-    private void populateColorPicker() {
-    }
-
 
     private void addNewPhoto(String filePath) {
         BitmapFactory.Options options = new BitmapFactory.Options();
@@ -600,10 +597,10 @@ public class AddNewReminder extends ActionBarActivity {
     }
 
     private void applyDefaultColorToActivity() {
-        applyDefaultColorToActivity(13);
+        applySelectedColorToActivity(13);
     }
 
-    private void applyDefaultColorToActivity(int colorPosition) {
+    private void applySelectedColorToActivity(int colorPosition) {
         TypedArray ca = getResources().obtainTypedArray(R.array.colors);
         TypedArray cna = getResources().obtainTypedArray(R.array.colorsName);
         selectedColor = ca.getColor(colorPosition, 0);
@@ -616,13 +613,13 @@ public class AddNewReminder extends ActionBarActivity {
         TypedArray ca = getResources().obtainTypedArray(R.array.colors);
         int position = 0;
         for (int i = 0; i < ca.length(); i++) {
-            if(ca.getColor(i, 0) == colorId) {
+            if (ca.getColor(i, 0) == colorId) {
                 position = i;
                 break;
             }
         }
 
-        applyDefaultColorToActivity(position);
+        applySelectedColorToActivity(position);
     }
 
     private void applyColorToActivity(int color, int darker, String colorName) {
