@@ -158,6 +158,8 @@ public class ReminderFragment extends Fragment {
     }
 
     private List<Card> getAllCards() {
+        DaoSession daoSession = DbUtil.setupDatabase(getActivity());
+        ReminderDao reminderDao = daoSession.getReminderDao();
         Query query = reminderDao.queryBuilder().where(ReminderDao.Properties.Status.eq(StatusType.of(StatusType.Active.toString()))).build();
         List<Reminder> reminders = query.list();
         List<Card> cards = new ArrayList<>();
