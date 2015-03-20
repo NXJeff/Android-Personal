@@ -1,6 +1,7 @@
 package com.woi.merlin.util;
 
 import com.woi.merlin.enumeration.ReminderType;
+import com.woi.merlin.enumeration.RepeatType;
 
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
@@ -12,17 +13,56 @@ import merlin.model.raw.Reminder;
  */
 public class ReminderUtil {
 
-    public static Long getNextReminderTime(Reminder reminder) {
+    public static LocalDate getNextReminderTime(Reminder reminder) {
 
-        LocalDate fromDate = new LocalDate(reminder.getFromDate());
-        LocalDate toDate = new LocalDate(reminder.getToDate());
-        LocalTime atTime = new LocalTime(reminder.getAtTime());
+        LocalDate nextDate = new LocalDate(reminder.getFromDate());
+        LocalDate currentDateTime = new LocalDate();
 
-        if(reminder.getReminderType().equals(ReminderType.Normal)) {
+        do {
+            switch (RepeatType.of(reminder.getRepeatType())) {
+                case EVERYDAY:
+                    nextDate = nextDate.plusDays(1);
+                    break;
+                case EVERYWEEK:
+                    nextDate = nextDate.plusWeeks(1);
+                    break;
+                case EVERYMONTH:
+                    nextDate = nextDate.plusMonths(1);
+                    break;
+                case EVERYYEAR:
+                    nextDate = nextDate.plusYears(1);
+                    break;
+                case CUSTOM:
 
+            }
+        } while (nextDate.isAfter(currentDateTime));
 
+        return nextDate;
 
-        }
+    }
 
+    public static LocalDate getNextOccuredDateBasedOnRepeatType(Reminder reminder, RepeatType repeatType) {
+
+        LocalDate nextDate = new LocalDate(reminder.getFromDate());
+        LocalDate currentDateTime = new LocalDate();
+
+        do {
+            switch (repeatType) {
+                case EVERYDAY:
+                    nextDate = nextDate.plusDays(1);
+                    break;
+                case EVERYWEEK:
+                    nextDate = nextDate.plusWeeks(1);
+                    break;
+                case EVERYMONTH:
+                    nextDate = nextDate.plusMonths(1);
+                    break;
+                case EVERYYEAR:
+                    nextDate = nextDate.plusYears(1);
+                    break;
+            }
+        } while (nextDate.isAfter(currentDateTime));
+
+        return nextDate;
     }
 }
