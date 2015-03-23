@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+
+
+
+
+        </LinearLayout>
+
+    <TextView
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="50dp"
+        android:text="AAAA"
+        android:textSize="20dp"
+        android:textColor="@color/blue_grey_700"
+        android:fontFamily="@string/card_font_fontFamily_image_text_over"
+        android:id="@+id/normal_title" />
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/normal_upcoming_date"
+        android:textSize="14sp"
+        android:textStyle="normal"
+        android:layout_marginLeft="50dp"
+        android:singleLine="true"
+        android:textColor="@color/grey_400"
+        android:text="DEFAULT" />
+
+
+</LinearLayout>

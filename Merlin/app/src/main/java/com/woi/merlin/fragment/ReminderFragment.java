@@ -17,11 +17,14 @@ import com.woi.merlin.R;
 import com.woi.merlin.activity.AddNewReminder;
 import com.woi.merlin.card.MedicalCard;
 import com.woi.merlin.card.MedicalCardHeader;
+import com.woi.merlin.card.NormalCard;
 import com.woi.merlin.enumeration.ReminderType;
 import com.woi.merlin.enumeration.StatusType;
 import com.woi.merlin.util.DbUtil;
 import com.woi.merlin.util.GeneralUtil;
+import com.woi.merlin.util.ReminderUtil;
 
+import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 
@@ -167,7 +170,7 @@ public class ReminderFragment extends Fragment {
             for (Reminder r : reminders) {
                 //Seperate by ReminderType
                 if (r.getReminderType().equals(ReminderType.Normal.getValue())) {
-                    cards.add(getNormalCard(r));
+                    cards.add(getCard(r));
                 } else if (r.getReminderType().equals(ReminderType.MedicalReminder)) {
 
                 } else if (r.getReminderType().equals(ReminderType.LoveCalendar)) {
@@ -179,6 +182,22 @@ public class ReminderFragment extends Fragment {
         return cards;
     }
 
+    private Card getCard(Reminder reminder) {
+
+        NormalCard card = new NormalCard(getActivity(), reminder);
+
+        card.addPartialOnClickListener(Card.CLICK_LISTENER_CONTENT_VIEW, new Card.OnCardClickListener() {
+            @Override
+            public void onClick(Card card, View view) {
+                NormalCard normalCard = (NormalCard) card;
+                Intent intent = new Intent(getActivity(), AddNewReminder.class);
+                intent.putExtra("id", normalCard.getReminder().getId());
+                startActivityForResult(intent, UPDATE_REMINDER);
+            }
+        });
+        return card;
+    }
+
     private Card getNormalCard(Reminder reminder) {
 
         //Create a Card
@@ -186,8 +205,17 @@ public class ReminderFragment extends Fragment {
 //        card.setLastDismissedDate(lastDismissedDate);
 //        card.setNextRemindDate(nextRemindDate);
 
+        DateTime nextDate = ReminderUtil.getNextReminderTime(reminder);
+
+
         //Create a CardHeader
-        String title = "22 minutes before taking";
+        String title = "";
+        if (nextDate==null) {
+            title = "Expired";
+        } else {
+            title = ReminderUtil.getReadableRemainingDate(nextDate);
+        }
+
         MedicalCardHeader header = new MedicalCardHeader(getActivity(), title, reminder.getSubject());
         header.setBgColor(reminder.getColor());
         header.setPopupMenu(R.menu.sample1menu, new CardHeader.OnClickCardHeaderPopupMenuListener() {
@@ -200,8 +228,8 @@ public class ReminderFragment extends Fragment {
 
         //Set shadow elevation
         //Convert dp to float
-        float shadowElevation = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 14, getResources().getDisplayMetrics());
-        card.setCardElevation(shadowElevation);
+//        float shadowElevation = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 14, getResources().getDisplayMetrics());
+//        card.setCardElevation(shadowElevation);
 
         card.setSwipeable(true);
 
