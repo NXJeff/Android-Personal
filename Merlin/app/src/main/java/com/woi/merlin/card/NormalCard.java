@@ -3,6 +3,7 @@ package com.woi.merlin.card;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.IconTextView;
 import android.widget.TextView;
 
 import com.woi.merlin.R;
@@ -30,13 +31,17 @@ public class NormalCard extends Card {
         if (view != null) {
             TextView tvTitle = (TextView) parent.findViewById(R.id.normal_title);
             TextView tvUpcoming = (TextView) parent.findViewById(R.id.normal_upcoming_date);
-
+            IconTextView ictIcon  = (IconTextView) parent.findViewById(R.id.norm_reminder_icon);
 
             if (tvTitle != null)
                 tvTitle.setText(reminder.getSubject());
 
             if (tvUpcoming != null) {
                 tvUpcoming.setText(ReminderUtil.getReadableRemainingDate(reminder));
+            }
+
+            if(ictIcon != null) {
+                ictIcon.setTextColor(reminder.getColor());
             }
         }
     }

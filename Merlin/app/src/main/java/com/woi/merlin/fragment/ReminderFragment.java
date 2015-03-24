@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.ListView;
+import android.widget.PopupMenu;
 import android.widget.Toast;
 
 import com.melnykov.fab.FloatingActionButton;
@@ -18,6 +19,7 @@ import com.woi.merlin.activity.AddNewReminder;
 import com.woi.merlin.card.MedicalCard;
 import com.woi.merlin.card.MedicalCardHeader;
 import com.woi.merlin.card.NormalCard;
+import com.woi.merlin.card.ReminderCardExpand;
 import com.woi.merlin.enumeration.ReminderType;
 import com.woi.merlin.enumeration.StatusType;
 import com.woi.merlin.util.DbUtil;
@@ -34,6 +36,7 @@ import java.util.List;
 import de.greenrobot.dao.query.Query;
 import it.gmariotti.cardslib.library.internal.Card;
 import it.gmariotti.cardslib.library.internal.CardArrayAdapter;
+import it.gmariotti.cardslib.library.internal.CardExpand;
 import it.gmariotti.cardslib.library.internal.CardHeader;
 import it.gmariotti.cardslib.library.internal.base.BaseCard;
 import it.gmariotti.cardslib.library.view.CardListView;
@@ -186,6 +189,8 @@ public class ReminderFragment extends Fragment {
 
         NormalCard card = new NormalCard(getActivity(), reminder);
 
+        CardHeader header = new CardHeader(getActivity());
+
         card.addPartialOnClickListener(Card.CLICK_LISTENER_CONTENT_VIEW, new Card.OnCardClickListener() {
             @Override
             public void onClick(Card card, View view) {
@@ -195,6 +200,39 @@ public class ReminderFragment extends Fragment {
                 startActivityForResult(intent, UPDATE_REMINDER);
             }
         });
+
+
+//        header.setButtonOverflowVisible(true);
+        //Add the listener
+        header.setPopupMenuListener(new CardHeader.OnClickCardHeaderPopupMenuListener() {
+            @Override
+            public void onMenuItemClick(BaseCard card, MenuItem item) {
+                Toast.makeText(getActivity(), "Click on " + item.getTitle() + "-" + ((Card) card).getCardHeader().getTitle(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        //Add a PopupMenuPrepareListener to add dynamically a menu entry
+        header.setPopupMenuPrepareListener(new CardHeader.OnPrepareCardHeaderPopupMenuListener() {
+            @Override
+            public boolean onPreparePopupMenu(BaseCard card, PopupMenu popupMenu) {
+                popupMenu.getMenu().add("Dynamic item");
+                return true;
+            }
+        });
+
+        card.addCardHeader(header);
+
+        header.setButtonExpandVisible(true);
+
+        //This provide a simple (and useless) expand area
+        ReminderCardExpand expand = new ReminderCardExpand(getActivity(), reminder);
+
+        //Set inner title in Expand Area
+        expand.setTitle("Test");
+
+        //Add expand to a card
+        card.addCardExpand(expand);
+
         return card;
     }
 
@@ -210,7 +248,7 @@ public class ReminderFragment extends Fragment {
 
         //Create a CardHeader
         String title = "";
-        if (nextDate==null) {
+        if (nextDate == null) {
             title = "Expired";
         } else {
             title = ReminderUtil.getReadableRemainingDate(nextDate);
