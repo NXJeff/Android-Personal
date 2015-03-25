@@ -284,5 +284,6 @@
 
     <!-- override color of cardslib -->
     <color name="card_backgroundExpand">#fff</color>
+    <color name="card_background">#fff</color>
 
 </resources>

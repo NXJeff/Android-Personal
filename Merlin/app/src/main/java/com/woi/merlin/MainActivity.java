@@ -152,7 +152,7 @@ public class MainActivity extends NavigationLiveo implements NavigationLiveoList
 
         Fragment mFragment = null;
         changeActionbarTitle(position);
-        changeActionbarColor(position);
+//        changeActionbarColor(position); temporary disable because will impact to the material design navigation bar
         switch (position) {
 
             case CASE_REMINDER:
