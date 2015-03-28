@@ -34,6 +34,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.greenrobot.dao.query.Query;
+import in.srain.cube.views.ptr.PtrFrameLayout;
+import in.srain.cube.views.ptr.PtrHandler;
+import in.srain.cube.views.ptr.header.MaterialHeader;
 import it.gmariotti.cardslib.library.internal.Card;
 import it.gmariotti.cardslib.library.internal.CardArrayAdapter;
 import it.gmariotti.cardslib.library.internal.CardExpand;
@@ -65,6 +68,39 @@ public class ReminderFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_reminder, container,
                 false);
+
+        final PtrFrameLayout frame = (PtrFrameLayout) view.findViewById(R.id.ptr_reminder);
+
+        final MaterialHeader header = new MaterialHeader(getActivity());
+        int[] colors = getResources().getIntArray(R.array.colors);
+        header.setColorSchemeColors(colors);
+        header.setLayoutParams(new PtrFrameLayout.LayoutParams(-1, -2));
+//        header.setPadding(0, LocalDisplay.dp2px(15), 0, LocalDisplay.dp2px(10));
+        header.setPtrFrameLayout(frame);
+
+        frame.setLoadingMinTime(1000);
+        frame.setDurationToCloseHeader(1500);
+        frame.setHeaderView(header);
+        frame.addPtrUIHandler(header);
+        frame.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                frame.autoRefresh(false);
+            }
+        }, 100);
+
+        frame.setPtrHandler(new PtrHandler() {
+            @Override
+            public boolean checkCanDoRefresh(PtrFrameLayout frame, View content, View header) {
+                return true;
+            }
+
+            @Override
+            public void onRefreshBegin(final PtrFrameLayout frame) {
+                //
+            }
+        });
+
 
         initFAB(view);
         return view;

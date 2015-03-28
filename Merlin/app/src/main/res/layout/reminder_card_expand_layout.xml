@@ -1,27 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal"
+    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:weightSum="1.0">
+    android:layout_height="match_parent">
+
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:weightSum="1.0">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_weight="0.5"
+            android:layout_marginLeft="10sp"
+            android:layout_marginRight="3sp"
+            android:id="@+id/reminder_expand_linear_layout_left" />
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_weight="0.5"
+            android:layout_marginLeft="3sp"
+            android:layout_marginRight="10sp"
+            android:id="@+id/reminder_expand_linear_layout_right" />
+    </LinearLayout>
+
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:layout_weight="0.5"
-        android:layout_marginLeft="10sp"
-        android:layout_marginRight="3sp"
-        android:id="@+id/reminder_expand_linear_layout_left" />
+        android:layout_height="match_parent">
 
+        <com.gc.materialdesign.views.ButtonFlat
+            android:id="@+id/expand_edit_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#1E88E5"
+            android:text="Edit" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:layout_weight="0.5"
-        android:layout_marginLeft="3sp"
-        android:layout_marginRight="10sp"
-        android:id="@+id/reminder_expand_linear_layout_right" />
+        <com.gc.materialdesign.views.ButtonFlat
+            android:id="@+id/expand_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#1E88E5"
+            android:text="Delete" />
 
+    </LinearLayout>
 </LinearLayout>

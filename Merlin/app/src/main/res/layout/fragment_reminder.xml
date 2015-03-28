@@ -4,15 +4,30 @@
     xmlns:fab="http://schemas.android.com/apk/res-auto"
     style="@style/DefaultFragmentStyle">
 
-    <it.gmariotti.cardslib.library.view.CardListView
+    <in.srain.cube.views.ptr.PtrFrameLayout
+        android:id="@+id/ptr_reminder"
+        xmlns:cube_ptr="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingLeft="@dimen/carddemo_list_padding"
-        android:paddingRight="@dimen/carddemo_list_padding"
-        style="@style/native_list_external"
-        android:background="#eeeeee"
-        card:list_card_layout_resourceID="@layout/reminder_card_list_layout"
-        android:id="@+id/reminder_list_base" />
+
+        cube_ptr:ptr_resistance="1.7"
+        cube_ptr:ptr_ratio_of_header_height_to_refresh="1.2"
+        cube_ptr:ptr_duration_to_close="300"
+        cube_ptr:ptr_duration_to_close_header="2000"
+        cube_ptr:ptr_keep_header_when_refresh="true"
+        cube_ptr:ptr_pull_to_fresh="false">
+
+        <it.gmariotti.cardslib.library.view.CardListView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingLeft="@dimen/carddemo_list_padding"
+            android:paddingRight="@dimen/carddemo_list_padding"
+            style="@style/native_list_external"
+            android:background="#eeeeee"
+            card:list_card_layout_resourceID="@layout/reminder_card_list_layout"
+            android:id="@+id/reminder_list_base" />
+
+    </in.srain.cube.views.ptr.PtrFrameLayout>
 
     <com.melnykov.fab.FloatingActionButton
         android:id="@+id/fab_reminder_fm"
