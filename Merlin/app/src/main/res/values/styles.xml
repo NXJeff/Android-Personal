@@ -72,5 +72,9 @@
         <item name="android:layout_alignParentRight">true</item>
     </style>
 
+    <style name="fontnormal">
+        <item name="android:textStyle">normal</item>
+    </style>
+
 
 </resources>

@@ -2,6 +2,7 @@ package com.woi.merlin.fragment;
 
 import android.app.Fragment;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -14,6 +15,8 @@ import android.widget.PopupMenu;
 import android.widget.Toast;
 
 import com.melnykov.fab.FloatingActionButton;
+import com.nhaarman.listviewanimations.appearance.AnimationAdapter;
+import com.nhaarman.listviewanimations.appearance.simple.AlphaInAnimationAdapter;
 import com.woi.merlin.R;
 import com.woi.merlin.activity.AddNewReminder;
 import com.woi.merlin.card.MedicalCard;
@@ -34,12 +37,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.greenrobot.dao.query.Query;
-import in.srain.cube.views.ptr.PtrFrameLayout;
-import in.srain.cube.views.ptr.PtrHandler;
-import in.srain.cube.views.ptr.header.MaterialHeader;
 import it.gmariotti.cardslib.library.internal.Card;
 import it.gmariotti.cardslib.library.internal.CardArrayAdapter;
-import it.gmariotti.cardslib.library.internal.CardExpand;
 import it.gmariotti.cardslib.library.internal.CardHeader;
 import it.gmariotti.cardslib.library.internal.base.BaseCard;
 import it.gmariotti.cardslib.library.view.CardListView;
@@ -47,11 +46,14 @@ import it.gmariotti.cardslib.library.view.listener.SwipeOnScrollListener;
 import merlin.model.raw.DaoSession;
 import merlin.model.raw.Reminder;
 import merlin.model.raw.ReminderDao;
+import uk.co.senab.actionbarpulltorefresh.library.ActionBarPullToRefresh;
+import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout;
+import uk.co.senab.actionbarpulltorefresh.library.listeners.OnRefreshListener;
 
 /**
  * Created by YeekFeiTan on 2/26/2015.
  */
-public class ReminderFragment extends Fragment {
+public class ReminderFragment extends Fragment implements OnRefreshListener {
 
     //keep track of intents
     final int ADD_NEW_REMINDER = 1;
@@ -62,6 +64,7 @@ public class ReminderFragment extends Fragment {
     ReminderDao reminderDao = null;
     CardArrayAdapter mCardArrayAdapter;
     List<Card> cards;
+    PullToRefreshLayout mPullToRefreshLayout = null;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -69,38 +72,17 @@ public class ReminderFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_reminder, container,
                 false);
 
-        final PtrFrameLayout frame = (PtrFrameLayout) view.findViewById(R.id.ptr_reminder);
+        // Retrieve the PullToRefreshLayout from the content view
+        mPullToRefreshLayout = (PullToRefreshLayout) view.findViewById(R.id.carddemo_extra_ptr_layout);
 
-        final MaterialHeader header = new MaterialHeader(getActivity());
-        int[] colors = getResources().getIntArray(R.array.colors);
-        header.setColorSchemeColors(colors);
-        header.setLayoutParams(new PtrFrameLayout.LayoutParams(-1, -2));
-//        header.setPadding(0, LocalDisplay.dp2px(15), 0, LocalDisplay.dp2px(10));
-        header.setPtrFrameLayout(frame);
-
-        frame.setLoadingMinTime(1000);
-        frame.setDurationToCloseHeader(1500);
-        frame.setHeaderView(header);
-        frame.addPtrUIHandler(header);
-        frame.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                frame.autoRefresh(false);
-            }
-        }, 100);
-
-        frame.setPtrHandler(new PtrHandler() {
-            @Override
-            public boolean checkCanDoRefresh(PtrFrameLayout frame, View content, View header) {
-                return true;
-            }
-
-            @Override
-            public void onRefreshBegin(final PtrFrameLayout frame) {
-                //
-            }
-        });
-
+        // Now setup the PullToRefreshLayout
+        ActionBarPullToRefresh.from(getActivity())
+                // Mark All Children as pullable
+                .allChildrenArePullable()
+                        // Set the OnRefreshListener
+                .listener(this)
+                        // Finally commit the setup to our PullToRefreshLayout
+                .setup(mPullToRefreshLayout);
 
         initFAB(view);
         return view;
@@ -165,8 +147,15 @@ public class ReminderFragment extends Fragment {
 
         CardListView listView = (CardListView) getActivity().findViewById(R.id.reminder_list_base);
         if (listView != null) {
-            listView.setAdapter(mCardArrayAdapter);
+//            listView.setAdapter(mCardArrayAdapter);
+            AnimationAdapter animCardArrayAdapter = new AlphaInAnimationAdapter(mCardArrayAdapter);
+            animCardArrayAdapter.setAbsListView(listView);
+            listView.setExternalAdapter(animCardArrayAdapter,mCardArrayAdapter);
+
         }
+
+
+
     }
 
     /**
@@ -356,6 +345,33 @@ public class ReminderFragment extends Fragment {
         card.setSwipeable(true);
 
         return card;
+    }
+
+    @Override
+    public void onRefreshStarted(View view) {
+        /**
+         * Simulate Refresh with 4 seconds sleep
+         */
+        new AsyncTask<Void, Void, Void>() {
+
+            @Override
+            protected Void doInBackground(Void... params) {
+                try {
+                    Thread.sleep(3000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void result) {
+                super.onPostExecute(result);
+
+                // Notify PullToRefreshAttacher that the refresh has finished
+                mPullToRefreshLayout.setRefreshComplete();
+            }
+        }.execute();
     }
 
 

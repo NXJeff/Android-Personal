@@ -80,6 +80,11 @@ dependencies {
     compile 'com.github.navasmdc:MaterialDesign:1.+@aar'
 
     //pull to refresh
-    compile 'in.srain.cube:ultra-ptr:1.0.8@aar'
+//    compile 'in.srain.cube:ultra-ptr:1.0.8@aar'
+
+    compile 'com.github.chrisbanes.actionbarpulltorefresh:library:+'
+
+    //listview animation
+    compile 'com.nhaarman.listviewanimations:lib-core:3.1.0@aar'
 
 }
