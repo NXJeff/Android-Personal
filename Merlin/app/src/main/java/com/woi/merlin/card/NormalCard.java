@@ -1,13 +1,17 @@
 package com.woi.merlin.card;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.IconTextView;
 import android.widget.TextView;
 
 import com.woi.merlin.R;
+import com.woi.merlin.activity.AddNewReminder;
 import com.woi.merlin.util.ReminderUtil;
+
+import java.util.Date;
 
 import it.gmariotti.cardslib.library.internal.Card;
 import merlin.model.raw.Reminder;
@@ -18,10 +22,12 @@ import merlin.model.raw.Reminder;
 public class NormalCard extends Card {
 
     Reminder reminder;
+    String nextReminderDate;
 
     public NormalCard(Context context, Reminder reminder) {
         super(context, R.layout.norm_reminder_content);
         this.reminder = reminder;
+        nextReminderDate = ReminderUtil.getReadableRemainingDate(reminder);
     }
 
 
@@ -37,7 +43,7 @@ public class NormalCard extends Card {
                 tvTitle.setText(reminder.getSubject());
 
             if (tvUpcoming != null) {
-                tvUpcoming.setText(ReminderUtil.getReadableRemainingDate(reminder));
+                tvUpcoming.setText(nextReminderDate);
             }
 
             if(ictIcon != null) {
@@ -45,6 +51,8 @@ public class NormalCard extends Card {
             }
         }
     }
+
+
 
     public Reminder getReminder() {
         return reminder;

@@ -34,6 +34,9 @@ import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 import de.greenrobot.dao.query.Query;
@@ -150,10 +153,9 @@ public class ReminderFragment extends Fragment implements OnRefreshListener {
 //            listView.setAdapter(mCardArrayAdapter);
             AnimationAdapter animCardArrayAdapter = new AlphaInAnimationAdapter(mCardArrayAdapter);
             animCardArrayAdapter.setAbsListView(listView);
-            listView.setExternalAdapter(animCardArrayAdapter,mCardArrayAdapter);
+            listView.setExternalAdapter(animCardArrayAdapter, mCardArrayAdapter);
 
         }
-
 
 
     }
@@ -170,7 +172,8 @@ public class ReminderFragment extends Fragment implements OnRefreshListener {
                 if (newId != 0l) {
                     Reminder r = (Reminder) reminderDao.load(newId);
                     if (r != null) {
-                        cards.add(getNormalCard(r));
+                        cards.add(getCard(r));
+                        sortNormalCards(cards);
                         mCardArrayAdapter.notifyDataSetChanged();
                     }
                 }
@@ -196,26 +199,27 @@ public class ReminderFragment extends Fragment implements OnRefreshListener {
         List<Card> cards = new ArrayList<>();
         if (reminders != null) {
             for (Reminder r : reminders) {
+                cards.add(getCard(r));
                 //Seperate by ReminderType
-                if (r.getReminderType().equals(ReminderType.Normal.getValue())) {
-                    cards.add(getCard(r));
-                } else if (r.getReminderType().equals(ReminderType.MedicalReminder)) {
-
-                } else if (r.getReminderType().equals(ReminderType.LoveCalendar)) {
-
-                }
+//                if (r.getReminderType().equals(ReminderType.Normal.getValue())) {
+//
+//                } else if (r.getReminderType().equals(ReminderType.MedicalReminder)) {
+//
+//                } else if (r.getReminderType().equals(ReminderType.LoveCalendar)) {
+//
+//                }
             }
         }
+
+        sortNormalCards(cards);
 
         return cards;
     }
 
-    private Card getCard(Reminder reminder) {
+    private NormalCard getCard(Reminder reminder) {
 
         NormalCard card = new NormalCard(getActivity(), reminder);
-
         CardHeader header = new CardHeader(getActivity());
-
         card.addPartialOnClickListener(Card.CLICK_LISTENER_CONTENT_VIEW, new Card.OnCardClickListener() {
             @Override
             public void onClick(Card card, View view) {
@@ -225,127 +229,103 @@ public class ReminderFragment extends Fragment implements OnRefreshListener {
                 startActivityForResult(intent, UPDATE_REMINDER);
             }
         });
-
-
-//        header.setButtonOverflowVisible(true);
-        //Add the listener
-        header.setPopupMenuListener(new CardHeader.OnClickCardHeaderPopupMenuListener() {
-            @Override
-            public void onMenuItemClick(BaseCard card, MenuItem item) {
-                Toast.makeText(getActivity(), "Click on " + item.getTitle() + "-" + ((Card) card).getCardHeader().getTitle(), Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        //Add a PopupMenuPrepareListener to add dynamically a menu entry
-        header.setPopupMenuPrepareListener(new CardHeader.OnPrepareCardHeaderPopupMenuListener() {
-            @Override
-            public boolean onPreparePopupMenu(BaseCard card, PopupMenu popupMenu) {
-                popupMenu.getMenu().add("Dynamic item");
-                return true;
-            }
-        });
-
         card.addCardHeader(header);
-
         header.setButtonExpandVisible(true);
-
         //This provide a simple (and useless) expand area
         ReminderCardExpand expand = new ReminderCardExpand(getActivity(), reminder);
-
         //Set inner title in Expand Area
-        expand.setTitle("Test");
-
+//        expand.setTitle("Test");
         //Add expand to a card
         card.addCardExpand(expand);
 
         return card;
     }
 
-    private Card getNormalCard(Reminder reminder) {
+//    private Card getNormalCard(Reminder reminder) {
+//
+//        //Create a Card
+//        MedicalCard card = new MedicalCard(getActivity(), reminder.getId(), reminder.getDescription(), ReminderType.Normal, GeneralUtil.getTimeInString(new LocalTime(reminder.getAtTime())));
+////        card.setLastDismissedDate(lastDismissedDate);
+////        card.setNextRemindDate(nextRemindDate);
+//
+//        DateTime nextDate = ReminderUtil.getNextReminderTime(reminder);
+//
+//
+//        //Create a CardHeader
+////        String title = "";
+////        if (nextDate == null) {
+////            title = "Expired";
+////        } else {
+////            title = ReminderUtil.getReadableRemainingDate(nextDate);
+////        }
+//
+////        MedicalCardHeader header = new MedicalCardHeader(getActivity(), title, reminder.getSubject());
+////        header.setBgColor(reminder.getColor());
+////        header.setPopupMenu(R.menu.sample1menu, new CardHeader.OnClickCardHeaderPopupMenuListener() {
+////            @Override
+////            public void onMenuItemClick(BaseCard card, MenuItem item) {
+////                Toast.makeText(getActivity(), "Click on " + item.getTitle(), Toast.LENGTH_SHORT).show();
+////            }
+////        });
+////        card.addCardHeader(header);
+//
+//        //Set shadow elevation
+//        //Convert dp to float
+////        float shadowElevation = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 14, getResources().getDisplayMetrics());
+////        card.setCardElevation(shadowElevation);
+//
+//        card.setSwipeable(true);
+//
+//        card.addPartialOnClickListener(Card.CLICK_LISTENER_CONTENT_VIEW, new Card.OnCardClickListener() {
+//            @Override
+//            public void onClick(Card card, View view) {
+//                MedicalCard medicalCard = (MedicalCard) card;
+//                Intent intent = new Intent(getActivity(), AddNewReminder.class);
+//                intent.putExtra("id", medicalCard.getReminderId());
+//                startActivityForResult(intent, UPDATE_REMINDER);
+//            }
+//        });
+//
+//        return card;
+//
+//    }
 
-        //Create a Card
-        MedicalCard card = new MedicalCard(getActivity(), reminder.getId(), reminder.getDescription(), ReminderType.Normal, GeneralUtil.getTimeInString(new LocalTime(reminder.getAtTime())));
+//    private MedicalCard getMedicalCard(Reminder reminder) {
+//        String description = "Paracetamol (acetaminophen) is a pain reliever and a fever reducer. Note: This dose will make you sleepy or dizzy.";
+//        ReminderType reminderType = ReminderType.MedicalReminder;
+//        String lastDismissedDate = GeneralUtil.getDateInString(new LocalDate());
+//        String nextRemindDate = GeneralUtil.getDateInString(new LocalDate());
+//        String atTime = GeneralUtil.getTimeInString(new LocalTime());
+//        String title = "22 minutes before taking";
+//        String subTitle = "Paracetamol";
+//        int bgColor = R.color.red_500;
+//
+//
+//        //Create a Card
+//        MedicalCard card = new MedicalCard(getActivity(), reminder.getId(), description, reminderType, atTime);
 //        card.setLastDismissedDate(lastDismissedDate);
 //        card.setNextRemindDate(nextRemindDate);
-
-        DateTime nextDate = ReminderUtil.getNextReminderTime(reminder);
-
-
-        //Create a CardHeader
-        String title = "";
-        if (nextDate == null) {
-            title = "Expired";
-        } else {
-            title = ReminderUtil.getReadableRemainingDate(nextDate);
-        }
-
-        MedicalCardHeader header = new MedicalCardHeader(getActivity(), title, reminder.getSubject());
-        header.setBgColor(reminder.getColor());
-        header.setPopupMenu(R.menu.sample1menu, new CardHeader.OnClickCardHeaderPopupMenuListener() {
-            @Override
-            public void onMenuItemClick(BaseCard card, MenuItem item) {
-                Toast.makeText(getActivity(), "Click on " + item.getTitle(), Toast.LENGTH_SHORT).show();
-            }
-        });
-        card.addCardHeader(header);
-
-        //Set shadow elevation
-        //Convert dp to float
+//
+//        //Create a CardHeader
+//        MedicalCardHeader header = new MedicalCardHeader(getActivity(), title, subTitle);
+//        header.setBgColor(bgColor);
+//        header.setPopupMenu(R.menu.sample1menu, new CardHeader.OnClickCardHeaderPopupMenuListener() {
+//            @Override
+//            public void onMenuItemClick(BaseCard card, MenuItem item) {
+//                Toast.makeText(getActivity(), "Click on " + item.getTitle(), Toast.LENGTH_SHORT).show();
+//            }
+//        });
+//        card.addCardHeader(header);
+//
+//        //Set shadow elevation
+//        //Convert dp to float
 //        float shadowElevation = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 14, getResources().getDisplayMetrics());
 //        card.setCardElevation(shadowElevation);
-
-        card.setSwipeable(true);
-
-        card.addPartialOnClickListener(Card.CLICK_LISTENER_CONTENT_VIEW, new Card.OnCardClickListener() {
-            @Override
-            public void onClick(Card card, View view) {
-                MedicalCard medicalCard = (MedicalCard) card;
-                Intent intent = new Intent(getActivity(), AddNewReminder.class);
-                intent.putExtra("id", medicalCard.getReminderId());
-                startActivityForResult(intent, UPDATE_REMINDER);
-            }
-        });
-
-        return card;
-
-    }
-
-    private MedicalCard getMedicalCard(Reminder reminder) {
-        String description = "Paracetamol (acetaminophen) is a pain reliever and a fever reducer. Note: This dose will make you sleepy or dizzy.";
-        ReminderType reminderType = ReminderType.MedicalReminder;
-        String lastDismissedDate = GeneralUtil.getDateInString(new LocalDate());
-        String nextRemindDate = GeneralUtil.getDateInString(new LocalDate());
-        String atTime = GeneralUtil.getTimeInString(new LocalTime());
-        String title = "22 minutes before taking";
-        String subTitle = "Paracetamol";
-        int bgColor = R.color.red_500;
-
-
-        //Create a Card
-        MedicalCard card = new MedicalCard(getActivity(), reminder.getId(), description, reminderType, atTime);
-        card.setLastDismissedDate(lastDismissedDate);
-        card.setNextRemindDate(nextRemindDate);
-
-        //Create a CardHeader
-        MedicalCardHeader header = new MedicalCardHeader(getActivity(), title, subTitle);
-        header.setBgColor(bgColor);
-        header.setPopupMenu(R.menu.sample1menu, new CardHeader.OnClickCardHeaderPopupMenuListener() {
-            @Override
-            public void onMenuItemClick(BaseCard card, MenuItem item) {
-                Toast.makeText(getActivity(), "Click on " + item.getTitle(), Toast.LENGTH_SHORT).show();
-            }
-        });
-        card.addCardHeader(header);
-
-        //Set shadow elevation
-        //Convert dp to float
-        float shadowElevation = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 14, getResources().getDisplayMetrics());
-        card.setCardElevation(shadowElevation);
-
-        card.setSwipeable(true);
-
-        return card;
-    }
+//
+//        card.setSwipeable(true);
+//
+//        return card;
+//    }
 
     @Override
     public void onRefreshStarted(View view) {
@@ -372,6 +352,37 @@ public class ReminderFragment extends Fragment implements OnRefreshListener {
                 mPullToRefreshLayout.setRefreshComplete();
             }
         }.execute();
+    }
+
+    public void sortNormalCards(List<Card> cards) {
+        Collections.sort(cards, new Comparator<Card>() {
+            @Override
+            public int compare(Card lc, Card rc) {
+                //Cast
+                NormalCard card1 = (NormalCard) lc;
+                NormalCard card2 = (NormalCard) rc;
+
+                if (card1 != null && card2 != null) {
+                    DateTime dt1 = ReminderUtil.getNextReminderTime(card1.getReminder());
+                    DateTime dt2 = ReminderUtil.getNextReminderTime(card2.getReminder());
+
+
+                    if (dt1 == null) {
+                        return 1;
+                    } else if (dt2 == null) {
+                        return -1;
+                    } else {
+                        if (dt1.isAfter(dt2)) {
+                            return 1;
+                        } else {
+                            return -1;
+                        }
+                    }
+                }
+
+                return 0;
+            }
+        });
     }
 
 
@@ -424,5 +435,6 @@ public class ReminderFragment extends Fragment implements OnRefreshListener {
 //
 //        return card;
 //    }
+
 
 }

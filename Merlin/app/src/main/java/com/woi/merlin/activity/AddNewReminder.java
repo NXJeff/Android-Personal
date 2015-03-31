@@ -134,6 +134,7 @@ public class AddNewReminder extends ActionBarActivity {
         fromDate = new LocalDate(reminder.getFromDate());
         toDate = new LocalDate(reminder.getToDate());
         atTime = new LocalTime(reminder.getAtTime());
+        refreshDateTextLabels();
         selectedColor = reminder.getColor();
         applyColorToActivity(selectedColor);
         repeatType = RepeatType.of(reminder.getRepeatType());
@@ -247,9 +248,7 @@ public class AddNewReminder extends ActionBarActivity {
         photosLayout = (LinearLayout) findViewById(R.id.addNewReminderPhotosLayout);
         photoButton = (Button) findViewById(R.id.addNewReminderAddPhotoBtn);
 
-        fromDatePicker.setText(GeneralUtil.getDateInString(fromDate));
-        toDatePicker.setText(GeneralUtil.getDateInString(toDate));
-        atTimePicker.setText(GeneralUtil.getTimeInString(atTime));
+        refreshDateTextLabels();
 
         fromDatePicker.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -298,6 +297,15 @@ public class AddNewReminder extends ActionBarActivity {
         });
 
         applyDefaultColorToActivity();
+    }
+
+    /**
+     * Refresh the textview that show the date
+     */
+    private void refreshDateTextLabels() {
+        fromDatePicker.setText(GeneralUtil.getDateInString(fromDate));
+        toDatePicker.setText(GeneralUtil.getDateInString(toDate));
+        atTimePicker.setText(GeneralUtil.getTimeInString(atTime));
     }
 
 

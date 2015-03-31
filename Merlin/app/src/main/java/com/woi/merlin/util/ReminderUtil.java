@@ -71,6 +71,11 @@ public class ReminderUtil {
     public static String getReadableRemainingDate(DateTime future) {
 
         DateTime now = new DateTime();
+
+        if(future == null || future.isBefore(now)) {
+            return "";
+        }
+
         Period period = new Period(now, future);
 
         //Suffixes
