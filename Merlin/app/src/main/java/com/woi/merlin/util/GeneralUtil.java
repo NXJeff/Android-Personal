@@ -10,8 +10,18 @@ import java.text.SimpleDateFormat;
  */
 public class GeneralUtil {
 
+    //Default format
     public static String getDateInString(LocalDate date) {
-        SimpleDateFormat dt = new SimpleDateFormat("EEEE, MMM d, yyyy");
+        return getDateInString(date, "EEEE, MMM d, yyyy");
+    }
+
+    //Wed, April 1, 2015
+    public static String getDateInStringFormatA(LocalDate date) {
+        return getDateInString(date, "E, MMM d, yyyy");
+    }
+
+    public static String getDateInString(LocalDate date, String format) {
+        SimpleDateFormat dt = new SimpleDateFormat(format);
         return dt.format(date.toDate());
     }
 

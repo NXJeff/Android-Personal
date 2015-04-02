@@ -75,6 +75,7 @@
                 style="@style/Divider" />
 
             <IconTextView
+                android:transitionName="ictIcon"
                 android:layout_width="wrap_content"
                 android:layout_height="50sp"
                 android:id="@+id/reminderTypeIconView"

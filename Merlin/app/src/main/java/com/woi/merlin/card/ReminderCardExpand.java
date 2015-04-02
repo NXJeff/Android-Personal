@@ -58,7 +58,7 @@ public class ReminderCardExpand extends CardExpand {
         //Next Reminder Time
         LocalDate date = new LocalDate(ReminderUtil.getNextReminderTime(reminder));
         LocalTime time = new LocalTime(reminder.getAtTime());
-        String nextReminderOccurDate = GeneralUtil.getDateInString(date);
+        String nextReminderOccurDate = GeneralUtil.getDateInStringFormatA(date);
         String nextReminderOccurTime = GeneralUtil.getTimeInString(time);
 
         addRow(right, "{fa-chevron-right}", nextReminderOccurDate + " " + nextReminderOccurTime);

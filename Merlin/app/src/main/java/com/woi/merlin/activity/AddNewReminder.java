@@ -661,7 +661,11 @@ public class AddNewReminder extends ActionBarActivity {
 
                     @Override
                     public void onNegative(MaterialDialog dialog) {
-                        finish();
+                        if (android.os.Build.VERSION.SDK_INT >= 21) {
+                            finishAfterTransition();
+                        } else {
+                            finish();
+                        }
                     }
                 })
                 .show();
@@ -746,16 +750,23 @@ public class AddNewReminder extends ActionBarActivity {
         Intent resultIntent = new Intent();
         resultIntent.putExtra(NEW_REMINDER_ID, reminder.getId());
         setResult(Activity.RESULT_OK, resultIntent);
-        finish();
+        if (android.os.Build.VERSION.SDK_INT >= 21) {
+            finishAfterTransition();
+        } else {
+            finish();
+        }
     }
 
     public void onSave() {
         if (validateReminderValues()) {
-            new Thread(new Runnable() {
-                public void run() {
-                    saveToDatabase();
-                }
-            }).start();
+            runOnUiThread(
+                    new Runnable() {
+                        public void run() {
+                            saveToDatabase();
+                        }
+                    }
+
+            );
         }
 
     }

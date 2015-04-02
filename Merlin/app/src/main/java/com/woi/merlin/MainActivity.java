@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.util.SparseIntArray;
 import android.view.Menu;
 import android.view.View;
+import android.view.Window;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.ThemeSingleton;
@@ -56,7 +57,18 @@ public class MainActivity extends NavigationLiveo implements NavigationLiveoList
     }
 
     @Override
+    public void onCreate(Bundle savedInstanceState) {
+        if (android.os.Build.VERSION.SDK_INT >= 21) {
+
+            // inside your activity (if you did not enable transitions in your theme)
+            getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
+        }
+        super.onCreate(savedInstanceState);
+    }
+
+    @Override
     public void onInt(Bundle bundle) {
+
         JodaTimeAndroid.init(this);
         // set listener {required}
         this.setNavigationListener(this);
@@ -147,7 +159,7 @@ public class MainActivity extends NavigationLiveo implements NavigationLiveoList
         Toast.makeText(this, "open user profile", Toast.LENGTH_SHORT).show();
     }
 
-    public void selectFragment(int position,int layoutContainerId) {
+    public void selectFragment(int position, int layoutContainerId) {
 
 
         Fragment mFragment = null;
@@ -173,7 +185,7 @@ public class MainActivity extends NavigationLiveo implements NavigationLiveoList
 
         FragmentManager mFragmentManager = getFragmentManager();
 
-        if (mFragment != null){
+        if (mFragment != null) {
             mFragmentManager.beginTransaction().replace(layoutContainerId, mFragment).commit();
         }
     }
