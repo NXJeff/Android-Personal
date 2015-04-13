@@ -1,16 +1,22 @@
 package com.woi.merlin.card;
 
+import android.app.Activity;
+import android.app.Fragment;
 import android.content.Context;
+import android.content.Intent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.IconTextView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.gc.materialdesign.views.ButtonFlat;
 import com.joanzapata.android.iconify.IconDrawable;
 import com.woi.merlin.R;
+import com.woi.merlin.activity.AddNewReminder;
 import com.woi.merlin.enumeration.ReminderType;
 import com.woi.merlin.enumeration.RepeatType;
+import com.woi.merlin.fragment.ReminderFragment;
 import com.woi.merlin.util.GeneralUtil;
 import com.woi.merlin.util.ReminderUtil;
 
@@ -26,11 +32,13 @@ import merlin.model.raw.Reminder;
 public class ReminderCardExpand extends CardExpand {
 
     Reminder reminder = null;
+    Fragment fragment = null;
 
 
-    public ReminderCardExpand(Context context, Reminder reminder) {
+    public ReminderCardExpand(Context context, Fragment fragment, Reminder reminder) {
         super(context, R.layout.reminder_card_expand_layout);
         this.reminder = reminder;
+        this.fragment = fragment;
     }
 
     @Override
@@ -38,6 +46,23 @@ public class ReminderCardExpand extends CardExpand {
 
         LinearLayout left = (LinearLayout) parent.findViewById(R.id.reminder_expand_linear_layout_left);
         LinearLayout right = (LinearLayout) parent.findViewById(R.id.reminder_expand_linear_layout_right);
+        ButtonFlat editBtn = (ButtonFlat) parent.findViewById(R.id.expand_edit_btn);
+        ButtonFlat deleteBtn = (ButtonFlat) parent.findViewById(R.id.expand_delete_btn);
+        editBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(fragment.getActivity(), AddNewReminder.class);
+                intent.putExtra("id", reminder.getId());
+//                if (android.os.Build.VERSION.SDK_INT >= 21) {
+//                    IconTextView ictIcon = (IconTextView) view.findViewById(R.id.norm_reminder_icon);
+//                    ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(getActivity(), ictIcon, "ictIcon");
+//                    startActivityForResult(intent, UPDATE_REMINDER, options.toBundle());
+//                } else {
+                fragment.startActivityForResult(intent, ReminderFragment.UPDATE_REMINDER);
+//            }
+            }
+        });
+
         left.removeAllViews();
         right.removeAllViews();
 
@@ -65,9 +90,6 @@ public class ReminderCardExpand extends CardExpand {
 
         //Last Reminder Time
         addRow(right, "{fa-chevron-left}", "N/A");
-
-
-
     }
 
     //Dynamically add view into the linear layout

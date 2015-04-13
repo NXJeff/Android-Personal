@@ -1,46 +1,31 @@
 package com.woi.merlin.fragment;
 
-import android.app.ActivityOptions;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.transition.Explode;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.AbsListView;
-import android.widget.IconTextView;
 import android.widget.ListView;
-import android.widget.PopupMenu;
-import android.widget.Toast;
 
 import com.melnykov.fab.FloatingActionButton;
 import com.nhaarman.listviewanimations.appearance.AnimationAdapter;
-import com.nhaarman.listviewanimations.appearance.simple.AlphaInAnimationAdapter;
+import com.nhaarman.listviewanimations.appearance.simple.SwingBottomInAnimationAdapter;
 import com.woi.merlin.R;
 import com.woi.merlin.activity.AddNewReminder;
-import com.woi.merlin.card.MedicalCard;
-import com.woi.merlin.card.MedicalCardHeader;
 import com.woi.merlin.card.NormalCard;
 import com.woi.merlin.card.ReminderCardExpand;
-import com.woi.merlin.enumeration.ReminderType;
 import com.woi.merlin.enumeration.StatusType;
 import com.woi.merlin.util.DbUtil;
-import com.woi.merlin.util.GeneralUtil;
 import com.woi.merlin.util.ReminderUtil;
 
 import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
-import org.joda.time.LocalTime;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -49,7 +34,6 @@ import de.greenrobot.dao.query.Query;
 import it.gmariotti.cardslib.library.internal.Card;
 import it.gmariotti.cardslib.library.internal.CardArrayAdapter;
 import it.gmariotti.cardslib.library.internal.CardHeader;
-import it.gmariotti.cardslib.library.internal.base.BaseCard;
 import it.gmariotti.cardslib.library.view.CardListView;
 import it.gmariotti.cardslib.library.view.listener.SwipeOnScrollListener;
 import merlin.model.raw.DaoSession;
@@ -65,15 +49,16 @@ import uk.co.senab.actionbarpulltorefresh.library.listeners.OnRefreshListener;
 public class ReminderFragment extends Fragment implements OnRefreshListener {
 
     //keep track of intents
-    final int ADD_NEW_REMINDER = 1;
-    final int UPDATE_REMINDER = 2;
-    final int DELETE_REMINDER = 3;
+    public static final int ADD_NEW_REMINDER = 1;
+    public static final int UPDATE_REMINDER = 2;
+    public static final int DELETE_REMINDER = 3;
 
     DaoSession daoSession = null;
     ReminderDao reminderDao = null;
     CardArrayAdapter mCardArrayAdapter;
     List<Card> cards;
     PullToRefreshLayout mPullToRefreshLayout = null;
+    View parentView = null;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -81,19 +66,17 @@ public class ReminderFragment extends Fragment implements OnRefreshListener {
         View view = inflater.inflate(R.layout.fragment_reminder, container,
                 false);
 
-        // Retrieve the PullToRefreshLayout from the content view
+        /** For Pull to refresh **/
         mPullToRefreshLayout = (PullToRefreshLayout) view.findViewById(R.id.carddemo_extra_ptr_layout);
 
         // Now setup the PullToRefreshLayout
         ActionBarPullToRefresh.from(getActivity())
-                // Mark All Children as pullable
                 .allChildrenArePullable()
-                        // Set the OnRefreshListener
                 .listener(this)
-                        // Finally commit the setup to our PullToRefreshLayout
                 .setup(mPullToRefreshLayout);
 
         initFAB(view);
+        parentView = view;
 
         return view;
     }
@@ -126,7 +109,7 @@ public class ReminderFragment extends Fragment implements OnRefreshListener {
         reminderDao = daoSession.getReminderDao();
     }
 
-    //Initialise Floating Action Button
+    /** Initialise Floating Action Button **/
     private void initFAB(View view) {
         ListView listView = (ListView) view.findViewById(R.id.reminder_list_base);
         listView.setOnScrollListener(
@@ -164,14 +147,10 @@ public class ReminderFragment extends Fragment implements OnRefreshListener {
 
         CardListView listView = (CardListView) getActivity().findViewById(R.id.reminder_list_base);
         if (listView != null) {
-//            listView.setAdapter(mCardArrayAdapter);
-            AnimationAdapter animCardArrayAdapter = new AlphaInAnimationAdapter(mCardArrayAdapter);
+            AnimationAdapter animCardArrayAdapter = new SwingBottomInAnimationAdapter(mCardArrayAdapter);
             animCardArrayAdapter.setAbsListView(listView);
             listView.setExternalAdapter(animCardArrayAdapter, mCardArrayAdapter);
-
         }
-
-
     }
 
     /**
@@ -184,7 +163,7 @@ public class ReminderFragment extends Fragment implements OnRefreshListener {
             if (requestCode == ADD_NEW_REMINDER) {
                 Long newId = resultIntent.getLongExtra(AddNewReminder.NEW_REMINDER_ID, 0l);
                 if (newId != 0l) {
-                    Reminder r = (Reminder) reminderDao.load(newId);
+                    Reminder r = reminderDao.load(newId);
                     if (r != null) {
                         cards.add(getCard(r));
                         sortNormalCards(cards);
@@ -194,14 +173,10 @@ public class ReminderFragment extends Fragment implements OnRefreshListener {
             } else if (requestCode == UPDATE_REMINDER) {
                 Long id = resultIntent.getLongExtra(AddNewReminder.NEW_REMINDER_ID, 0l);
                 if (id != 0l) {
-                    Reminder r = (Reminder) reminderDao.load(id);
-                    if (r != null) {
-                        initCards();
-                        mCardArrayAdapter.notifyDataSetChanged();
-                    }
+                    initCards();
+                    mCardArrayAdapter.notifyDataSetChanged();
                 }
             }
-            //user is returning from cropping the image
         }
     }
 
@@ -230,19 +205,20 @@ public class ReminderFragment extends Fragment implements OnRefreshListener {
                 NormalCard normalCard = (NormalCard) card;
                 Intent intent = new Intent(getActivity(), AddNewReminder.class);
                 intent.putExtra("id", normalCard.getReminder().getId());
-                if (android.os.Build.VERSION.SDK_INT >= 21) {
-                    IconTextView ictIcon = (IconTextView) view.findViewById(R.id.norm_reminder_icon);
-                    ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(getActivity(), ictIcon, "ictIcon");
-                    startActivityForResult(intent, UPDATE_REMINDER, options.toBundle());
-                } else {
-                    startActivityForResult(intent, UPDATE_REMINDER);
-                }
+//                if (android.os.Build.VERSION.SDK_INT >= 21) {
+//                    IconTextView ictIcon = (IconTextView) view.findViewById(R.id.norm_reminder_icon);
+//                    ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(getActivity(), ictIcon, "ictIcon");
+//                    startActivityForResult(intent, UPDATE_REMINDER, options.toBundle());
+//                } else {
+                startActivityForResult(intent, UPDATE_REMINDER);
+//                }
             }
         });
         card.addCardHeader(header);
         header.setButtonExpandVisible(true);
         //This provide a simple (and useless) expand area
-        ReminderCardExpand expand = new ReminderCardExpand(getActivity(), reminder);
+        ReminderCardExpand expand = new ReminderCardExpand(getActivity(), this, reminder);
+
         //Add expand to a card
         card.addCardExpand(expand);
 

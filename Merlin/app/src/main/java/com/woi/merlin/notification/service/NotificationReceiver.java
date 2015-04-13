@@ -26,9 +26,9 @@ public class NotificationReceiver extends BroadcastReceiver {
         long id = intent.getLongExtra("NotificationId", -1);
         Log.d("NotificationReceiver", " received id : " + id);
 
-        Intent userIntent = new Intent(context, MainActivity.class);
-        userIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        PendingIntent userPi = PendingIntent.getActivity(context, 0, userIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+//        Intent userIntent = new Intent(context, MainActivity.class);
+//        userIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+//        PendingIntent userPi = PendingIntent.getActivity(context, 0, userIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
 //        Notification n = new Notification(R.drawable.ic_launcher, alarm.getName(), alarmMsg.getDateTime());
         NotificationCompat.Builder mBuilder =

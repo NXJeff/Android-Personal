@@ -750,11 +750,11 @@ public class AddNewReminder extends ActionBarActivity {
         Intent resultIntent = new Intent();
         resultIntent.putExtra(NEW_REMINDER_ID, reminder.getId());
         setResult(Activity.RESULT_OK, resultIntent);
-        if (android.os.Build.VERSION.SDK_INT >= 21) {
-            finishAfterTransition();
-        } else {
+//        if (android.os.Build.VERSION.SDK_INT >= 21) {
+//            finishAfterTransition();
+//        } else {
             finish();
-        }
+//        }
     }
 
     public void onSave() {
