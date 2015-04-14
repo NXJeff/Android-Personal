@@ -41,9 +41,11 @@ import com.woi.merlin.component.ImageViewActivity;
 import com.woi.merlin.component.TimePickerFragment;
 import com.woi.merlin.enumeration.CustomRepeatMode;
 import com.woi.merlin.enumeration.EntityType;
+import com.woi.merlin.enumeration.NotificationActionType;
 import com.woi.merlin.enumeration.ReminderType;
 import com.woi.merlin.enumeration.RepeatType;
 import com.woi.merlin.enumeration.StatusType;
+import com.woi.merlin.notification.service.NotificationService;
 import com.woi.merlin.util.DbUtil;
 import com.woi.merlin.util.EditTextValidator;
 import com.woi.merlin.util.EntityUtil;
@@ -746,6 +748,13 @@ public class AddNewReminder extends ActionBarActivity {
                 }
             }
         }
+
+        //cancel then recreate alarm
+        Intent service = new Intent(this, NotificationService.class);
+        service.putExtra("NotificationActionType", NotificationActionType.APPLY);
+        service.putExtra("ReminderId", reminder.getId());
+//        service.setAction(AlarmService.POPULATE);
+        startService(service);
 
         Intent resultIntent = new Intent();
         resultIntent.putExtra(NEW_REMINDER_ID, reminder.getId());

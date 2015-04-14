@@ -23,6 +23,7 @@ import java.util.Calendar;
 import merlin.model.raw.DaoMaster;
 import merlin.model.raw.DaoSession;
 import merlin.model.raw.Reminder;
+import merlin.model.raw.ReminderDao;
 
 /**
  * Created by YeekFeiTan on 1/27/2015.
@@ -37,9 +38,9 @@ public class NotificationService extends IntentService {
 
     public NotificationService() {
         super("NotificationService");
-        matcher = new IntentFilter();
-        matcher.addAction(CREATE);
-        matcher.addAction(CANCEL);
+//        matcher = new IntentFilter();
+//        matcher.addAction(CREATE);
+//        matcher.addAction(CANCEL);
     }
 
     @Override
@@ -48,7 +49,16 @@ public class NotificationService extends IntentService {
         String action = intent.getAction();
 //        String actionType = intent.getExtra
         NotificationActionType actionType = (NotificationActionType) intent.getSerializableExtra("NotificationActionType");
-        Reminder reminder = (Reminder) intent.getSerializableExtra("Reminder");
+        Long reminderId = intent.getLongExtra("ReminderId", 0l);
+        if(reminderId == 0l) {
+            return;
+        }
+//        Reminder reminder = (Reminder) intent.getSerializableExtra("Reminder");
+        ReminderDao reminderDao = daoSession.getReminderDao();
+
+        Reminder reminder = reminderDao.load(reminderId);
+
+        execute(actionType, reminder);
 //        String notificationId = intent.getStringExtra("notificationId");
 
 //        execute("asd", "12");
@@ -59,7 +69,7 @@ public class NotificationService extends IntentService {
     }
 
     private void execute(NotificationActionType actionType, Reminder reminder) {
-        AlarmManager am = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+        AlarmManager am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         Intent i;
         PendingIntent pi;
         long PERIOD = 10000;
@@ -72,18 +82,14 @@ public class NotificationService extends IntentService {
         pi = PendingIntent.getBroadcast(this, 0, i, PendingIntent.FLAG_UPDATE_CURRENT);
 //        am.set(AlarmManager.RTC_WAKEUP, time, pi);
 
-        am.setRepeating(AlarmManager.ELAPSED_REALTIME,
-                SystemClock.elapsedRealtime() + PERIOD, PERIOD, pi);
-        am.set(AlarmManager.RTC_WAKEUP, Calendar.getInstance().getTimeInMillis(), pi);
-        Log.d("NotificationService", "alarm setted");
+        if (actionType.equals(NotificationActionType.APPLY)) {
+//        am.setRepeating(AlarmManager.ELAPSED_REALTIME,
+//                SystemClock.elapsedRealtime() + PERIOD, PERIOD, pi);
+            am.set(AlarmManager.RTC_WAKEUP, Calendar.getInstance().getTimeInMillis(), pi);
+            Log.d("NotificationService", "alarm set");
+        } else {
+            am.cancel(pi);
+        }
 
     }
-
-//    private void setupDatabase() {
-//        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, "merlin-db", null);
-//        SQLiteDatabase db = helper.getWritableDatabase();
-//        DaoMaster daoMaster = new DaoMaster(db);
-//        daoSession = daoMaster.newSession();
-//        Log.d(TAG, "Initialise database completed on " + this.getClass().getSimpleName());
-//    }
 }
