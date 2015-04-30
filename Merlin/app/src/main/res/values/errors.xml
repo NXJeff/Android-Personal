@@ -1,0 +1,7 @@
+<resources>
+
+    <string name="dpi_error">You can only enter DPI value range from 180 to 480.</string>
+    <string name="file_not_found_in_path">The path selected does not contains a file.</string>
+    <string name="operation_done">Operation done. Please reboot the device.</string>
+
+</resources>

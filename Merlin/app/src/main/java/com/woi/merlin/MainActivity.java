@@ -17,6 +17,7 @@ import com.afollestad.materialdialogs.ThemeSingleton;
 import com.squareup.picasso.Picasso;
 import com.woi.merlin.component.ColorPickerDialog;
 import com.woi.merlin.fragment.MealFragment;
+import com.woi.merlin.fragment.PhoneMgrFragment;
 import com.woi.merlin.fragment.ReminderFragment;
 import com.woi.merlin.notification.service.NotificationService;
 import com.woi.merlin.ui.drawer.CustomDrawerAdapter;
@@ -42,7 +43,8 @@ public class MainActivity extends NavigationLiveo implements NavigationLiveoList
 
     private static final int CASE_REMINDER = 0;
     private static final int CASE_MEAL = 1;
-    private static final int CASE_SETTING = 10;
+    private static final int CASE_PHONE_MGR = 2;
+    private static final int CASE_SETTING = 99;
     private static final String TAG = "MERLIN-APP";
 
 
@@ -80,11 +82,13 @@ public class MainActivity extends NavigationLiveo implements NavigationLiveoList
         mListNameItem = new ArrayList<>();
         mListNameItem.add(0, getTitleString(CASE_REMINDER));
         mListNameItem.add(1, getTitleString(CASE_MEAL));
+        mListNameItem.add(2, getTitleString(CASE_PHONE_MGR));
 
         // icons list items
         List<Integer> mListIconItem = new ArrayList<>();
         mListIconItem.add(0, R.drawable.ic_action_email);
-        mListIconItem.add(1, drawable.ic_action_good); //Item no icon set 0
+        mListIconItem.add(1, drawable.ic_action_good);
+        mListIconItem.add(2, drawable.ic_action_settings);//Item no icon set 0
 
 
         //{optional} - Among the names there is some subheader, you must indicate it here
@@ -125,6 +129,10 @@ public class MainActivity extends NavigationLiveo implements NavigationLiveoList
                 break;
             case CASE_MEAL:
                 str = "Meals";
+                break;
+
+            case CASE_PHONE_MGR:
+                str = "Phone Manager";
                 break;
 
             case CASE_SETTING:
@@ -175,6 +183,9 @@ public class MainActivity extends NavigationLiveo implements NavigationLiveoList
                 mFragment = new MealFragment();
                 break;
 
+            case CASE_PHONE_MGR:
+                mFragment = new PhoneMgrFragment();
+                break;
             case CASE_SETTING:
                 break;
 
@@ -201,6 +212,10 @@ public class MainActivity extends NavigationLiveo implements NavigationLiveoList
 
             case CASE_MEAL:
                 applyDefaultColorToActivity(13);
+                break;
+
+            case CASE_PHONE_MGR:
+                applyDefaultColorToActivity(8);
                 break;
 
             case CASE_SETTING:

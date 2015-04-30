@@ -132,6 +132,7 @@ public class MediaUtil {
 
     /**
      * Convenient method to delete a file
+     *
      * @param path
      * @return
      */
@@ -141,6 +142,23 @@ public class MediaUtil {
             return file.delete();
         }
         return false;
+    }
+
+    public static int getNumberOfFilesInDir(String dirPath) {
+        int count = 0;
+        File f = new File(dirPath);
+        File[] files = f.listFiles();
+
+        if (files != null)
+            for (int i = 0; i < files.length; i++) {
+                count++;
+                File file = files[i];
+                if (file.isDirectory()) {
+                    getNumberOfFilesInDir(file.getAbsolutePath());
+                }
+            }
+
+        return count;
     }
 
 }

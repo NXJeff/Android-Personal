@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <string name="ok">OK</string>
+    <string name="warning">Warning</string>
+    <string name="complete">Complete</string>
     <string name="app_name">Merlin</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
@@ -9,5 +12,15 @@
     <string name="drawer_close">Close drawer</string>
     <string name="add_new_reminder_label">Event</string>
     <string name="meal_label">Meal</string>
+
+    <string name="choose">Choose</string>
+    <string name="flash_process">Flash Process</string>
+    <string name="select_dpi">Select preferred DPI</string>
+    <string name="clone_init_folder">Clone Init.d Folder</string>
+
+
+
+
+
 
 </resources>
