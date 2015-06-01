@@ -26,12 +26,17 @@ public class FolderChooserDialog extends DialogFragment implements MaterialDialo
     private File[] parentContents;
     private boolean canGoUp = true;
     private FolderSelectCallback mCallback;
+    private boolean isFile = false;
+    private String fileChooserId;
 
     private final MaterialDialog.ButtonCallback mButtonCallback = new MaterialDialog.ButtonCallback() {
         @Override
         public void onPositive(MaterialDialog materialDialog) {
+            if (parentFolder.isFile() && !isFile) {
+                return;
+            }
             materialDialog.dismiss();
-            mCallback.onFolderSelection(parentFolder);
+            mCallback.onFolderSelection(fileChooserId, parentFolder);
         }
 
         @Override
@@ -41,12 +46,14 @@ public class FolderChooserDialog extends DialogFragment implements MaterialDialo
     };
 
     public interface FolderSelectCallback {
-        void onFolderSelection(File folder);
+        void onFolderSelection(String id, File folder);
     }
 
+
     public FolderChooserDialog() {
+
         parentFolder = Environment.getExternalStorageDirectory();
-        parentContents = listFiles();
+
     }
 
     String[] getContentsArray() {
@@ -58,10 +65,17 @@ public class FolderChooserDialog extends DialogFragment implements MaterialDialo
     }
 
     File[] listFiles() {
+        if (!parentFolder.isDirectory()) {
+            return new File[0];
+        }
         File[] contents = parentFolder.listFiles();
         List<File> results = new ArrayList<>();
         for (File fi : contents) {
-            if (fi.isDirectory()) results.add(fi);
+            if (fi.isFile() && !isFile) {
+                continue;
+            }
+//            if (fi.isDirectory())
+            results.add(fi);
         }
         Collections.sort(results, new FolderSorter());
         return results.toArray(new File[results.size()]);
@@ -82,14 +96,23 @@ public class FolderChooserDialog extends DialogFragment implements MaterialDialo
 
     @Override
     public void onSelection(MaterialDialog materialDialog, View view, int i, CharSequence s) {
-        if (canGoUp && i == 0) {
-            parentFolder = parentFolder.getParentFile();
-            canGoUp = parentFolder.getParent() != null;
+
+        if (parentFolder.isDirectory()) {
+            if (canGoUp && i == 0) {
+                parentFolder = parentFolder.getParentFile();
+                canGoUp = parentFolder.getParent() != null;
+            } else {
+                parentFolder = parentContents[canGoUp ? i - 1 : i];
+                canGoUp = true;
+            }
+            parentContents = listFiles();
         } else {
-            parentFolder = parentContents[canGoUp ? i - 1 : i];
-            canGoUp = true;
+            if (canGoUp && i == 0) {
+                parentFolder = parentFolder.getParentFile();
+                canGoUp = parentFolder.getParent() != null;
+                parentContents = listFiles();
+            }
         }
-        parentContents = listFiles();
         MaterialDialog dialog = (MaterialDialog) getDialog();
         dialog.setTitle(parentFolder.getAbsolutePath());
         dialog.setItems(getContentsArray());
@@ -101,6 +124,21 @@ public class FolderChooserDialog extends DialogFragment implements MaterialDialo
     }
 
     public void show(Fragment context) {
+        if (getArguments() != null) {
+            isFile = getArguments().getBoolean("isFile");
+            fileChooserId = getArguments().getString("id");
+
+            if(getArguments().get("FileURI") != null) {
+                String fileURI = getArguments().getString("FileURI");
+                File file = new File(fileURI);
+                if (file != null) {
+                    parentFolder = file;
+                }
+            }
+
+
+        }
+        parentContents = listFiles();
         show(context.getFragmentManager(), "FOLDER_SELECTOR");
         mCallback = (FolderSelectCallback) context;
     }
@@ -108,6 +146,13 @@ public class FolderChooserDialog extends DialogFragment implements MaterialDialo
     private static class FolderSorter implements Comparator<File> {
         @Override
         public int compare(File lhs, File rhs) {
+
+            if (lhs.isFile() && rhs.isDirectory()) {
+                return 1;
+            } else if (lhs.isDirectory() && rhs.isFile()) {
+                return -1;
+            }
+
             return lhs.getName().compareTo(rhs.getName());
         }
     }

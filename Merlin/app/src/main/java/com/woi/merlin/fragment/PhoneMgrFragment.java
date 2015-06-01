@@ -6,6 +6,7 @@ import android.support.annotation.StringRes;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,13 +32,20 @@ public class PhoneMgrFragment extends Fragment implements
 
     private static final String PREFERENCE_DPI = "preferred_dpi";
     private static final String PREFERENCE_CLONE_INIT_D_PATH = "clone_init_d_path";
-    private static final String HOSTFILEFROM = "/storage/sdcard1/Others/hosts"; //TODO REMOVE
+    private static final String PREFERENCE_HOSTS_PATH = "hosts_path";
+    private static final String PREFERENCE_MEDIA_PROFILE_XML = "media_profile_xml_path";
+//    private static final String HOSTFILEFROM = "/storage/sdcard1/Others/hosts"; //TODO REMOVE
+
+    //FileChooser indicator
+    private static final String FILE_CHOOSER_CHOOSE_RESTORE_DIR = "FC_1";
+//    private static final String FILE_CHOOSER_HOSTS = "FC_2";
+//    private static final String FILE_CHOOSER_MEDIA_PROFILE = "FC_3";
 
     EditText etDPI = null;
-    TextView tvCloneInitDPath = null;
-    String cloneInitPath = null;
+    TextView tvCloneInitDPath, tvHostsPath, tvMediaProfilePath;
+    String cloneInitPath, hostsPath, mediaProfilePath;
+    Button backupAllBtn, restoreAllBtn;
     List<String> cmds = new ArrayList<>();
-    Process proc = null;
 
 
     @Override
@@ -46,11 +54,34 @@ public class PhoneMgrFragment extends Fragment implements
         View view = inflater.inflate(R.layout.fragment_phone_mgr, container,
                 false);
 
-        view.findViewById(R.id.cloneInitDFolderPath).setOnClickListener(new View.OnClickListener() {
+        etDPI = (EditText) view.findViewById(R.id.preferredDPI);
+        tvCloneInitDPath = (TextView) view.findViewById(R.id.cloneInitDFolderPath);
+        tvHostsPath = (TextView) view.findViewById(R.id.hostsFilePath);
+        tvMediaProfilePath = (TextView) view.findViewById(R.id.mediaProfileFilePath);
+        backupAllBtn = (Button) view.findViewById(R.id.phone_mgr_backup_btn);
+        restoreAllBtn = (Button) view.findViewById(R.id.phone_mgr_restore_btn);
+
+        tvCloneInitDPath.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                showFolderChooser();
+                showFolderChooser(PREFERENCE_CLONE_INIT_D_PATH, cloneInitPath, false);
+            }
+        });
+
+        tvHostsPath.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                showFolderChooser(PREFERENCE_HOSTS_PATH, hostsPath, true);
+            }
+        });
+
+        tvMediaProfilePath.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                showFolderChooser(PREFERENCE_MEDIA_PROFILE_XML, mediaProfilePath, true);
             }
         });
 
@@ -61,28 +92,77 @@ public class PhoneMgrFragment extends Fragment implements
             }
         });
 
-        etDPI = (EditText) view.findViewById(R.id.preferredDPI);
-        tvCloneInitDPath = (TextView) view.findViewById(R.id.cloneInitDFolderPath);
+        backupAllBtn.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                ShellUtil.backupAllSystemFiles(getActivity());
+            }
+        });
+
+        restoreAllBtn.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                showFolderChooser(FILE_CHOOSER_CHOOSE_RESTORE_DIR, MediaUtil.getPhoneMgrDirectoryAbsolutePath(), false);
+            }
+        });
+
 
         getPreferences();
-        //Root
-        try {
-            proc = Runtime.getRuntime().exec("su");
-        } catch (IOException ioe) {
-            ioe.printStackTrace();
-        }
+
+        ShellUtil.getRootAccess();
 
         return view;
     }
 
     @Override
-    public void onFolderSelection(File folder) {
-        cloneInitPath = folder.getAbsolutePath();
-        tvCloneInitDPath.setText(cloneInitPath);
+    public void onFolderSelection(String id, final File folder) {
+        switch (id) {
+            case PREFERENCE_CLONE_INIT_D_PATH:
+                cloneInitPath = folder.getAbsolutePath();
+                tvCloneInitDPath.setText(cloneInitPath);
+                break;
+            case PREFERENCE_HOSTS_PATH:
+                hostsPath = folder.getAbsolutePath();
+                tvHostsPath.setText(hostsPath);
+                break;
+            case PREFERENCE_MEDIA_PROFILE_XML:
+                mediaProfilePath = folder.getAbsolutePath();
+                tvMediaProfilePath.setText(mediaProfilePath);
+                break;
+            case FILE_CHOOSER_CHOOSE_RESTORE_DIR:
+                new MaterialDialog.Builder(getActivity())
+                        .title("Restore")
+                        .content("Are you sure you want to restore this backup? " + folder.getName())
+                        .positiveText("Proceed")
+                        .negativeText("Back")
+                        .callback(new MaterialDialog.ButtonCallback() {
+                            @Override
+                            public void onPositive(MaterialDialog dialog) {
+                                dialog.dismiss();
+                                ShellUtil.restoreAllSystemFiles(getActivity(), folder.getAbsolutePath());
+                            }
+
+                            @Override
+                            public void onNegative(MaterialDialog dialog) {
+                                dialog.dismiss();
+                            }
+                        })
+                        .show();
+                break;
+        }
     }
 
-    private void showFolderChooser() {
-        new FolderChooserDialog().show(this);
+    private void showFolderChooser(String id, String path, boolean isFile) {
+        Bundle args = new Bundle();
+        args.putString("FileURI", path);
+        args.putBoolean("isFile", isFile);
+        args.putString("id", id);
+
+        FolderChooserDialog dialog = new FolderChooserDialog();
+        dialog.setArguments(args);
+        dialog.show(this);
     }
 
     private void showToast(String message) {
@@ -146,10 +226,20 @@ public class PhoneMgrFragment extends Fragment implements
         if (cloneInitPath != null && !cloneInitPath.isEmpty()) {
             SharedPreferenceUtil.setPreference(getActivity(), PREFERENCE_CLONE_INIT_D_PATH, cloneInitPath);
         }
+        if (hostsPath != null && !hostsPath.isEmpty()) {
+            SharedPreferenceUtil.setPreference(getActivity(), PREFERENCE_HOSTS_PATH, hostsPath);
+        }
+        if (mediaProfilePath != null && !mediaProfilePath.isEmpty()) {
+            SharedPreferenceUtil.setPreference(getActivity(), PREFERENCE_MEDIA_PROFILE_XML, mediaProfilePath);
+        }
     }
 
     private void generateCmds() {
+        cmds.clear();
+        //Mount System
         cmds.add(ShellUtil.getMountSystemCmd());
+
+        //InitD copy
         String path = "";
         if (cloneInitPath.substring(cloneInitPath.length() - 1) != "/") {
             path = cloneInitPath + "/*";
@@ -157,16 +247,27 @@ public class PhoneMgrFragment extends Fragment implements
             path = cloneInitPath + "*";
         }
         cmds.add(ShellUtil.cloneInitDFolder(path));
-        cmds.add(ShellUtil.copyHostFile(HOSTFILEFROM));
         cmds.add(ShellUtil.applyPermissionInitDFolder());
-        cmds.add(ShellUtil.applyPermissionHostFile());
+
+        //Hosts copy
+        if (MediaUtil.isFileExist(hostsPath)) {
+            cmds.add(ShellUtil.copyToSystemEtc(hostsPath));
+            cmds.add(ShellUtil.applyPermissionHostFile());
+        }
+
+        if (MediaUtil.isFileExist(mediaProfilePath)) {
+            cmds.add(ShellUtil.copyToSystemEtc(mediaProfilePath));
+        }
+
+
+        //Apply DPI value
         cmds.add(ShellUtil.getDPICmd(SharedPreferenceUtil.getIntPreference(getActivity(), PREFERENCE_DPI)));
         cmds.add(ShellUtil.getUnmountSystemCmd());
-        try {
-            runCommandsAsRoot(cmds);
-        } catch (IOException ioe) {
-            ioe.printStackTrace();
-        }
+
+
+        //Run commands
+        ShellUtil.runCommandsAsRoot(cmds, getActivity());
+
     }
 
     private void getPreferences() {
@@ -179,26 +280,19 @@ public class PhoneMgrFragment extends Fragment implements
             cloneInitPath = SharedPreferenceUtil.getPreference(getActivity(), PREFERENCE_CLONE_INIT_D_PATH);
             tvCloneInitDPath.setText(cloneInitPath);
         }
+
+        if (SharedPreferenceUtil.getPreference(getActivity(), PREFERENCE_HOSTS_PATH) != null) {
+            hostsPath = SharedPreferenceUtil.getPreference(getActivity(), PREFERENCE_HOSTS_PATH);
+            tvHostsPath.setText(hostsPath);
+        }
+
+        if (SharedPreferenceUtil.getPreference(getActivity(), PREFERENCE_MEDIA_PROFILE_XML) != null) {
+            mediaProfilePath = SharedPreferenceUtil.getPreference(getActivity(), PREFERENCE_MEDIA_PROFILE_XML);
+            tvMediaProfilePath.setText(mediaProfilePath);
+        }
     }
 
     //---------------------------
 
-    public void runCommandsAsRoot(List<String> cmds) throws IOException {
-
-
-        DataOutputStream oStream = new DataOutputStream(proc.getOutputStream());
-
-        for (String cmd : cmds) {
-            oStream.writeBytes(cmd + "\n");
-        }
-
-        oStream.writeBytes("exit\n");
-        oStream.flush();
-        new MaterialDialog.Builder(getActivity())
-                .title(R.string.complete)
-                .content(R.string.operation_done)
-                .positiveText(R.string.ok)
-                .show();
-    }
 
 }

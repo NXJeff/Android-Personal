@@ -25,9 +25,11 @@ import java.util.Locale;
 public class MediaUtil {
 
     private static final String APP_DIRECTORY_NAME = "Merlin";
+    private static final String PHONE_MGR_DIRECTORY_NAME = "PhoneMgr";
     private static final String IMAGE_DIRECTORY_NAME = "Images";
     public static final int MEDIA_TYPE_IMAGE = 1;
     public static final int MEDIA_TYPE_VIDEO = 2;
+    public static final int MEDIA_TYPE_PHONEMGR_BACKUP_DIR = 3;
 
     /**
      * Creating file uri to store image/video
@@ -73,6 +75,35 @@ public class MediaUtil {
         }
 
         return mediaFile;
+    }
+
+    public static String getPhoneMgrDirectoryAbsolutePath() {
+        return Environment.getExternalStorageDirectory() + File.separator + APP_DIRECTORY_NAME + File.separator + PHONE_MGR_DIRECTORY_NAME;
+    }
+
+    public static File getPhoneMgrNewBackUpDirectory() {
+        // External sdcard location
+        File mediaStorageDir = new File(
+                Environment
+                        .getExternalStorageDirectory(),
+                APP_DIRECTORY_NAME + File.separator + PHONE_MGR_DIRECTORY_NAME);
+
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss",
+                Locale.getDefault()).format(new Date());
+
+        mediaStorageDir = new File(mediaStorageDir.getPath() + File.separator
+                + "Backup_" + timeStamp);
+
+        // Create the storage directory if it does not exist
+        if (!mediaStorageDir.exists()) {
+            if (!mediaStorageDir.mkdirs()) {
+                Log.d(PHONE_MGR_DIRECTORY_NAME, "Oops! Failed create "
+                        + APP_DIRECTORY_NAME + File.separator + PHONE_MGR_DIRECTORY_NAME + " directory");
+                return null;
+            }
+        }
+
+        return mediaStorageDir;
     }
 
     public static void compressImage(String path) {
@@ -161,4 +192,11 @@ public class MediaUtil {
         return count;
     }
 
+    public static boolean isFileExist(String path) {
+        File file = new File(path);
+        if (file.exists())
+            return true;
+
+        return false;
+    }
 }
