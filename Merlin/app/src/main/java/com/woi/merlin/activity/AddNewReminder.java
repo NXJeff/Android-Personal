@@ -749,11 +749,9 @@ public class AddNewReminder extends ActionBarActivity {
             }
         }
 
-        //cancel then recreate alarm
         Intent service = new Intent(this, NotificationService.class);
         service.putExtra("NotificationActionType", NotificationActionType.APPLY);
         service.putExtra("ReminderId", reminder.getId());
-//        service.setAction(AlarmService.POPULATE);
         startService(service);
 
         Intent resultIntent = new Intent();

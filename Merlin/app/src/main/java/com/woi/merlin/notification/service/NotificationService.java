@@ -53,19 +53,11 @@ public class NotificationService extends IntentService {
         if(reminderId == 0l) {
             return;
         }
-//        Reminder reminder = (Reminder) intent.getSerializableExtra("Reminder");
         ReminderDao reminderDao = daoSession.getReminderDao();
 
         Reminder reminder = reminderDao.load(reminderId);
 
         execute(actionType, reminder);
-//        String notificationId = intent.getStringExtra("notificationId");
-
-//        execute("asd", "12");
-//
-//        if (matcher.matchAction(action)) {
-//            execute(action, notificationId);
-//        }
     }
 
     private void execute(NotificationActionType actionType, Reminder reminder) {
@@ -75,7 +67,6 @@ public class NotificationService extends IntentService {
         long PERIOD = 10000;
 
         i = new Intent(this, NotificationReceiver.class);
-//        i.setAction("com.appsrox.remindme."+1);
         i.putExtra("NotificationId", reminder.getId());
         i.putExtra("NotificationType", "Reminder");
         i.putExtra("NotificationActionType", actionType);
