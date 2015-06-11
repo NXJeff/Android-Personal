@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.afollestad.materialdialogs.ThemeSingleton;
 import com.squareup.picasso.Picasso;
 import com.woi.merlin.component.ColorPickerDialog;
+import com.woi.merlin.fragment.BillMaintenanceFragment;
 import com.woi.merlin.fragment.MealFragment;
 import com.woi.merlin.fragment.PhoneMgrFragment;
 import com.woi.merlin.fragment.ReminderFragment;
@@ -44,6 +45,7 @@ public class MainActivity extends NavigationLiveo implements NavigationLiveoList
     private static final int CASE_REMINDER = 0;
     private static final int CASE_MEAL = 1;
     private static final int CASE_PHONE_MGR = 2;
+    private static final int CASE_BILL_CALC = 3;
     private static final int CASE_SETTING = 99;
     private static final String TAG = "MERLIN-APP";
 
@@ -83,12 +85,14 @@ public class MainActivity extends NavigationLiveo implements NavigationLiveoList
         mListNameItem.add(0, getTitleString(CASE_REMINDER));
         mListNameItem.add(1, getTitleString(CASE_MEAL));
         mListNameItem.add(2, getTitleString(CASE_PHONE_MGR));
+        mListNameItem.add(3, getTitleString(CASE_BILL_CALC));
 
         // icons list items
         List<Integer> mListIconItem = new ArrayList<>();
         mListIconItem.add(0, R.drawable.ic_action_email);
         mListIconItem.add(1, drawable.ic_action_good);
         mListIconItem.add(2, drawable.ic_action_settings);//Item no icon set 0
+        mListIconItem.add(3, drawable.ic_action_good);
 
 
         //{optional} - Among the names there is some subheader, you must indicate it here
@@ -139,6 +143,10 @@ public class MainActivity extends NavigationLiveo implements NavigationLiveoList
                 str = "Settings";
                 break;
 
+            case CASE_BILL_CALC:
+                str = "Bill Calculator";
+                break;
+
             default:
                 break;
         }
@@ -186,6 +194,10 @@ public class MainActivity extends NavigationLiveo implements NavigationLiveoList
             case CASE_PHONE_MGR:
                 mFragment = new PhoneMgrFragment();
                 break;
+
+            case CASE_BILL_CALC:
+                mFragment = new BillMaintenanceFragment();
+                break;
             case CASE_SETTING:
                 break;
 
@@ -218,6 +230,9 @@ public class MainActivity extends NavigationLiveo implements NavigationLiveoList
                 applyDefaultColorToActivity(8);
                 break;
 
+            case CASE_BILL_CALC:
+                applyDefaultColorToActivity(13);
+                break;
             case CASE_SETTING:
                 applyDefaultColorToActivity(4);
                 break;

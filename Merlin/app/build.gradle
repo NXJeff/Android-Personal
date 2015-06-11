@@ -77,7 +77,7 @@ dependencies {
     compile 'br.com.liveo:navigationdrawer-material:1.0.4'
 
     //MaterialDesignLibrary
-    compile 'com.github.navasmdc:MaterialDesign:1.+@aar'
+    compile 'com.github.navasmdc:MaterialDesign:1.5@aar'
 
     //pull to refresh
 //    compile 'in.srain.cube:ultra-ptr:1.0.8@aar'

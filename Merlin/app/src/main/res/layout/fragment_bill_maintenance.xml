@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card="http://schemas.android.com/apk/res-auto"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
+    style="@style/DefaultFragmentStyle">
+
+    <ListView
+        android:id="@+id/bill_main_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+    </ListView>
+
+
+    <com.melnykov.fab.FloatingActionButton
+        android:id="@+id/fab_bill_maintenance_fm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|right"
+        android:layout_margin="16dp"
+        android:src="@drawable/ic_add_white_24dp"
+        fab:fab_colorNormal="@color/pink_400"
+        fab:fab_colorPressed="@color/pink_500"
+        fab:fab_colorRipple="@color/pink_100" />
+</FrameLayout>
