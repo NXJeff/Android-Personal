@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/view01"
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="20sp"
+            android:text="TouchFix requires Root Access. Hence you will receive a dialog popup from SuperUser management app. Select Grant so that TouchFix can do the rest." />
+
+
+        <ImageView
+            android:layout_width="488px"
+            android:layout_height="fill_parent"
+            android:layout_gravity="center"
+            android:padding="50px"
+            android:src="@drawable/suprompt" />
+
+    </LinearLayout>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/view02"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="visible">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="20sp"
+            android:text="TouchFix applied fix successfully. You are not required to run TouchFix again unless you has cleared init.d system while flashing an update." />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/status"
+            android:padding="20sp" android:text="Status: Disabled"></TextView>
+
+
+        <ImageView
+            android:layout_width="246px"
+            android:layout_height="fill_parent"
+            android:layout_gravity="center"
+            android:src="@drawable/done" />
+
+    </LinearLayout>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/view03"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="20sp"
+            android:text="You seems like do not 100% own your device, TouchFix requires Root Access. If your device is rooted, check the status of TouchFix in SuperUser management app, make sure TouchFix is not in 'Deny'." />
+
+
+        <ImageView
+            android:layout_width="529px"
+            android:layout_height="fill_parent"
+            android:layout_gravity="center"
+            android:src="@drawable/sucheck" />
+
+    </LinearLayout>
+
+    </LinearLayout>
+</ScrollView>

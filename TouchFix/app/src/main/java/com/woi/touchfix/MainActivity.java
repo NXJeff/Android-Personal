@@ -8,7 +8,16 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
 import eu.chainfire.libsuperuser.Shell;
 
@@ -16,6 +25,8 @@ import eu.chainfire.libsuperuser.Shell;
 public class MainActivity extends ActionBarActivity {
 
     LinearLayout view1, view2, view3;
+    TextView tv1;
+    int statusType = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,6 +35,7 @@ public class MainActivity extends ActionBarActivity {
         view1 = (LinearLayout)findViewById(R.id.view01);
         view2 = (LinearLayout)findViewById(R.id.view02);
         view3 = (LinearLayout)findViewById(R.id.view03);
+        tv1 = (TextView) findViewById(R.id.status);
         (new StartUp()).setContext(this).execute();
 
     }
@@ -32,7 +44,7 @@ public class MainActivity extends ActionBarActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+//        getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
@@ -58,6 +70,24 @@ public class MainActivity extends ActionBarActivity {
                 view1.setVisibility(View.GONE);
                 view2.setVisibility(View.VISIBLE);
                 view3.setVisibility(View.GONE);
+                try {
+                    BufferedReader br = new BufferedReader(
+                            new InputStreamReader(
+                                    new FileInputStream("/proc/touchpanel/glove_mode_enable"),"UTF-8"));
+                    br.mark(1);
+                    if (br.read() != 0xFEFF)
+                        br.reset();
+                    String nextLine;
+
+                    while ((nextLine = br.readLine()) != null) {
+                        if(nextLine.trim() == "1") {
+                            tv1.setText("Status: Activated");
+                        }
+                    }
+                }catch (IOException ioe) {
+                    ioe.printStackTrace();
+                }
+
                 break;
             case 3:
                 view1.setVisibility(View.GONE);
@@ -72,7 +102,7 @@ public class MainActivity extends ActionBarActivity {
     }
 
 
-    private class StartUp extends AsyncTask<String, Void, Void> {
+    private class StartUp extends AsyncTask<String, Void, String> {
 
 
         private Context context = null;
@@ -85,7 +115,7 @@ public class MainActivity extends ActionBarActivity {
         }
 
         @Override
-        protected Void doInBackground(String... params) {
+        protected String doInBackground(String... params) {
             suAvailable = Shell.SU.available();
             if (suAvailable) {
                 Shell.SU.run("busybox mount -o remount,rw /system");
@@ -93,13 +123,18 @@ public class MainActivity extends ActionBarActivity {
                 Shell.SU.run("echo $'#!/system/bin/sh\\n#Touch Fix\\n\\necho 1 > /proc/touchpanel/glove_mode_enable' > /system/etc/init.d/T99TouchFix");
                 Shell.SU.run("busybox chmod 777 /system/etc/init.d/T99TouchFix");
                 Shell.SU.run("busybox mount -o remount,ro /system");
-                updateView(2);
+                statusType = 2;
             } else {
-                Toast.makeText(getApplicationContext(), "Phone not Rooted", Toast.LENGTH_SHORT).show();
-                updateView(3);
+                statusType = 3;
             }
 
             return null;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+            updateView(statusType);
         }
     }
 }
