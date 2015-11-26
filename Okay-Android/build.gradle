@@ -1,0 +1,55 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+
+buildscript {
+    repositories {
+        jcenter()
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:1.3.0'
+        classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
+
+        // NOTE: Do not place your application dependencies here; they belong
+        // in the individual module build.gradle files
+    }
+}
+
+allprojects {
+    repositories {
+        jcenter()
+        maven {
+            url 'https://oss.sonatype.org/content/repositories/snapshots/'
+        }
+
+        maven {
+            url "https://jitpack.io"
+        }
+
+        maven {
+            url 'https://clojars.org/repo/'
+        }
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
+
+ext {
+    minSdk = 14
+    targetSdk = 23
+    buldToolsVersion = '23.0.1'
+    compileSdkVersion = 23
+
+    fragmentargsVersion = '2.1.0'
+    butterknifeVersion = '7.0.1'
+    icepickVersion = '3.0.2'
+    rxjavaVersion = '1.0.14'
+    rxandroidVersion = '1.0.1'
+    slidinguppanelVersion = '3.0.0'
+    sugarVersion = '1.3.1'
+    swipelayoutVersion = '1.2.0@aar'
+    dagger2Version = '2.0'
+    eventbusVersion = '2.4.0'
+    dragtoplayoutVersion = '1.2.1@aar'
+}
