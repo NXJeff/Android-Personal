@@ -40,4 +40,6 @@ dependencies {
     compile "com.daimajia.swipelayout:library:" + rootProject.ext.swipelayoutVersion
     compile 'com.github.chenupt.android:dragtoplayout:' + rootProject.ext.dragtoplayoutVersion
     compile 'de.greenrobot:eventbus:' + rootProject.ext.eventbusVersion
+    compile 'com.hannesdorfmann.annotatedadapter:annotation:' + rootProject.ext.annotatedadapterVersion
+    apt 'com.hannesdorfmann.annotatedadapter:processor:' + rootProject.ext.annotatedadapterVersion
 }

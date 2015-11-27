@@ -56,4 +56,15 @@ public class MainActivity extends BaseActivity implements SlidingUpPanelLayout.P
     public void onPanelHidden(View panel) {
 
     }
+
+    /** Action from note preview / list */
+    public void createNewNote() {
+
+    }
+
+    //VTT = Voice To Text
+    public void createNewNoteWithVTT() {
+        
+    }
+
 }

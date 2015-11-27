@@ -52,4 +52,5 @@ ext {
     dagger2Version = '2.0'
     eventbusVersion = '2.4.0'
     dragtoplayoutVersion = '1.2.1@aar'
+    annotatedadapterVersion = '1.1.1.1-SNAPSHOT'
 }

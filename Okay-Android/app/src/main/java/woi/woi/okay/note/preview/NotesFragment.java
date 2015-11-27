@@ -22,7 +22,7 @@ public class NotesFragment extends BaseViewStateFragment<NotesView, NotesPresent
         implements NotesView {
 
     @Bind(R.id.listNotes)
-    private ListView mListNotes;
+    public ListView mListNotes;
 
     private NotesComponent notesComponent;
 //    private NotesSwipeAdapter mLogNotesAdapter;
