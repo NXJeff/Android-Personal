@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">WFlashTool</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="choose">Choose</string>
+
+    <string name="select_dpi">Select preferred DPI</string>
+    <string name="clone_init_folder">Clone Init.d Folder</string>
+</resources>
