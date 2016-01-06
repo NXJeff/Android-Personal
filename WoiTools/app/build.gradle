@@ -38,5 +38,8 @@ dependencies {
     compile 'com.sromku:simple-storage:' + rootProject.ext.simpleStorageVersion
     compile 'com.github.satyan:sugar:' + rootProject.ext.sugarVersion
     compile 'com.greysonparrelli.permiso:permiso:' + rootProject.ext.permissionUtilsVersion;
-
+    compile 'com.mikepenz:iconics-core:' + rootProject.ext.iconicsVersion
+    compile 'com.mikepenz:google-material-typeface:' + rootProject.ext.googleMaterialTypefaceVersion;
+    compile 'de.greenrobot:eventbus:' + rootProject.ext.eventBusVersion;
+    compile 'net.danlew:android.joda:' + rootProject.ext.jodaTimeVersion;
 }

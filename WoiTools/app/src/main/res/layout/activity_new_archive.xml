@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                  android:layout_width="match_parent"
+                  android:layout_height="match_parent"
+                  android:orientation="vertical"
+                  android:weightSum="1">
+
+        <EditText
+            android:id="@+id/archive_name"
+            android:layout_width="match_parent"
+            android:layout_height="50sp"
+            android:layout_weight="0.04"
+            android:autoText="false"
+            android:background="@android:color/transparent"
+            android:hint="@string/archive_name_hint"/>
+
+        <View style="@style/Divider"/>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:animateLayoutChanges="true">
+
+            <com.mikepenz.iconics.view.IconicsImageView
+                android:id="@+id/icon_archive_path"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:paddingLeft="15sp"
+                android:paddingRight="25sp"
+                app:iiv_color="@android:color/holo_blue_bright"
+                app:iiv_icon="gmd-sd-storage"
+                app:iiv_size="70dp"/>
+
+            <TextView
+                android:id="@+id/archive_path"
+                android:layout_width="match_parent"
+                android:layout_height="70sp"
+                android:layout_toRightOf="@id/icon_archive_path"
+                android:layout_weight="1"
+                android:focusable="true"
+                android:gravity="center_vertical"
+                android:text="@string/choose_source_path"
+                android:textColor="#333"
+                android:textSize="16sp"/>
+
+
+            <com.mikepenz.iconics.view.IconicsImageView
+                android:id="@+id/icon_archive_mode"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_below="@id/icon_archive_path"
+                android:paddingLeft="15sp"
+                android:paddingRight="25sp"
+                app:iiv_color="@android:color/holo_green_dark"
+                app:iiv_icon="gmd-settings"
+                app:iiv_size="70dp"/>
+
+            <Spinner
+                android:id="@+id/archive_mode_spinner"
+                android:layout_width="match_parent"
+                android:layout_height="70sp"
+                android:layout_below="@id/icon_archive_path"
+                android:layout_toRightOf="@id/icon_archive_mode"
+                android:gravity="center_vertical"
+                />
+
+            <LinearLayout
+                android:id="@+id/llOlderThan"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/icon_archive_mode"
+                android:orientation="horizontal"
+                android:paddingLeft="15sp"
+                android:visibility="gone">
+
+                <com.mikepenz.iconics.view.IconicsImageView
+                    android:id="@+id/icon_older_than"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:layout_below="@id/icon_archive_path"
+                    android:paddingLeft="15sp"
+                    android:paddingRight="25sp"
+                    app:iiv_color="@android:color/holo_orange_dark"
+                    app:iiv_icon="gmd-timelapse"
+                    app:iiv_size="70dp"/>
+
+
+                <EditText
+                    android:id="@+id/etOlderThanNumber"
+                    android:layout_width="wrap_content"
+                    android:layout_height="70sp"
+                    android:ems="4"
+                    android:gravity="center_vertical"
+                    android:inputType="number"
+                    android:textColor="#333"
+                    />
+
+                <Spinner
+                    android:id="@+id/dayOrMonthSpinner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="70sp"
+                    android:gravity="center_vertical"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/llMoreThan"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/llOlderThan"
+                android:orientation="horizontal"
+                android:paddingLeft="15sp"
+                android:visibility="gone">
+
+                <com.mikepenz.iconics.view.IconicsImageView
+                    android:id="@+id/icon_more_than"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:layout_below="@id/icon_archive_path"
+                    android:paddingLeft="15sp"
+                    android:paddingRight="25sp"
+                    app:iiv_color="@android:color/holo_orange_dark"
+                    app:iiv_icon="gmd-filter-9-plus"
+                    app:iiv_size="70dp"/>
+
+                <EditText
+                    android:id="@+id/etMoreThanNumber"
+                    android:layout_width="wrap_content"
+                    android:layout_height="70sp"
+                    android:ems="4"
+                    android:gravity="center_vertical"
+                    android:inputType="number"
+                    android:textColor="#333"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="70sp"
+                    android:paddingLeft="10sp"
+                    android:text="@string/files"/>
+
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/bSave"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_below="@id/llMoreThan"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:text="@string/save"
+                />
+
+
+        </RelativeLayout>
+
+    </LinearLayout>
+</ScrollView>

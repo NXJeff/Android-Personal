@@ -7,12 +7,12 @@ import java.util.Date;
 /**
  * Created by YeekFeiTan on 12/29/2015.
  */
-public class ArchiveItem extends SugarRecord{
+public class ArchiveItem extends SugarRecord {
     private String name;
     private String sourcePath;
     private ArchiveMode archieveMode;
-    private int month;
-    private int day;
+    private DayOrMonthMode dayOrMonthMode;
+    private int dayOrMonthNumber;
     private int maxFilesNo;
     private Date lastScan;
     private Date lastSync;
@@ -45,20 +45,12 @@ public class ArchiveItem extends SugarRecord{
         this.archieveMode = archieveMode;
     }
 
-    public int getMonth() {
-        return month;
+    public int getDayOrMonthNumber() {
+        return dayOrMonthNumber;
     }
 
-    public void setMonth(int month) {
-        this.month = month;
-    }
-
-    public int getDay() {
-        return day;
-    }
-
-    public void setDay(int day) {
-        this.day = day;
+    public void setDayOrMonthNumber(int dayOrMonthNumber) {
+        this.dayOrMonthNumber = dayOrMonthNumber;
     }
 
     public int getMaxFilesNo() {
@@ -91,5 +83,13 @@ public class ArchiveItem extends SugarRecord{
 
     public void setNumberOfFilesArchieved(long numberOfFilesArchieved) {
         this.numberOfFilesArchieved = numberOfFilesArchieved;
+    }
+
+    public DayOrMonthMode getDayOrMonthMode() {
+        return dayOrMonthMode;
+    }
+
+    public void setDayOrMonthMode(DayOrMonthMode dayOrMonthMode) {
+        this.dayOrMonthMode = dayOrMonthMode;
     }
 }

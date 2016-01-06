@@ -1,25 +1,32 @@
 package tools.woi.com.woitools.archive.fragment;
 
-import android.app.Activity;
-import android.content.Context;
+import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.support.v4.app.Fragment;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.util.List;
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
+import com.mikepenz.google_material_typeface_library.GoogleMaterial;
+import com.mikepenz.iconics.IconicsDrawable;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import de.greenrobot.event.EventBus;
 import tools.woi.com.woitools.MainActivity;
 import tools.woi.com.woitools.R;
-import tools.woi.com.woitools.archive.view.OnDialogChooserListener;
+import tools.woi.com.woitools.archive.service.ArchiveService;
 import tools.woi.com.woitools.base.BaseFragment;
 import tools.woi.com.woitools.system.domain.SystemConfiguration;
+import tools.woi.com.woitools.system.domain.SystemPropertyKey;
 
 /**
  * Created by YeekFeiTan on 12/29/2015.
@@ -32,15 +39,27 @@ public class ArchiveFragment extends BaseFragment {
     @Bind(R.id.destination_directory_path)
     TextView tvDestinationPath;
 
+    @Bind(R.id.tvArchiveLog)
+    TextView tvArchiveLog;
+
+    SystemConfiguration destinationConfiguration;
+
     public ArchiveFragment() {
         super();
         this.setTagText(TAG);
     }
 
-//    @Override
-//    public void onAttach(Context context) {
-//        super.onAttach(context);
-//    }
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        EventBus.getDefault().unregister(this);
+        super.onStop();
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -49,6 +68,8 @@ public class ArchiveFragment extends BaseFragment {
                 false);
         ButterKnife.bind(this, view);
         initialize();
+        initFabOnFragment();
+
         return view;
     }
 
@@ -63,18 +84,57 @@ public class ArchiveFragment extends BaseFragment {
     }
 
     private void initialize() {
-        List<SystemConfiguration> configs = SystemConfiguration.listAll(SystemConfiguration.class);
-        if (configs != null && !configs.isEmpty()) {
-            SystemConfiguration conf = configs.get(0);
-            tvDestinationPath.setText(conf.getValue());
+        destinationConfiguration = SystemConfiguration.find(SystemPropertyKey.Archieve_DestinationPath);
+        if (destinationConfiguration != null) {
+            tvDestinationPath.setText(destinationConfiguration.getValue());
         }
     }
 
-    public void onDirectoryChoosen (String path) {
+    private void initFabOnFragment() {
+        getFab().setImageDrawable(new IconicsDrawable(getActivity())
+                .icon(GoogleMaterial.Icon.gmd_archive)
+                .color(Color.WHITE));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            getFab().setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.green_300, getActivity().getTheme())));
+        } else {
+            getFab().setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.green_300)));
+        }
+    }
+
+    public void onDirectoryChoosen(String path) {
+        if (destinationConfiguration == null) {
+            destinationConfiguration = new SystemConfiguration(SystemPropertyKey.Archieve_DestinationPath, path);
+        }
+        destinationConfiguration.setValue(path);
         tvDestinationPath.setText(path);
+        destinationConfiguration.save();
     }
 
     @Override
     public void fabButtonAction() {
+        MaterialDialog dialog = new MaterialDialog.Builder(getActivity())
+                .title(R.string.archive_manager)
+                .content(R.string.confirmation_archive)
+                .positiveText(R.string.archive_now)
+                .negativeText(R.string.cancel)
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        startArchive();
+                    }
+                })
+                .show();
+    }
+
+    private void startArchive() {
+        getContext().startService(new Intent(getContext(), ArchiveService.class));
+    }
+
+    public void onEvent(String event) {
+        addLineToArchiveLog(event);
+    };
+
+    public void addLineToArchiveLog(String line) {
+        tvArchiveLog.append("\n" + line);
     }
 }

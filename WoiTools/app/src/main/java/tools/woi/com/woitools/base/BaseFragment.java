@@ -1,15 +1,17 @@
 package tools.woi.com.woitools.base;
 
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 
 /**
  * Created by YeekFeiTan on 12/29/2015.
  */
-public abstract class BaseFragment extends Fragment implements FabActionInterface{
+public abstract class BaseFragment extends Fragment implements FabActionInterface {
 
     String tagText;
 
     BaseFragment backFragment;
+    FloatingActionButton fab;
 
     public BaseFragment() {
         super();
@@ -29,5 +31,13 @@ public abstract class BaseFragment extends Fragment implements FabActionInterfac
 
     public void setBackFragment(BaseFragment backFragment) {
         this.backFragment = backFragment;
+    }
+
+    public FloatingActionButton getFab() {
+        return fab;
+    }
+
+    public void setFab(FloatingActionButton fab) {
+        this.fab = fab;
     }
 }

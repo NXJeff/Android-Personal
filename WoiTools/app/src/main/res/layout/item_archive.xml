@@ -3,6 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal"
     android:paddingBottom="10dp"
     android:paddingTop="10dp"
@@ -20,19 +21,42 @@
             android:padding="16dp"
             >
 
+            <com.mikepenz.iconics.view.IconicsImageView
+                android:id="@+id/icon_archive"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_below="@id/icon_archive_path"
+                android:paddingLeft="15sp"
+                android:paddingRight="25sp"
+                app:iiv_color="@color/grey_400"
+                app:iiv_icon="gmd-archive"
+                app:iiv_size="24dp"/>
+
             <TextView
                 android:id="@+id/archive_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
-                android:textSize="30sp"
+                android:layout_toRightOf="@id/icon_archive"
+                android:textSize="18sp"
                 />
 
             <TextView
-                android:id="@+id/archive_mode"
+                android:id="@+id/firstLine"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/archive_name"
+                android:textColor="@color/grey_700"
+                android:textSize="12sp"
+                />
+
+            <TextView
+                android:id="@+id/secondLine"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/firstLine"
+                android:textColor="@color/grey_500"
+                android:textSize="10sp"
                 />
 
 
@@ -40,10 +64,13 @@
                 android:id="@+id/archive_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/archive_mode"
+                android:layout_below="@id/secondLine"
+                android:layout_alignParentRight="true"
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"
-                android:textSize="10sp"
+                android:text="@string/edit"
+                android:textColor="@color/grey_white_1000"
+                android:backgroundTint="@color/colorAccent"
                 />
 
         </RelativeLayout>

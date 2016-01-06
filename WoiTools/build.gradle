@@ -28,5 +28,9 @@ ext {
     materialDialogVersion = '0.8.5.3@aar'
     simpleStorageVersion = '1.1.0'
     permissionUtilsVersion = '0.1.2'
+    iconicsVersion = '2.5.3@aar'
+    googleMaterialTypefaceVersion = '2.1.0.1.original@aar'
+    eventBusVersion = '2.4.0'
+    jodaTimeVersion = '2.9.1'
 
 }
