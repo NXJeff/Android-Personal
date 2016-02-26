@@ -71,8 +71,8 @@ public class ArchiveItemAdapter extends
         viewHolder.tvFirstLine.setText(item.getSourcePath());
 
         String syncText;
-        if(item.getArchieveMode().equals(ArchiveMode.OlderThan)) {
-            syncText = "Archive files older than " + item.getDayOrMonthNumber() + ". ";
+        if(item.getArchieveMode().equals(ArchiveMode.OlderThan) && item.getDayOrMonthMode() != null) {
+            syncText = "Archive files older than " + item.getDayOrMonthNumber() + " (" +item.getDayOrMonthMode().name() + "). ";
         } else {
             syncText = "Archive files more than " + item.getMaxFilesNo() + ". ";
         }

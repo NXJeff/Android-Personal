@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="validation_archive_source_path" type="id">Please select the source path.</item>
+</resources>

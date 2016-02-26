@@ -28,4 +28,10 @@
     <string name="cancel">Cancel</string>
     <string name="confirmation_archive">Are you sure you want to archive the files now? Please make sure the destination storage is mounted.</string>
     <string name="archive_now">Archive Now</string>
+    <string name="include_subfolders">Include Sub-folders</string>
+    <string name="validation_archive_name">Please enter an unique name to represent this archive.</string>
+    <string name="validation_archive_source_path">Please select the source path.</string>
+    <string name="validation_number_required">Please enter a number.</string>
+    <string name="validation_number_invalid">Please enter a valid number.</string>
+    <string name="validation_duplicated_source_path">Selected source path already has an archive using it.</string>
 </resources>

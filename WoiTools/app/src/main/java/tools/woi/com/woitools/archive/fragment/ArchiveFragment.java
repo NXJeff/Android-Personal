@@ -10,6 +10,7 @@ import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.DialogAction;
@@ -23,7 +24,7 @@ import butterknife.OnClick;
 import de.greenrobot.event.EventBus;
 import tools.woi.com.woitools.MainActivity;
 import tools.woi.com.woitools.R;
-import tools.woi.com.woitools.archive.service.ArchiveService;
+import tools.woi.com.woitools.archive.service.ArchiveIntentService;
 import tools.woi.com.woitools.base.BaseFragment;
 import tools.woi.com.woitools.system.domain.SystemConfiguration;
 import tools.woi.com.woitools.system.domain.SystemPropertyKey;
@@ -41,6 +42,9 @@ public class ArchiveFragment extends BaseFragment {
 
     @Bind(R.id.tvArchiveLog)
     TextView tvArchiveLog;
+
+    @Bind(R.id.svArchiveLog)
+    ScrollView svArchiveLog;
 
     SystemConfiguration destinationConfiguration;
 
@@ -127,14 +131,20 @@ public class ArchiveFragment extends BaseFragment {
     }
 
     private void startArchive() {
-        getContext().startService(new Intent(getContext(), ArchiveService.class));
+        getContext().startService(new Intent(getContext(), ArchiveIntentService.class));
     }
 
     public void onEvent(String event) {
         addLineToArchiveLog(event);
     };
 
-    public void addLineToArchiveLog(String line) {
-        tvArchiveLog.append("\n" + line);
+    public void addLineToArchiveLog(final String line) {
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                tvArchiveLog.append("\n" + line);
+                svArchiveLog.fullScroll(View.FOCUS_DOWN);
+            }
+        });
     }
 }

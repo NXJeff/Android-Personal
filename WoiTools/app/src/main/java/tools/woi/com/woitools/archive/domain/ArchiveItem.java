@@ -17,6 +17,7 @@ public class ArchiveItem extends SugarRecord {
     private Date lastScan;
     private Date lastSync;
     private long numberOfFilesArchieved;
+    private boolean includeSubFolder;
 
     public ArchiveItem() {
     }
@@ -91,5 +92,13 @@ public class ArchiveItem extends SugarRecord {
 
     public void setDayOrMonthMode(DayOrMonthMode dayOrMonthMode) {
         this.dayOrMonthMode = dayOrMonthMode;
+    }
+
+    public boolean isIncludeSubFolder() {
+        return includeSubFolder;
+    }
+
+    public void setIncludeSubFolder(boolean includeSubFolder) {
+        this.includeSubFolder = includeSubFolder;
     }
 }

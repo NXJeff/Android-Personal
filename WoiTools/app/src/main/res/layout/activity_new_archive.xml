@@ -41,7 +41,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="70sp"
                 android:layout_toRightOf="@id/icon_archive_path"
+                android:background="@android:color/transparent"
                 android:layout_weight="1"
+                style="@android:style/Widget.EditText"
                 android:focusable="true"
                 android:gravity="center_vertical"
                 android:text="@string/choose_source_path"
@@ -147,12 +149,21 @@
 
             </LinearLayout>
 
+            <CheckBox
+                android:id="@+id/cb_include_subfolder"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@id/icon_archive_mode"
+                android:checked="true"
+                android:text="@string/include_subfolders"
+                android:layout_below="@id/llMoreThan"/>
+
             <Button
                 android:id="@+id/bSave"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
-                android:layout_below="@id/llMoreThan"
+                android:layout_below="@id/cb_include_subfolder"
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"
                 android:text="@string/save"

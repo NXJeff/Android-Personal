@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
@@ -23,6 +24,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.folderselector.FolderChooserDialog;
 
 import java.io.File;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -61,6 +63,10 @@ public class AddArchiveActivity extends AppCompatActivity implements FolderChoos
     @Bind(R.id.archive_path)
     TextView tvArchivePath;
 
+    @Bind(R.id.cb_include_subfolder)
+    CheckBox cbIncludeSubFolder;
+
+
     //Data
     ArchiveItem archiveItem;
     ArchiveMode archiveMode;
@@ -78,8 +84,8 @@ public class AddArchiveActivity extends AppCompatActivity implements FolderChoos
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item){
-        switch(item.getItemId()){
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
             case R.id.action_delete:
                 MaterialDialog dialog = new MaterialDialog.Builder(this)
                         .title(R.string.delete_archive)
@@ -120,7 +126,7 @@ public class AddArchiveActivity extends AppCompatActivity implements FolderChoos
             archiveMode = archiveItem.getArchieveMode();
             archiveModeSpinner.setSelection(((ArrayAdapter<ArchiveMode>) archiveModeSpinner.getAdapter()).getPosition(archiveMode));
             if (archiveItem.getDayOrMonthMode() != null) {
-                dayOrMonthSpinner.setSelection(((ArrayAdapter<DayOrMonthMode>) dayOrMonthSpinner.getAdapter()).getPosition(olderThanOption));
+                dayOrMonthSpinner.setSelection(((ArrayAdapter<DayOrMonthMode>) dayOrMonthSpinner.getAdapter()).getPosition(archiveItem.getDayOrMonthMode()));
             }
             if (archiveItem.getDayOrMonthNumber() != 0) {
                 etOlderThanNumber.setText(String.valueOf(archiveItem.getDayOrMonthNumber()));
@@ -129,6 +135,8 @@ public class AddArchiveActivity extends AppCompatActivity implements FolderChoos
             if (archiveItem.getMaxFilesNo() != 0) {
                 etMoreThanNumber.setText(String.valueOf(archiveItem.getMaxFilesNo()));
             }
+
+            cbIncludeSubFolder.setChecked(archiveItem.isIncludeSubFolder());
 
         }
     }
@@ -185,6 +193,64 @@ public class AddArchiveActivity extends AppCompatActivity implements FolderChoos
     }
 
     private boolean validateBeforeSave() {
+
+        etArchiveName.setError(null);
+        tvArchivePath.setError(null);
+        etOlderThanNumber.setError(null);
+        etMoreThanNumber.setError(null);
+
+        if (etArchiveName.getText().toString().trim().isEmpty()) {
+            etArchiveName.setError(getString(R.string.validation_archive_name));
+            return false;
+        }
+
+        if (sourcePath == null || sourcePath.trim().isEmpty()) {
+            tvArchivePath.setError(getString(R.string.validation_archive_source_path));
+            return false;
+        }
+
+        //check if the sourcePath already existed
+        List<ArchiveItem> existingRecords = ArchiveItem.find(ArchiveItem.class, "source_Path = ?", sourcePath.trim());
+        if (!existingRecords.isEmpty()) {
+            if (this.archiveItem != null && archiveItem.getId() != null) {
+                for (ArchiveItem item : existingRecords) {
+                    if (!archiveItem.getId().equals(item.getId())) {
+                        tvArchivePath.setError(getString(R.string.validation_duplicated_source_path));
+                        return false;
+                    }
+                }
+            } else {
+                tvArchivePath.setError(getString(R.string.validation_duplicated_source_path));
+                return false;
+            }
+        }
+
+        if (archiveMode.equals(ArchiveMode.OlderThan)) {
+            if (etOlderThanNumber.getText().toString().trim().isEmpty()) {
+                etOlderThanNumber.setError(getString(R.string.validation_number_required));
+                return false;
+            }
+
+            try {
+                int number = Integer.parseInt(etOlderThanNumber.getText().toString().trim());
+            } catch (NumberFormatException nfe) {
+                etOlderThanNumber.setError(getString(R.string.validation_number_invalid));
+                return false;
+            }
+        } else {
+            if (etMoreThanNumber.getText().toString().trim().isEmpty()) {
+                etMoreThanNumber.setError(getString(R.string.validation_number_required));
+                return false;
+            }
+
+            try {
+                int number = Integer.parseInt(etMoreThanNumber.getText().toString().trim());
+            } catch (NumberFormatException nfe) {
+                etMoreThanNumber.setError(getString(R.string.validation_number_invalid));
+                return false;
+            }
+        }
+
         return true;
     }
 
@@ -208,6 +274,7 @@ public class AddArchiveActivity extends AppCompatActivity implements FolderChoos
                 archiveItem.setMaxFilesNo(Integer.parseInt(etMoreThanNumber.getText().toString()));
                 archiveItem.setDayOrMonthMode(null);
             }
+            archiveItem.setIncludeSubFolder(cbIncludeSubFolder.isChecked());
 
             archiveItem.save();
 

@@ -17,6 +17,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    packagingOptions {
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/LICENSE.txt'
+    }
 }
 
 dependencies {
@@ -42,4 +46,9 @@ dependencies {
     compile 'com.mikepenz:google-material-typeface:' + rootProject.ext.googleMaterialTypefaceVersion;
     compile 'de.greenrobot:eventbus:' + rootProject.ext.eventBusVersion;
     compile 'net.danlew:android.joda:' + rootProject.ext.jodaTimeVersion;
+    compile 'commons-io:commons-io:' + rootProject.ext.apacheCommonsIoVersion;
+    compile 'com.google.guava:guava:'+ rootProject.ext.guava
+    compile 'com.joestelmach:natty:0.6'
+
+
 }

@@ -35,11 +35,7 @@
         </activity>
 
         <activity android:name=".archive.activity.AddArchiveActivity"/>
-
-        <service
-            android:name=".archive.service.ArchiveService"
-            >
-        </service>
+        <service android:enabled="true" android:name=".archive.service.ArchiveIntentService" />
 
     </application>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
