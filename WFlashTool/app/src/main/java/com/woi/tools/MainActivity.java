@@ -1,15 +1,23 @@
-package flashtool.tool.woi.wflashtool;
+package com.woi.tools;
 
+import android.os.Bundle;
+import android.support.annotation.StringRes;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v7.app.ActionBarActivity;
-import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.afollestad.materialdialogs.folderselector.FolderChooserDialog;
+import com.woi.tools.archive.fragment.ArchiveFragment;
+import com.woi.tools.flashtool.fragment.FlashToolFragment;
+import com.woi.tools.global.system.domain.SystemConfiguration;
+import com.woi.tools.global.system.domain.SystemPropertyKey;
 
 import java.io.DataOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,17 +25,18 @@ import java.util.List;
 import br.liveo.interfaces.OnItemClickListener;
 import br.liveo.model.HelpLiveo;
 import br.liveo.navigationliveo.NavigationLiveo;
-import flashtool.tool.woi.wflashtool.fragment.FlashToolFragment;
+import butterknife.ButterKnife;
 
+public class MainActivity extends NavigationLiveo implements OnItemClickListener,
+        FolderChooserDialog.FolderCallback {
 
-public class MainActivity extends NavigationLiveo implements OnItemClickListener {
-
-    private static final int CASE_FLASH_TOOL = 0;
-    private static final int CASE_SCREEN_CALIBRATE = 1;
+    private static final int CASE_FLASH_TOOL = 1;
+    private static final int CASE_ARCHIEVE = 0;
     private static final int CASE_SETTING = 99;
 
     TextView mainTitle;
     private HelpLiveo mHelpLiveo;
+    private Toast mToast;
 
     @Override
     public void onInt(Bundle bundle) {
@@ -38,7 +47,7 @@ public class MainActivity extends NavigationLiveo implements OnItemClickListener
         // name of the list items
         List<String> mListNameItem = new ArrayList<>();
         mListNameItem.add(0, getTitleBarString(CASE_FLASH_TOOL));
-        mListNameItem.add(1, getTitleBarString(CASE_SCREEN_CALIBRATE));
+        mListNameItem.add(1, getTitleBarString(CASE_ARCHIEVE));
 
         // icons list items
         List<Integer> mListIconItem = new ArrayList<>();
@@ -54,7 +63,7 @@ public class MainActivity extends NavigationLiveo implements OnItemClickListener
 
         mHelpLiveo = new HelpLiveo();
         mHelpLiveo.add(getTitleBarString(CASE_FLASH_TOOL));
-        mHelpLiveo.add(getTitleBarString(CASE_SCREEN_CALIBRATE));
+        mHelpLiveo.add(getTitleBarString(CASE_ARCHIEVE));
 
 
 
@@ -76,6 +85,7 @@ public class MainActivity extends NavigationLiveo implements OnItemClickListener
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ButterKnife.bind(this);
 //        setContentView(R.layout.activity_main);
 //        mainTitle = (TextView) findViewById(R.id.main_title);
 //        runCommands();
@@ -147,12 +157,11 @@ public class MainActivity extends NavigationLiveo implements OnItemClickListener
                 mFragment = new FlashToolFragment();
                 break;
 
-            case CASE_SCREEN_CALIBRATE:
-                mFragment = new FlashToolFragment();
+            case CASE_ARCHIEVE:
+                mFragment = new ArchiveFragment();
                 break;
 
             default:
-//                mFragment = new FragmentHome();
                 mFragment = new FlashToolFragment();
                 break;
 
@@ -170,26 +179,68 @@ public class MainActivity extends NavigationLiveo implements OnItemClickListener
         String str = "";
         switch (position) {
             case CASE_FLASH_TOOL:
-                str = "Flash Tools";
+                str = getString(R.string.flash_tools);
                 break;
-            case CASE_SCREEN_CALIBRATE:
-                str = "Screen Calibration";
+            case CASE_ARCHIEVE:
+                str = getString(R.string.archive_manager);
                 break;
 
             case CASE_SETTING:
-                str = "Settings";
+                str = getString(R.string.settings);
         }
         return str;
     }
 
     @Override
     public void onItemClick(int position) {
-//        FragmentManager mFragmentManager = getSupportFragmentManager();
-//        Fragment mFragment = new FragmentMain().newInstance(mHelpLiveo.get(position).getName());
-//
-//        if (mFragment != null){
-//            mFragmentManager.beginTransaction().replace(R.id.container, mFragment).commit();
-//        }
         selectFragment(position);
+    }
+
+    public void showFolderChooser(String path) {
+        new FolderChooserDialog.Builder(this)
+                .chooseButton(R.string.md_choose_label)  // changes label of the choose button
+                .initialPath(path)  // changes initial path, defaults to external storage directory
+                .show();
+    }
+
+    /**
+     * FlashTool Activities
+     */
+    @Override
+    public void onFolderSelection(File folder) {
+        showToast(folder.getAbsolutePath());
+        List<SystemConfiguration> configs = SystemConfiguration.find(SystemConfiguration.class, "key = ?", SystemPropertyKey.Archieve_DestinationPath.name());
+        SystemConfiguration conf;
+        if(configs != null && !configs.isEmpty()) {
+            conf = configs.get(0);
+            conf.setValue(folder.getAbsolutePath());
+        } else {
+            conf = new SystemConfiguration(SystemPropertyKey.Archieve_DestinationPath, folder.getAbsolutePath());
+        }
+
+        conf.save();
+    }
+
+    /**
+     * Archive Manager Activities
+     */
+
+
+
+    /**
+     * Other methods
+     * @param message
+     */
+    private void showToast(String message) {
+        if (mToast != null) {
+            mToast.cancel();
+            mToast = null;
+        }
+        mToast = Toast.makeText(this, message, Toast.LENGTH_SHORT);
+        mToast.show();
+    }
+
+    private void showToast(@StringRes int message) {
+        showToast(getString(message));
     }
 }

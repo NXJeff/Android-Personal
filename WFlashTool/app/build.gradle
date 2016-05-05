@@ -5,7 +5,7 @@ android {
     buildToolsVersion "23.0.1"
 
     defaultConfig {
-        applicationId "flashtool.tool.woi.wflashtool"
+        applicationId "com.woi.tools"
         minSdkVersion 19
         targetSdkVersion 23
         versionCode 1
@@ -22,6 +22,7 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:appcompat-v7:23.0.1'
+    compile 'com.jakewharton:butterknife:7.0.1'
     //material dialog
     compile('com.github.afollestad.material-dialogs:core:0.8.5.3@aar') {
         transitive = true
@@ -32,4 +33,5 @@ dependencies {
     //material design navidrawer
     compile 'br.com.liveo:navigationdrawer-material:2.3.6'
     compile 'com.sromku:simple-storage:1.1.0'
+    compile 'com.github.satyan:sugar:' + rootProject.ext.sugarVersion
 }

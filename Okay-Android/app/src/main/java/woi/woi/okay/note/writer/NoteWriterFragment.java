@@ -31,6 +31,7 @@ import java.util.Date;
 import java.util.Locale;
 
 import woi.woi.okay.MainActivity;
+import woi.woi.okay.R;
 import woi.woi.okay.base.view.BaseLceFragment;
 import woi.woi.okay.model.notes.Note;
 

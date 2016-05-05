@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">WFlashTool</string>
+    <string name="app_name">Woi Tools</string>
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
@@ -7,4 +7,9 @@
 
     <string name="select_dpi">Select preferred DPI</string>
     <string name="clone_init_folder">Clone Init.d Folder</string>
+    <string name="destination_directory">Destination Directory</string>
+    <string name="choose_destination_path">Touch to choose a destination path</string>
+    <string name="flash_tools">Flash Tools</string>
+    <string name="archive_manager">Archive Manager</string>
+    <string name="settings">Settings</string>
 </resources>

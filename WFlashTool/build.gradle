@@ -18,3 +18,8 @@ allprojects {
         maven { url "https://jitpack.io" }
     }
 }
+
+ext {
+    butterknifeVersion = '7.0.1'
+    sugarVersion = '1.4'
+}

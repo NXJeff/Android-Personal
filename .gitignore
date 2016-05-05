@@ -8,3 +8,14 @@ target/
 build/
 bin/
 gen/
+
+
+R&D-Libraries/.metadata
+R&D-Libraries/.settings
+R&D-Libraries/.project
+R&D-Libraries/.classpath
+
+R&D-Libraries/target/
+R&D-Libraries/build/
+R&D-Libraries/bin/
+R&D-Libraries/gen/
